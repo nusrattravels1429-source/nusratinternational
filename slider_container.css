@@ -3,21 +3,31 @@
    Hero Full-screen Slider
    =========================== */
 
+/* Root fix: prevent ANY horizontal overflow globally */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 .hero-slider {
   position: relative;
   height: 100vh;
   min-height: 600px;
   overflow: hidden;
+  width: 100%;
 }
 
 .slider {
   display: flex;
   height: 100%;
+  /* Must be wide enough for all slides — do NOT restrict width */
   transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 .slide {
-  min-width: 100%;
+  /* 100vw ensures each slide is exactly the screen width on mobile too */
+  flex: 0 0 100vw;
+  width: 100vw;
   height: 100%;
   position: relative;
 }
@@ -28,6 +38,8 @@
   object-fit: cover;
   transform: scale(1.05);
   animation: zoomOut 6s ease forwards;
+  /* Block any sub-pixel bleed */
+  display: block;
 }
 
 @keyframes zoomOut {
