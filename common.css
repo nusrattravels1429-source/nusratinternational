@@ -1,7 +1,7 @@
 /* ===========================
    common.css — Global Base
    =========================== */
-
+@import "tailwindcss";
 *, *::before, *::after {
   margin: 0;
   padding: 0;
