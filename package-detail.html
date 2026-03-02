@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Package Details — Nusrat International</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --blue:#1a56db;--blue-dark:#1140a6;
+      --gold:#c9a227;--gold-dark:#a07b0e;
+      --green:#0d9f6e;--green-dark:#077a53;
+      --dark:#0d1117;--text:#1a1f2e;--muted:#6b7280;
+      --bg:#f5f7fa;--white:#fff;--radius:18px;--t:.3s ease;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans','Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+    img{display:block;max-width:100%}
+    a{text-decoration:none;color:inherit}
+
+    /* NAVBAR */
+    #navbar{position:fixed;top:0;left:0;width:100%;z-index:1000;background:transparent;transition:var(--t)}
+    #navbar.scrolled{background:rgba(255,255,255,.97);box-shadow:0 4px 24px rgba(0,0,0,.08);backdrop-filter:blur(10px)}
+    #navbar.scrolled .logo-text{color:var(--dark)!important}
+    #navbar.scrolled .logo-text em{color:var(--gold)!important}
+    #navbar.scrolled .nav-links a{color:var(--text)}
+    #navbar.scrolled .hamburger span{background:var(--text)}
+    .nav-inner{max-width:1280px;margin:0 auto;padding:18px 40px;display:flex;align-items:center;justify-content:space-between}
+    .logo-link{display:flex;align-items:center;gap:12px}
+    .logo-link img{height:42px;width:42px;object-fit:cover;border-radius:8px}
+    .logo-text{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:white}
+    .logo-text em{font-style:normal;color:#f8c640}
+    .nav-links{list-style:none;display:flex;align-items:center;gap:32px}
+    .nav-links a{font-size:14px;font-weight:500;color:rgba(255,255,255,.9);letter-spacing:.01em;transition:var(--t);padding-bottom:2px;border-bottom:2px solid transparent}
+    .nav-links a:hover,.nav-links a.active{color:white;border-bottom-color:#f8c640}
+    .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;z-index:1100}
+    .hamburger span{display:block;width:24px;height:2px;background:white;border-radius:2px;transition:var(--t)}
+    .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .hamburger.open span:nth-child(2){opacity:0}
+    .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+    /* HERO */
+    .pkg-hero{min-height:68vh;position:relative;display:flex;align-items:flex-end;overflow:hidden}
+    .hero-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform 8s ease}
+    .hero-bg-img.loaded{transform:scale(1)}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.3) 55%,rgba(0,0,0,.18) 100%)}
+    .hero-content{position:relative;z-index:2;max-width:1200px;margin:0 auto;width:100%;padding:100px 40px 64px}
+    .type-badge{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;padding:8px 20px;border-radius:30px;margin-bottom:22px}
+    .badge-travel{background:rgba(248,198,64,.12);border:1px solid rgba(248,198,64,.3);color:#f8c640}
+    .badge-hajj{background:rgba(201,162,39,.12);border:1px solid rgba(201,162,39,.35);color:#f6d860}
+    .badge-work{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);color:#34d399}
+    .hero-content h1{font-family:'Playfair Display',serif;font-size:clamp(34px,5vw,64px);font-weight:900;color:white;line-height:1.1;margin-bottom:10px}
+    .hero-content h1 em{font-style:italic;color:#f8c640}
+    .hero-sub{font-size:17px;color:rgba(255,255,255,.55);margin-bottom:32px}
+    .hero-meta{display:flex;flex-wrap:wrap;gap:24px;align-items:center}
+    .hmeta{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(255,255,255,.8)}
+    .hmeta .hi{font-size:20px}
+    .hmeta b{color:white;display:block;font-size:15px}
+    .hmeta small{font-size:12px;opacity:.7}
+    .price-pill{background:linear-gradient(135deg,#f8c640,#e8a800);color:#0d1117;font-size:20px;font-weight:900;padding:10px 28px;border-radius:50px;box-shadow:0 8px 24px rgba(248,198,64,.35)}
+
+    /* BREADCRUMB */
+    .breadcrumb{background:white;border-bottom:1px solid #f0f0f0;padding:14px 40px}
+    .bc-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+    .bc-inner a{color:var(--blue);transition:var(--t)}
+    .bc-inner a:hover{color:var(--blue-dark)}
+    .sep{color:#d1d5db}
+
+    /* LAYOUT */
+    .detail-wrap{max-width:1200px;margin:0 auto;padding:52px 40px;display:grid;grid-template-columns:1fr 380px;gap:48px;align-items:start}
+
+    /* GALLERY */
+    .gallery-wrap{margin-bottom:48px}
+    .gallery-wrap h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--dark);margin-bottom:18px}
+    .gallery-main{border-radius:var(--radius);overflow:hidden;height:420px;cursor:zoom-in}
+    .gallery-main img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+    .gallery-main:hover img{transform:scale(1.03)}
+    .thumbs-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+    .thumb{border-radius:10px;overflow:hidden;height:90px;cursor:pointer;border:2px solid transparent;transition:var(--t)}
+    .thumb img{width:100%;height:100%;object-fit:cover}
+    .thumb.active,.thumb:hover{border-color:var(--blue)}
+
+    /* SECTION CARD */
+    .sc{background:white;border-radius:var(--radius);padding:36px;margin-bottom:28px;box-shadow:0 4px 20px rgba(0,0,0,.05)}
+    .sc-head{display:flex;align-items:center;gap:12px;font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--dark);margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #f3f4f6}
+    .about-text{font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:12px}
+    .about-bn{font-size:13px;color:#9ca3af}
+
+    /* HIGHLIGHTS */
+    .hl-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .hl-item{display:flex;align-items:flex-start;gap:12px;background:#f8f9ff;border-radius:12px;padding:14px 16px}
+    .hl-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+    .hl-text b{display:block;font-size:13px;font-weight:700;color:var(--dark)}
+    .hl-text span{font-size:12px;color:var(--muted)}
+
+    /* TIMELINE */
+    .tl-item{display:flex;gap:20px;padding-bottom:28px;position:relative}
+    .tl-item:not(:last-child)::before{content:'';position:absolute;left:18px;top:40px;bottom:0;width:2px;background:#e5e7eb}
+    .tl-num{flex-shrink:0;width:38px;height:38px;border-radius:50%;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+    .tl-num.c-blue{background:var(--blue);color:white;box-shadow:0 4px 12px rgba(26,86,219,.25)}
+    .tl-num.c-gold{background:var(--gold);color:white;box-shadow:0 4px 12px rgba(201,162,39,.25)}
+    .tl-num.c-green{background:var(--green);color:white;box-shadow:0 4px 12px rgba(13,159,110,.25)}
+    .tl-body h4{font-size:15px;font-weight:700;color:var(--dark);margin-bottom:4px}
+    .tl-body p{font-size:13px;color:var(--muted);line-height:1.7}
+
+    /* INCLUDES */
+    .inc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .inc-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text)}
+    .inc-ok{color:var(--green);font-size:16px}
+    .inc-no{color:#ef4444;font-size:16px}
+
+    /* REVIEWS */
+    .rv-summary{display:flex;align-items:center;gap:28px;background:linear-gradient(135deg,#f8f9ff,#eef2ff);border-radius:14px;padding:24px 28px;margin-bottom:28px}
+    .rv-score{font-family:'Playfair Display',serif;font-size:56px;font-weight:900;color:var(--dark);line-height:1}
+    .rv-stars{color:#f59e0b;font-size:20px;letter-spacing:2px}
+    .rv-count{font-size:13px;color:var(--muted);margin-top:4px}
+    .rv-bars{flex:1}
+    .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .bar-lbl{font-size:12px;color:var(--muted);width:32px;text-align:right}
+    .bar-track{flex:1;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden}
+    .bar-fill{height:100%;background:#f59e0b;border-radius:3px}
+    .bar-pct{font-size:12px;color:var(--muted);width:30px}
+    .rv-list{display:flex;flex-direction:column;gap:18px;margin-bottom:28px}
+    .rv-card{background:white;border-radius:14px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+    .rv-card.b-blue{border-left:3px solid var(--blue)}
+    .rv-card.b-gold{border-left:3px solid var(--gold)}
+    .rv-card.b-green{border-left:3px solid var(--green)}
+    .rv-hdr{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+    .rv-av{width:44px;height:44px;border-radius:50%;color:white;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .av-blue{background:var(--blue)}.av-gold{background:var(--gold)}.av-green{background:var(--green)}
+    .rv-name{font-size:15px;font-weight:700;color:var(--dark)}
+    .rv-date{font-size:12px;color:var(--muted)}
+    .rv-starz{color:#f59e0b;font-size:14px;margin-left:auto}
+    .rv-text{font-size:14px;color:var(--muted);line-height:1.75}
+
+    /* WRITE REVIEW */
+    .write-rv{background:#f8f9ff;border-radius:14px;padding:28px;border:1.5px dashed #d1d9f5}
+    .write-rv h4{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--dark);margin-bottom:16px}
+    .star-row{display:flex;gap:8px;margin-bottom:16px}
+    .sb{font-size:28px;color:#d1d5db;cursor:pointer;background:none;border:none;padding:0;transition:var(--t)}
+    .sb.on,.sb:hover{color:#f59e0b;transform:scale(1.15)}
+    .rv-inp{width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:12px;font-family:inherit;font-size:14px;color:var(--dark);background:white;outline:none;transition:var(--t);margin-bottom:12px;resize:none}
+    .rv-inp:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(26,86,219,.08)}
+    .btn-rv{padding:12px 28px;background:var(--blue);color:white;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:var(--t)}
+    .btn-rv:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 8px 20px rgba(26,86,219,.28)}
+    .rv-ok{display:none;margin-top:12px;padding:12px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:10px;font-size:14px;text-align:center}
+
+    /* BOOKING CARD */
+    .booking-sticky{position:sticky;top:90px}
+    .booking-card{background:white;border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.10);overflow:hidden}
+    .bk-hdr{padding:28px 28px 22px;color:white}
+    .bk-hdr.bh-blue{background:linear-gradient(135deg,var(--blue),var(--blue-dark))}
+    .bk-hdr.bh-gold{background:linear-gradient(135deg,var(--gold),var(--gold-dark))}
+    .bk-hdr.bh-green{background:linear-gradient(135deg,var(--green),var(--green-dark))}
+    .bk-label{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;opacity:.75}
+    .bk-price{font-family:'Playfair Display',serif;font-size:40px;font-weight:900;line-height:1;margin:6px 0 2px}
+    .bk-per{font-size:13px;opacity:.7}
+    .bk-stars{color:#f8c640;font-size:14px}
+    .bk-body{padding:28px}
+    .bk-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--dark);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #f3f4f6}
+    .bf{margin-bottom:14px}
+    .bf label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px;letter-spacing:.3px}
+    .bf input,.bf select,.bf textarea{width:100%;padding:11px 14px;border:1.5px solid #e5e7eb;border-radius:12px;font-family:inherit;font-size:13px;color:var(--dark);background:#f9fafb;outline:none;transition:var(--t);resize:none}
+    .bf input:focus,.bf select:focus,.bf textarea:focus{border-color:var(--blue);background:white;box-shadow:0 0 0 4px rgba(26,86,219,.08)}
+    .bf-2col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .btn-book{width:100%;padding:16px;border:none;border-radius:14px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:var(--t);letter-spacing:.5px;margin-top:4px;color:white}
+    .bb-blue{background:var(--blue)}.bb-blue:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 12px 30px rgba(26,86,219,.3)}
+    .bb-gold{background:linear-gradient(135deg,var(--gold),var(--gold-dark))}.bb-gold:hover{box-shadow:0 12px 30px rgba(201,162,39,.3);transform:translateY(-2px)}
+    .bb-green{background:var(--green)}.bb-green:hover{background:var(--green-dark);transform:translateY(-2px);box-shadow:0 12px 30px rgba(13,159,110,.3)}
+    .book-ok{display:none;margin-top:12px;padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:10px;font-size:13px;text-align:center;line-height:1.7}
+    .bk-foot{padding:0 28px 28px}
+    .bk-assure{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-bottom:7px}
+    .bk-assure .ck{color:var(--green);font-size:14px}
+    .sim-wrap{margin-top:22px}
+    .sim-wrap h4{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:12px;letter-spacing:.3px;text-transform:uppercase}
+    .sim-card{display:flex;gap:12px;padding:12px;background:white;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.05);margin-bottom:10px;cursor:pointer;transition:var(--t)}
+    .sim-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+    .sim-img{width:60px;height:60px;border-radius:8px;overflow:hidden;flex-shrink:0}
+    .sim-img img{width:100%;height:100%;object-fit:cover}
+    .sim-info{flex:1;min-width:0}
+    .sim-info b{display:block;font-size:13px;font-weight:700;color:var(--dark);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sim-info span{font-size:12px;color:var(--muted)}
+    .sim-price{font-size:13px;font-weight:700;color:var(--blue);flex-shrink:0}
+
+    /* FOOTER */
+    footer{background:var(--dark);color:#9ca3af;padding:60px 0 0;margin-top:80px}
+    .fi{max-width:1280px;margin:0 auto;padding:0 40px 50px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:50px}
+    .fb-brand p{font-size:14px;line-height:1.8;max-width:280px;color:#6b7280;margin-top:10px}
+    .fl{display:flex;flex-direction:column;gap:12px}
+    .fl h4{font-family:'Playfair Display',serif;font-size:16px;color:white;margin-bottom:6px}
+    .fl a{font-size:14px;color:#6b7280;transition:var(--t)}
+    .fl a:hover{color:white;padding-left:6px}
+    .fb-bottom{border-top:1px solid #1f2937;text-align:center;padding:20px 40px;font-size:13px;color:#4b5563}
+
+    /* RESPONSIVE */
+    @media(max-width:1024px){.detail-wrap{grid-template-columns:1fr}.booking-sticky{position:static}}
+    @media(max-width:768px){
+      .hamburger{display:flex}
+      .nav-links{position:fixed;top:0;left:0;width:100%;background:white;box-shadow:0 8px 32px rgba(0,0,0,.12);flex-direction:column;align-items:stretch;gap:0;padding-top:68px;padding-bottom:12px;transform:translateY(-100%);transition:transform .38s cubic-bezier(.4,0,.2,1);visibility:hidden;z-index:1100}
+      .nav-links.open{transform:translateY(0);visibility:visible}
+      .nav-links li{border-bottom:1px solid #f0f0f0}
+      .nav-links a{display:block;padding:16px 28px;color:var(--text);border-bottom:none}
+      .nav-links a.active{color:var(--blue);background:#f0f5ff}
+      .hamburger.open span{background:var(--text)}
+      .nav-inner{padding:16px 20px}
+      .hero-content{padding:90px 20px 50px}
+      .detail-wrap{padding:28px 20px;gap:24px}
+      .gallery-main{height:260px}
+      .hl-grid,.inc-grid,.bf-2col{grid-template-columns:1fr}
+      .breadcrumb{padding:14px 20px}
+      .hero-meta{gap:14px}
+      .fi{grid-template-columns:1fr;gap:24px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="logo-link">
+      <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Logo" onerror="this.style.display='none'">
+      <span class="logo-text">Nusrat <em>International</em></span>
+    </a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home | হোম</a></li>
+      <li><a href="Travel.html">Travel | ভ্রমণ</a></li>
+      <li><a href="Hajj.html">Hajj | হাজ্জ</a></li>
+      <li><a href="Work.html">Work | কাজ</a></li>
+      <li><a href="Contact.html">Contact | যোগাযোগ</a></li>
+      <li><a href="About_us.html">About | আমাদের সম্পর্কে</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="pkg-hero">
+  <img class="hero-bg-img" id="heroBg" src="" alt="">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="type-badge badge-travel" id="typeBadge">✈ TRAVEL PACKAGE</span>
+    <h1 id="heroH1">Package <em id="heroEm">Details</em></h1>
+    <p class="hero-sub" id="heroBn"></p>
+    <div class="hero-meta">
+      <div class="hmeta"><span class="hi">📅</span><div><small>Departure</small><b id="mDate">—</b></div></div>
+      <div class="hmeta"><span class="hi">⏱</span><div><small>Duration</small><b id="mDur">—</b></div></div>
+      <div class="hmeta"><span class="hi">👥</span><div><small>Group</small><b id="mGroup">—</b></div></div>
+      <div class="hmeta"><span class="hi">⭐</span><div><small>Rating</small><b id="mRating">—</b></div></div>
+      <span class="price-pill" id="mPrice">—</span>
+    </div>
+  </div>
+</section>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <div class="bc-inner">
+    <a href="index.html">Home</a><span class="sep">›</span>
+    <a href="#" id="bcLink">Packages</a><span class="sep">›</span>
+    <span id="bcName">Details</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="detail-wrap">
+
+  <!-- LEFT -->
+  <div>
+    <!-- Gallery -->
+    <div class="gallery-wrap">
+      <h2>📸 Photo Gallery</h2>
+      <div class="gallery-main"><img id="mainImg" src="" alt=""></div>
+      <div class="thumbs-row" id="thumbsRow"></div>
+    </div>
+
+    <!-- About -->
+    <div class="sc">
+      <div class="sc-head">📋 About This Package</div>
+      <p class="about-text" id="aboutEn"></p>
+      <p class="about-text about-bn" id="aboutBn"></p>
+    </div>
+
+    <!-- Highlights -->
+    <div class="sc">
+      <div class="sc-head">✨ Package Highlights</div>
+      <div class="hl-grid" id="hlGrid"></div>
+    </div>
+
+    <!-- Itinerary -->
+    <div class="sc">
+      <div class="sc-head">🗓 Itinerary & Day Plan</div>
+      <div id="timeline"></div>
+    </div>
+
+    <!-- Includes -->
+    <div class="sc">
+      <div class="sc-head">🎒 Included & Excluded</div>
+      <div class="inc-grid" id="incGrid"></div>
+    </div>
+
+    <!-- Reviews -->
+    <div class="sc">
+      <div class="sc-head">⭐ Reviews & Ratings</div>
+
+      <div class="rv-summary">
+        <div>
+          <div class="rv-score" id="rvScore">4.8</div>
+          <div class="rv-stars">★★★★★</div>
+          <div class="rv-count" id="rvCount">124 reviews</div>
+        </div>
+        <div class="rv-bars" id="rvBars"></div>
+      </div>
+
+      <div class="rv-list" id="rvList"></div>
+
+      <!-- Write Review -->
+      <div class="write-rv">
+        <h4>✍️ Write a Review | রিভিউ লিখুন</h4>
+        <div class="star-row" id="starRow">
+          <button class="sb" data-v="1">★</button>
+          <button class="sb" data-v="2">★</button>
+          <button class="sb" data-v="3">★</button>
+          <button class="sb" data-v="4">★</button>
+          <button class="sb" data-v="5">★</button>
+        </div>
+        <input class="rv-inp" id="rvName" placeholder="Your name | আপনার নাম" type="text">
+        <textarea class="rv-inp" id="rvText" rows="4" placeholder="Your experience... | আপনার অভিজ্ঞতা লিখুন..."></textarea>
+        <button class="btn-rv" id="btnRv">Submit Review | রিভিউ দিন</button>
+        <div class="rv-ok" id="rvOk">✅ Review submitted! ধন্যবাদ আপনার মন্তব্যের জন্য!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="booking-sticky">
+    <div class="booking-card">
+      <div class="bk-hdr bh-blue" id="bkHdr">
+        <div class="bk-label">Starting from</div>
+        <div class="bk-price" id="bkPrice">—</div>
+        <div class="bk-per">per person</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;font-size:13px">
+          <span class="bk-stars">★★★★★</span><span id="bkRat">4.8 · 124 reviews</span>
+        </div>
+      </div>
+      <div class="bk-body">
+        <div class="bk-title">📝 Book This Package | বুকিং করুন</div>
+        <div class="bf-2col">
+          <div class="bf"><label>Full Name</label><input id="bfName" type="text" placeholder="Your name"></div>
+          <div class="bf"><label>Phone</label><input id="bfPhone" type="tel" placeholder="+880 XXXXXXXXX"></div>
+        </div>
+        <div class="bf"><label>Email</label><input id="bfEmail" type="email" placeholder="you@email.com"></div>
+        <div class="bf-2col">
+          <div class="bf"><label>Preferred Date</label><input id="bfDate" type="date"></div>
+          <div class="bf"><label>Travelers</label>
+            <select id="bfTrav">
+              <option>1 Person</option><option>2 Persons</option>
+              <option>3 Persons</option><option>4 Persons</option><option>5+ Persons</option>
+            </select>
+          </div>
+        </div>
+        <div class="bf"><label>Special Requests</label><textarea id="bfNote" rows="3" placeholder="Any special needs... | বিশেষ চাহিদা..."></textarea></div>
+        <button class="btn-book bb-blue" id="btnBook">Book Now | এখনই বুক করুন ✈</button>
+        <div class="book-ok" id="bookOk">✅ Booking received! আমরা ২৪ ঘণ্টার মধ্যে যোগাযোগ করব।</div>
+      </div>
+      <div class="bk-foot">
+        <div class="bk-assure"><span class="ck">✓</span> Free consultation</div>
+        <div class="bk-assure"><span class="ck">✓</span> No hidden charges</div>
+        <div class="bk-assure"><span class="ck">✓</span> Secure process</div>
+      </div>
+    </div>
+
+    <div class="sim-wrap">
+      <h4>Similar Packages</h4>
+      <div id="simList"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fi">
+    <div class="fb-brand">
+      <a href="index.html" class="logo-link"><span class="logo-text" style="color:white">Nusrat <em>International</em></span></a>
+      <p>Trusted partner for travel, Hajj, Umrah & work abroad. Serving Bangladesh since 2010.</p>
+    </div>
+    <div class="fl">
+      <h4>Services</h4>
+      <a href="Travel.html">Travel Packages</a>
+      <a href="Hajj.html">Hajj & Umrah</a>
+      <a href="Work.html">Work Visas</a>
+    </div>
+    <div class="fl">
+      <h4>Company</h4>
+      <a href="About_us.html">About Us</a>
+      <a href="Contact.html">Contact</a>
+    </div>
+    <div class="fl">
+      <h4>Contact</h4>
+      <a>📍 Dhaka, Bangladesh</a>
+      <a href="tel:+8801712345678">📞 +880 1712-345678</a>
+    </div>
+  </div>
+  <div class="fb-bottom">© 2026 Nusrat International. All rights reserved. | সর্বস্বত্ব সংরক্ষিত।</div>
+</footer>
+
+<script>
+// ============================================================
+//  PACKAGE DATABASE
+//  Pass data via URL: package-detail.html?id=greece
+//  OR call openPackage(data) from parent page's card buttons
+// ============================================================
+const DB = {
+  "greece":{
+    type:"travel",title:"Santorini",em:"Greece",bn:"সান্তোরিনি, গ্রীস",
+    price:"$799",rating:"4.8",duration:"7 Days",group:"10–20",date:"15 Aug 2026",
+    img:"https://picsum.photos/id/1018/1600/900",
+    gallery:["https://picsum.photos/id/1018/800/500","https://picsum.photos/id/1015/800/500","https://picsum.photos/id/1019/800/500","https://picsum.photos/id/1057/800/500"],
+    desc:"Discover the magic of Santorini — whitewashed Cycladic architecture, volcanic beaches, and legendary sunsets over the Aegean Sea. Our 7-day package includes guided tours of Oia, Fira, Akrotiri ruins, vineyard wine tasting, and a spectacular caldera boat cruise.",
+    descBn:"সান্তোরিনির যাদুকরী সাদা বাড়ি, আগ্নেয়গিরির সমুদ্র সৈকত ও এজিয়ান সাগরের সোনালি সূর্যাস্ত আপনার জীবনের সেরা স্মৃতি হয়ে থাকবে।",
+    hl:[
+      {i:"🏖",t:"Caldera Cruise",d:"Sunset boat tour of the volcano"},
+      {i:"🍷",t:"Wine Tasting",d:"Local vineyard experience"},
+      {i:"🏛",t:"Guided Tours",d:"Oia, Fira & Akrotiri ruins"},
+      {i:"✈️",t:"Flights Included",d:"Round-trip from Dhaka"},
+      {i:"🏨",t:"4-Star Hotel",d:"Sea-view rooms in Fira"},
+      {i:"🍽️",t:"Daily Breakfast",d:"Traditional Greek breakfast"}
+    ],
+    itin:[
+      {d:"Day 01",t:"Arrival in Santorini",p:"Arrive, hotel check-in, welcome dinner at a cliffside restaurant overlooking the caldera."},
+      {d:"Day 02",t:"Explore Fira",p:"Wander Fira's narrow alleys, visit the Orthodox Cathedral, cable car ride down to the port."},
+      {d:"Day 03",t:"Iconic Oia Sunset",p:"Visit famous blue-domed churches and witness the world-renowned Oia sunset."},
+      {d:"Day 04",t:"Caldera Boat Tour",p:"Full-day cruise: volcanic hot springs dip, white & red beaches, BBQ lunch on deck."},
+      {d:"Day 05",t:"Akrotiri & Beaches",p:"Explore ancient Minoan ruins at Akrotiri, then Perissa black-sand and Red Beach."},
+      {d:"Day 06",t:"Free Leisure Day",p:"Shopping in Fira, optional ATV tour, or spa indulgence at your leisure."},
+      {d:"Day 07",t:"Departure Day",p:"Farewell breakfast, airport transfer — fly home with memories to last a lifetime."}
+    ],
+    inc:[
+      {ok:1,t:"Round-trip airfare"},{ok:1,t:"7 nights accommodation"},
+      {ok:1,t:"Daily breakfast"},{ok:1,t:"All airport transfers"},
+      {ok:1,t:"Guided tours"},{ok:1,t:"Caldera cruise"},
+      {ok:0,t:"Lunch & dinner (own)"},{ok:0,t:"Personal shopping"}
+    ],
+    reviews:[
+      {n:"Rahul Ahmed",d:"Jan 2026",s:5,t:"Absolutely magical! Nusrat handled everything perfectly. Hotel had stunning caldera views and our guide was excellent throughout."},
+      {n:"Fatima Khanam",d:"Dec 2025",s:5,t:"Best trip of my life! The sunset at Oia was breathtaking. Every detail was perfectly organised from pickup to drop-off."},
+      {n:"Karim Uddin",d:"Nov 2025",s:4,t:"Great package overall. Food was amazing, the boat tour was the highlight. Would suggest a bit more free shopping time."}
+    ],
+    sim:[
+      {t:"Maldives Dream",p:"$999",img:"https://picsum.photos/id/1015/120/100"},
+      {t:"Dubai Adventure",p:"$899",img:"https://picsum.photos/id/1019/120/100"},
+      {t:"Switzerland Alps",p:"$1,299",img:"https://picsum.photos/id/1057/120/100"}
+    ]
+  },
+  "hajj-standard":{
+    type:"hajj",title:"Standard Hajj",em:"হজ প্যাকেজ",bn:"স্ট্যান্ডার্ড হজ প্যাকেজ",
+    price:"$2,999",rating:"4.8",duration:"21 Days",group:"Guided Group",date:"10 Jun 2026",
+    img:"https://images.unsplash.com/photo-1609599006353-e629aaabfeae?w=1600&q=80",
+    gallery:["https://images.unsplash.com/photo-1609599006353-e629aaabfeae?w=800","https://picsum.photos/id/1035/800/500","https://picsum.photos/id/1036/800/500","https://picsum.photos/id/1039/800/500"],
+    desc:"Embark on the most sacred journey of your lifetime. Our Standard Hajj Package includes complete Hajj ritual guidance, accommodation in Makkah & Madinah, dedicated scholarly support, all transport between holy sites, and three daily meals throughout your blessed pilgrimage.",
+    descBn:"আপনার জীবনের সবচেয়ে পবিত্র সফরে আমরা সর্বক্ষণ আপনার পাশে থাকব। মক্কা ও মদিনায় হোটেল থেকে সম্পূর্ণ হজ পালনের গাইডেন্স পর্যন্ত সবকিছু আমাদের তত্ত্বাবধানে।",
+    hl:[
+      {i:"🕌",t:"Makkah Hotel",d:"3-star near Haram, Makkah"},
+      {i:"🕌",t:"Madinah Stay",d:"Hotel near Masjid Nabawi"},
+      {i:"📖",t:"Scholar Guide",d:"24/7 Islamic guidance"},
+      {i:"✈️",t:"Flights Included",d:"Dhaka–Jeddah round trip"},
+      {i:"🍱",t:"3 Meals Daily",d:"Breakfast, lunch & dinner"},
+      {i:"🚌",t:"All Transport",d:"Hajj route buses & transfers"}
+    ],
+    itin:[
+      {d:"Day 01–02",t:"Departure & Makkah",p:"Fly from Dhaka, enter Ihram at Meeqat, arrive in Makkah. Hotel check-in and rest."},
+      {d:"Day 03–06",t:"Makkah — Umrah Rituals",p:"Perform Tawaf, Sa'i, visit Masjid al-Haram, drink Zamzam, ziyarat of holy sites."},
+      {d:"Day 07–08",t:"Madinah Ziyarat",p:"Visit Masjid an-Nabawi, Raudhah, Baqi, Masjid Quba and Masjid al-Qiblatayn."},
+      {d:"Day 09–11",t:"Return to Makkah",p:"Scholarly lectures on Hajj rituals, Ihram donning ceremony and Niyyah."},
+      {d:"Day 12",t:"8 Dhul Hijjah — Mina",p:"Depart to Mina, night spent in tents in du'a, dhikr and preparation."},
+      {d:"Day 13",t:"Arafah — Greatest Day",p:"Stand at Arafah in Wuquf. After sunset proceed to Muzdalifah, collect pebbles."},
+      {d:"Day 14–16",t:"Eid & Stoning",p:"Rami (stoning), Qurbani sacrifice, shaving, Tawaf al-Ifaadah and Sa'i."},
+      {d:"Day 17–21",t:"Farewell & Return",p:"Tawaf al-Wida, final prayers, rest and depart home with an accepted Hajj insha'Allah."}
+    ],
+    inc:[
+      {ok:1,t:"Round-trip airfare"},{ok:1,t:"Hajj visa processing"},
+      {ok:1,t:"Makkah 3-star hotel"},{ok:1,t:"Madinah hotel stay"},
+      {ok:1,t:"3 daily meals"},{ok:1,t:"All holy site transport"},
+      {ok:0,t:"Qurbani (charged separately)"},{ok:0,t:"Personal expenses"}
+    ],
+    reviews:[
+      {n:"Haji Abdul Karim",d:"Jul 2025",s:5,t:"Alhamdulillah! Best Hajj experience. Our scholar guide was very knowledgeable. Hotel was close to Haram. Highly recommend Nusrat."},
+      {n:"Hajjah Nurjahan Begum",d:"Jul 2025",s:5,t:"Sobkichu khub valo chilo. Guide saheb amader sorbokkhon sathe chilen. Allah sobke Hajj korate tofiq dik. Ameen."},
+      {n:"Md. Shafiqul Islam",d:"Jun 2024",s:4,t:"Good overall. Madinah hotel was excellent — very close to Masjid Nabawi. Makkah hotel was decent. Very satisfied."}
+    ],
+    sim:[
+      {t:"Premium Hajj 5-Star",p:"$4,499",img:"https://picsum.photos/id/1036/120/100"},
+      {t:"Umrah Package",p:"$1,599",img:"https://picsum.photos/id/1039/120/100"},
+      {t:"Ramadan Umrah",p:"$1,899",img:"https://picsum.photos/id/1035/120/100"}
+    ]
+  },
+  "malaysia-work":{
+    type:"work",title:"Malaysia Work Visa",em:"মালয়েশিয়া",bn:"মালয়েশিয়া ওয়ার্ক ভিসা প্যাকেজ",
+    price:"$599",rating:"4.7",duration:"2-Year Contract",group:"Individual",date:"Rolling Intake",
+    img:"https://picsum.photos/id/1062/1600/900",
+    gallery:["https://picsum.photos/id/1062/800/500","https://picsum.photos/id/1071/800/500","https://picsum.photos/id/1069/800/500","https://picsum.photos/id/1047/800/500"],
+    desc:"Start a new chapter in Malaysia with our complete work visa package. We handle all visa processing, job placement in reputable factories, construction & service sectors. Employer-provided free accommodation and competitive monthly salary await you.",
+    descBn:"মালয়েশিয়ায় আপনার নতুন জীবন শুরু করুন। ভিসা প্রসেসিং থেকে চাকরি নিশ্চিত করা পর্যন্ত সবকিছু আমরা সামলাই। বিনামূল্যে থাকার ব্যবস্থা ও ভালো বেতন সহ।",
+    hl:[
+      {i:"📄",t:"Full Visa Processing",d:"All documentation handled"},
+      {i:"💼",t:"Job Guarantee",d:"Placement confirmed before departure"},
+      {i:"🏠",t:"Free Accommodation",d:"Employer-provided housing"},
+      {i:"✈️",t:"Flight Arranged",d:"One-way ticket assisted"},
+      {i:"🏥",t:"Medical Check",d:"Mandatory health screening done"},
+      {i:"📞",t:"After-Arrival Support",d:"We stay with you post-departure"}
+    ],
+    itin:[
+      {d:"Step 1",t:"Initial Consultation",p:"Meet our counselor, assess your skills, select suitable job category and employer."},
+      {d:"Step 2",t:"Document Preparation",p:"Collect passport, NID, certificates, medical test, police clearance certificate."},
+      {d:"Step 3",t:"Visa Application",p:"We submit your work visa application to the Malaysian embassy on your behalf."},
+      {d:"Step 4",t:"Visa Approval",p:"Receive work permit, employment letter and pre-departure orientation materials."},
+      {d:"Step 5",t:"Pre-Departure Briefing",p:"Orientation on Malaysian laws, work culture, emergency contacts and rights."},
+      {d:"Step 6",t:"Departure to Malaysia",p:"Fly to Kuala Lumpur with assistance; employer pickup arranged at airport."}
+    ],
+    inc:[
+      {ok:1,t:"Visa fee & processing"},{ok:1,t:"Job placement service"},
+      {ok:1,t:"Document preparation"},{ok:1,t:"Pre-departure training"},
+      {ok:1,t:"Airport assistance"},{ok:1,t:"Post-arrival helpline"},
+      {ok:0,t:"Return air ticket"},{ok:0,t:"Personal expenses abroad"}
+    ],
+    reviews:[
+      {n:"Rahim Miah",d:"Mar 2026",s:5,t:"Alhamdulillah! Got a good factory job in KL through Nusrat. Process was smooth and honest. Salary BDT 45,000/month. Very happy!"},
+      {n:"Jamal Hossain",d:"Jan 2026",s:4,t:"Everything arranged properly. Got free food and accommodation from employer. Nusrat team was very helpful throughout the process."},
+      {n:"Shahin Akter",d:"Dec 2025",s:5,t:"Best agency in Dhaka! Transparent and professional. They did exactly as promised with zero hidden charges. Highly recommend!"}
+    ],
+    sim:[
+      {t:"Singapore Work Permit",p:"$799",img:"https://picsum.photos/id/1071/120/100"},
+      {t:"Dubai Employment",p:"$699",img:"https://picsum.photos/id/1019/120/100"},
+      {t:"Saudi Arabia Work",p:"$499",img:"https://picsum.photos/id/1069/120/100"}
+    ]
+  }
+};
+
+// ============================================================
+//  RENDER
+// ============================================================
+function render(data){
+  const t = data.type; // travel | hajj | work
+  const cc = {travel:"c-blue",hajj:"c-gold",work:"c-green"}[t];
+
+  // Hero
+  const bgImg = document.getElementById("heroBg");
+  bgImg.src = data.img;
+  bgImg.onload  = ()=> bgImg.classList.add("loaded");
+  bgImg.onerror = ()=> bgImg.src="https://picsum.photos/id/1018/1600/900";
+
+  // Type badge
+  const badge = document.getElementById("typeBadge");
+  badge.className = "type-badge badge-"+t;
+  badge.textContent = {travel:"✈ TRAVEL PACKAGE",hajj:"☪ HAJJ PACKAGE",work:"💼 WORK PACKAGE"}[t];
+  if(t==="work") badge.style="background:rgba(52,211,153,.10);border:1px solid rgba(52,211,153,.3);color:#34d399;";
+
+  document.getElementById("heroH1").innerHTML = data.title + ' <em id="heroEm">' + data.em + '</em>';
+  document.getElementById("heroBn").textContent = data.bn;
+  document.getElementById("mDate").textContent  = data.date;
+  document.getElementById("mDur").textContent   = data.duration;
+  document.getElementById("mGroup").textContent = data.group;
+  document.getElementById("mRating").textContent= "★ "+data.rating;
+  document.getElementById("mPrice").textContent = data.price;
+  document.title = data.title+" — Nusrat International";
+
+  // Breadcrumb
+  const bcLinks={travel:"Travel.html",hajj:"Hajj.html",work:"Work.html"};
+  const bcNames={travel:"Travel",hajj:"Hajj",work:"Work"};
+  document.getElementById("bcLink").href=bcLinks[t];
+  document.getElementById("bcLink").textContent=bcNames[t]+" Packages";
+  document.getElementById("bcName").textContent=data.title;
+
+  // Gallery
+  const mainImg=document.getElementById("mainImg");
+  mainImg.src=data.gallery[0];
+  mainImg.onerror=()=>mainImg.src="https://picsum.photos/id/1018/800/500";
+  const thumbsRow=document.getElementById("thumbsRow");
+  data.gallery.forEach((src,i)=>{
+    const d=document.createElement("div");
+    d.className="thumb"+(i===0?" active":"");
+    d.innerHTML=`<img src="${src}" onerror="this.src='https://picsum.photos/id/${1015+i}/200/150'">`;
+    d.onclick=()=>{
+      mainImg.src=src;
+      thumbsRow.querySelectorAll(".thumb").forEach(x=>x.classList.remove("active"));
+      d.classList.add("active");
+    };
+    thumbsRow.appendChild(d);
+  });
+
+  // About
+  document.getElementById("aboutEn").textContent=data.desc;
+  document.getElementById("aboutBn").textContent=data.descBn;
+
+  // Highlights
+  const hlG=document.getElementById("hlGrid");
+  data.hl.forEach(h=>hlG.innerHTML+=`<div class="hl-item"><span class="hl-icon">${h.i}</span><div class="hl-text"><b>${h.t}</b><span>${h.d}</span></div></div>`);
+
+  // Itinerary
+  const tl=document.getElementById("timeline");
+  data.itin.forEach(it=>tl.innerHTML+=`<div class="tl-item"><div class="tl-num ${cc}">${it.d}</div><div class="tl-body"><h4>${it.t}</h4><p>${it.p}</p></div></div>`);
+
+  // Includes
+  const inc=document.getElementById("incGrid");
+  data.inc.forEach(x=>inc.innerHTML+=`<div class="inc-item"><span class="${x.ok?'inc-ok':'inc-no'}">${x.ok?"✓":"✗"}</span><span>${x.t}</span></div>`);
+
+  // Review bars
+  const bars=[[5,70],[4,18],[3,8],[2,3],[1,1]];
+  const rvBars=document.getElementById("rvBars");
+  bars.forEach(([s,p])=>rvBars.innerHTML+=`<div class="bar-row"><span class="bar-lbl">${s}★</span><div class="bar-track"><div class="bar-fill" style="width:${p}%"></div></div><span class="bar-pct">${p}%</span></div>`);
+  document.getElementById("rvScore").textContent=data.rating;
+  document.getElementById("rvCount").textContent=`${data.reviews.length*41} reviews`;
+
+  // Reviews
+  const rvColors=["b-blue","b-gold","b-green"];
+  const avColors=["av-blue","av-gold","av-green"];
+  const rvList=document.getElementById("rvList");
+  data.reviews.forEach((r,i)=>{
+    const init=r.n.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    rvList.innerHTML+=`<div class="rv-card ${rvColors[i%3]}">
+      <div class="rv-hdr">
+        <div class="rv-av ${avColors[i%3]}">${init}</div>
+        <div><div class="rv-name">${r.n}</div><div class="rv-date">${r.d}</div></div>
+        <div class="rv-starz">${"★".repeat(r.s)}${"☆".repeat(5-r.s)}</div>
+      </div>
+      <div class="rv-text">${r.t}</div>
+    </div>`;
+  });
+
+  // Booking header
+  const bkHdr=document.getElementById("bkHdr");
+  if(t==="hajj") bkHdr.classList.replace("bh-blue","bh-gold");
+  if(t==="work") bkHdr.classList.replace("bh-blue","bh-green");
+  document.getElementById("bkPrice").textContent=data.price;
+  document.getElementById("bkRat").textContent=`${data.rating} · ${data.reviews.length*41} reviews`;
+
+  const btnBook=document.getElementById("btnBook");
+  btnBook.classList.remove("bb-blue");
+  if(t==="travel") btnBook.classList.add("bb-blue");
+  if(t==="hajj")   btnBook.classList.add("bb-gold");
+  if(t==="work")   btnBook.classList.add("bb-green");
+
+  // Similar
+  const simList=document.getElementById("simList");
+  data.sim.forEach(s=>simList.innerHTML+=`<div class="sim-card">
+    <div class="sim-img"><img src="${s.img}" onerror="this.src='https://picsum.photos/id/1018/120/100'"></div>
+    <div class="sim-info"><b>${s.t}</b><span>${t.charAt(0).toUpperCase()+t.slice(1)} Package</span></div>
+    <div class="sim-price">${s.p}</div>
+  </div>`);
+}
+
+// ============================================================
+//  HOW CARDS PASS DATA
+//  Option A (URL param): href="package-detail.html?id=greece"
+//  Option B (localStorage): called from card's onclick
+// ============================================================
+function getParam(k){ return new URLSearchParams(location.search).get(k); }
+
+// Also accept data stored by parent page via localStorage
+function loadAndRender(){
+  const id = getParam("id");
+  if(id && DB[id]){ render(DB[id]); return; }
+  // Check if parent stored custom data
+  try{
+    const stored=localStorage.getItem("pkg_detail");
+    if(stored){ render(JSON.parse(stored)); return; }
+  }catch(e){}
+  // Default demo
+  render(DB["greece"]);
+}
+
+// ============================================================
+//  STAR PICKER
+// ============================================================
+let selStars=0;
+document.getElementById("starRow").addEventListener("click",e=>{
+  if(!e.target.classList.contains("sb")) return;
+  selStars=+e.target.dataset.v;
+  document.querySelectorAll(".sb").forEach((b,i)=>b.classList.toggle("on",i<selStars));
+});
+
+// ============================================================
+//  SUBMIT REVIEW
+// ============================================================
+document.getElementById("btnRv").addEventListener("click",()=>{
+  const name=document.getElementById("rvName").value.trim();
+  const text=document.getElementById("rvText").value.trim();
+  if(!name||!text||!selStars){ alert("Please enter your name, star rating and review."); return; }
+  const init=name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+  const card=document.createElement("div");
+  card.className="rv-card b-gold";
+  card.style.cssText="opacity:0;transform:translateY(20px);transition:.5s ease";
+  card.innerHTML=`<div class="rv-hdr"><div class="rv-av av-gold">${init}</div><div><div class="rv-name">${name}</div><div class="rv-date">Just now</div></div><div class="rv-starz">${"★".repeat(selStars)}${"☆".repeat(5-selStars)}</div></div><div class="rv-text">${text}</div>`;
+  document.getElementById("rvList").prepend(card);
+  setTimeout(()=>{card.style.opacity="1";card.style.transform="translateY(0)"},20);
+  document.getElementById("rvName").value="";
+  document.getElementById("rvText").value="";
+  selStars=0;
+  document.querySelectorAll(".sb").forEach(b=>b.classList.remove("on"));
+  const ok=document.getElementById("rvOk");
+  ok.style.display="block";
+  setTimeout(()=>ok.style.display="none",4000);
+});
+
+// ============================================================
+//  BOOKING SUBMIT
+// ============================================================
+document.getElementById("btnBook").addEventListener("click",()=>{
+  const name=document.getElementById("bfName").value.trim();
+  const phone=document.getElementById("bfPhone").value.trim();
+  if(!name||!phone){
+    const el=document.getElementById("bfName");
+    el.style.borderColor="red"; el.focus();
+    setTimeout(()=>el.style.borderColor="",2500);
+    return;
+  }
+  const btn=document.getElementById("btnBook");
+  btn.textContent="✓ Submitted!"; btn.disabled=true;
+  const ok=document.getElementById("bookOk");
+  ok.style.display="block";
+  ok.scrollIntoView({behavior:"smooth",block:"center"});
+  // Log booking data (replace with real API call)
+  console.log("Booking:",{name,phone,
+    email:document.getElementById("bfEmail").value,
+    date:document.getElementById("bfDate").value,
+    travelers:document.getElementById("bfTrav").value,
+    notes:document.getElementById("bfNote").value
+  });
+});
+
+// ============================================================
+//  NAVBAR SCROLL & HAMBURGER
+// ============================================================
+const navbar=document.getElementById("navbar");
+window.addEventListener("scroll",()=>navbar.classList.toggle("scrolled",scrollY>50));
+const ham=document.getElementById("hamburger");
+const nl=document.getElementById("navLinks");
+ham.addEventListener("click",e=>{e.stopPropagation();ham.classList.toggle("open");nl.classList.toggle("open");});
+document.addEventListener("click",e=>{if(nl.classList.contains("open")&&!nl.contains(e.target)&&!ham.contains(e.target)){ham.classList.remove("open");nl.classList.remove("open");}});
+
+// ============================================================
+//  INIT
+// ============================================================
+loadAndRender();
+</script>
+</body>
+</html>
