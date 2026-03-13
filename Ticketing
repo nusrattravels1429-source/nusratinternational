@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ticketing & Travel — Nusrat International</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="common.css">
+  <link rel="stylesheet" href="traveling.css">
+</head>
+<body>
+
+  <!-- ================= HEADER ================= -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <div class="logo">
+        <a href="index.html">
+          <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg"
+               alt="Nusrat International Logo"
+               onerror="this.style.display='none'">
+          <div class="logo-text">
+            <span>Nusrat International <br> Nusrat Travels</span>
+          </div>
+        </a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home | হোম</a></li>
+        <li><a href="Travel.html" class="active">Tickting | ভ্রমণ</a></li>
+        <li><a href="Travel.html" class="active">Travel | ভ্রমণ</a></li>
+        <li><a href="Hajj.html">Hajj | হাজ্জ</a></li>
+        <li><a href="Work.html">Work | কাজ</a></li>
+        <li><a href="Contact.html">Contact | যোগাযোগ</a></li>
+
+        <li class="has-dropdown" id="aboutDropdown">
+          <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+            About | আমাদের সম্পর্কে
+            <span class="drop-arrow">▾</span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li role="none">
+              <a href="About_us.html" role="menuitem">
+                <span class="dm-text"><strong>About Us</strong><small>Our story &amp; leadership</small></span>
+              </a>
+            </li>
+            <li role="none">
+              <a href="gallery.html" role="menuitem">
+                <span class="dm-text"><strong>Gallery</strong><small>Photos &amp; memories</small></span>
+              </a>
+            </li>
+            <li role="none">
+              <a href="employees.html" role="menuitem">
+                <span class="dm-text"><strong>Our Team</strong><small>Meet our employees</small></span>
+              </a>
+            </li>
+            <li role="none">
+              <a href="About_us.html#certifications" role="menuitem">
+                <span class="dm-text"><strong>Approvals &amp; Certifications</strong><small>BAIRA · IATA · ATAB · RL-1429</small></span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ================= PAGE HERO ================= -->
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://picsum.photos/id/1015/1600/600" alt="Air Ticketing">
+    </div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <span class="hero-tag">✈ AIR TICKETING & TRAVEL</span>
+      <h1>Your Journey<br><em>Starts Here</em></h1>
+      <p>IATA-accredited direct ticketing to 20+ global destinations.<br>দ্রুত, নির্ভরযোগ্য এবং সাশ্রয়ী টিকেটিং সেবা।</p>
+      <a href="Contact.html" class="btn-primary">Book a Ticket →</a>
+    </div>
+  </section>
+
+  <!-- ================= TICKETING SECTION ================= -->
+  <section class="ticketing-section" id="ticketing">
+    <div class="ticketing-inner">
+      <div class="ticketing-text">
+        <span class="section-tag">🎫 AIR TICKETING</span>
+        <h2>We Manage Ticketing Services<br><span class="bn-sub">এই দেশগুলোর জন্য টিকেটিং সেবা</span></h2>
+        <p>As an IATA-accredited agency, Nusrat Travels provides direct airline ticketing to 20+ major global destinations. Fast, reliable, and affordable.</p>
+        <a href="Contact.html" class="btn-ticket-cta">Book Your Ticket →</a>
+      </div>
+      <div class="ticketing-track-wrap">
+        <div class="flag-track" id="flagTrack">
+          <div class="flag-row" id="flagRow1">
+            <div class="flag-item"><span class="flag-emoji">🇸🇦</span><span>Saudi Arabia</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇦🇪</span><span>UAE / Dubai</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇶🇦</span><span>Qatar</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇰🇼</span><span>Kuwait</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇧🇭</span><span>Bahrain</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇴🇲</span><span>Oman</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇲🇾</span><span>Malaysia</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇸🇬</span><span>Singapore</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇰🇷</span><span>South Korea</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇯🇵</span><span>Japan</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇸🇦</span><span>Saudi Arabia</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇦🇪</span><span>UAE / Dubai</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇶🇦</span><span>Qatar</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇰🇼</span><span>Kuwait</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇧🇭</span><span>Bahrain</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇴🇲</span><span>Oman</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇲🇾</span><span>Malaysia</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇸🇬</span><span>Singapore</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇰🇷</span><span>South Korea</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇯🇵</span><span>Japan</span></div>
+          </div>
+          <div class="flag-row reverse" id="flagRow2">
+            <div class="flag-item"><span class="flag-emoji">🇬🇧</span><span>United Kingdom</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇩🇪</span><span>Germany</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇮🇹</span><span>Italy</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇵🇱</span><span>Poland</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇹🇷</span><span>Turkey</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇹🇭</span><span>Thailand</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇮🇳</span><span>India</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇨🇳</span><span>China</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇺🇸</span><span>USA</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇦🇺</span><span>Australia</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇬🇧</span><span>United Kingdom</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇩🇪</span><span>Germany</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇮🇹</span><span>Italy</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇵🇱</span><span>Poland</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇹🇷</span><span>Turkey</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇹🇭</span><span>Thailand</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇮🇳</span><span>India</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇨🇳</span><span>China</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇺🇸</span><span>USA</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇦🇺</span><span>Australia</span></div>
+          </div>
+        </div>
+        <div class="ticket-contact-bar">
+          <span>📞 Book your ticket today —</span>
+          <a href="tel:01713165116">01713-165116</a>
+          <span>|</span>
+          <a href="https://wa.me/8801713165116" target="_blank">WhatsApp Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WHY CHOOSE US ================= -->
+  <section class="why-section">
+    <div class="why-inner">
+      <div class="why-header">
+        <span class="section-tag-dark">⭐ WHY NUSRAT TRAVELS</span>
+        <h2>Trusted by Thousands<br><span class="bn-sub-dark">হাজারো যাত্রীর বিশ্বস্ত সঙ্গী</span></h2>
+        <p>We've been helping Bangladeshis reach their destinations safely and affordably since 2010.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">✈</div>
+          <h3>IATA Accredited</h3>
+          <p>Direct ticketing authority for all major international airlines. No middlemen, best prices.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🛡</div>
+          <h3>Govt. Approved</h3>
+          <p>Licensed under RL-1429, fully regulated by the Bangladesh Government.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">⚡</div>
+          <h3>Fast Processing</h3>
+          <p>Same-day ticket issuance for most destinations. Urgent travel? We've got you covered.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">💬</div>
+          <h3>Bengali Support</h3>
+          <p>Full customer support in Bengali. আমরা আপনার ভাষায় সেবা প্রদান করি।</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT CTA ================= -->
+  <section class="cta-section">
+    <div class="cta-inner">
+      <h2>Ready to Fly?</h2>
+      <p>Contact us today and get your ticket booked within hours.<br>আজই যোগাযোগ করুন এবং ঘণ্টার মধ্যে টিকেট পান।</p>
+      <div class="cta-btns">
+        <a href="tel:01713165116" class="btn-primary">📞 Call Now</a>
+        <a href="https://wa.me/8801713165116" class="btn-ghost-dark" target="_blank">💬 WhatsApp</a>
+        <a href="Contact.html" class="btn-ghost-dark">✉ Contact Form</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">Nusrat International</div>
+        <p>Your trusted partner for travel, Hajj, Umrah & international work opportunities. Serving Bangladesh since 2010.</p>
+        <div class="social-links">
+          <a href="#">FB</a>
+          <a href="#">YT</a>
+          <a href="#">IG</a>
+          <a href="#">WA</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Services</h4>
+        <a href="#">Travel Packages</a>
+        <a href="#">Hajj Packages</a>
+        <a href="#">Umrah Packages</a>
+        <a href="#">Work Visas</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="About_us.html">About Us</a>
+        <a href="employees.html">Our Team</a>
+        <a href="#">Testimonials</a>
+        <a href="Contact.html">Contact</a>
+      </div>
+      <div class="footer-links">
+        <h4>Location</h4>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.7194346099836!2d90.4049653103119!3d23.79300323072133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c70e90bb671d%3A0x7eab77d0896252c0!2sBanani%20Super%20Market!5e0!3m2!1sen!2sbd!4v1771968108612!5m2!1sen!2sbd" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Nusrat International Bangladesh. All rights reserved. | সর্বস্বত্ব সংরক্ষিত।</p>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Hamburger
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    const navItems = navLinks.querySelectorAll('li');
+
+    function openMenu() {
+      hamburger.classList.add('open');
+      navLinks.classList.add('open');
+      document.body.classList.add('menu-open');
+      navItems.forEach((item, i) => {
+        item.style.transitionDelay = `${0.06 + i * 0.07}s`;
+        setTimeout(() => item.classList.add('revealed'), 20);
+      });
+    }
+
+    function closeMenu() {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+      document.body.classList.remove('menu-open');
+      navItems.forEach(item => {
+        item.classList.remove('revealed');
+        item.style.transitionDelay = '0s';
+      });
+      const aboutDropdown = document.getElementById('aboutDropdown');
+      const dropTrigger = aboutDropdown.querySelector('.dropdown-trigger');
+      aboutDropdown.classList.remove('mobile-open');
+      dropTrigger.setAttribute('aria-expanded', 'false');
+    }
+
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      hamburger.classList.contains('open') ? closeMenu() : openMenu();
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (navLinks.classList.contains('open') &&
+          !navLinks.contains(e.target) &&
+          !hamburger.contains(e.target)) {
+        closeMenu();
+      }
+    });
+
+    // About dropdown
+    const aboutDropdown = document.getElementById('aboutDropdown');
+    const dropTrigger = aboutDropdown.querySelector('.dropdown-trigger');
+    dropTrigger.addEventListener('click', function(e) {
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen = aboutDropdown.classList.toggle('mobile-open');
+        this.setAttribute('aria-expanded', isOpen);
+      }
+    });
+  </script>
+</body>
+</html>

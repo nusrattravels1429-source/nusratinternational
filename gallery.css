@@ -1,0 +1,104 @@
+
+    /* Navbar always solid */
+    #navbar {
+      background: rgba(13,17,23,0.97) !important;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    }
+    #navbar .nav-links a,
+    #navbar .dropdown-trigger { color: rgba(255,255,255,0.9) !important; }
+    #navbar .logo span         { color: white !important; }
+    #navbar .hamburger span    { background: white !important; }
+
+    body {
+      padding-top: 80px;
+      background: #f5f7fa;
+      margin: 0;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* Page Title */
+    .page-title {
+      text-align: center;
+      padding: 56px 20px 40px;
+    }
+    .page-title .ptag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #1a56db;
+      margin-bottom: 12px;
+    }
+    .page-title h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 900;
+      color: #0d1117;
+      line-height: 1.15;
+      margin: 0 0 10px;
+    }
+    .page-title h1 em { font-style: italic; color: #1a56db; }
+    .page-title p {
+      font-size: 15px;
+      color: #6b7280;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* ── Gallery columns ─────────────────────────────────────────
+       LARAVEL / DB NOTE:
+       Replace the static .gallery-item blocks below with:
+
+         @foreach($images as $image)
+           <div class="gallery-item" data-src="{{ $image->url }}">
+             <img src="{{ $image->url }}"
+                  alt="{{ $image->caption ?? '' }}"
+                  loading="lazy">
+           </div>
+         @endforeach
+    ─────────────────────────────────────────────────────────── *//* Simple Gallery */
+
+.gallery{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.gallery-item{
+  margin-bottom: 20px;
+}
+
+.gallery-item img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+
+/* Title */
+
+.page-title{
+  text-align: center;
+  padding: 50px 20px 20px;
+}
+
+.page-title h1{
+  font-size: 40px;
+  font-weight: 700;
+}
+
+/* Mobile */
+
+@media (max-width:768px){
+
+  .gallery{
+    padding: 15px;
+  }
+
+  .page-title h1{
+    font-size: 30px;
+  }
+
+}

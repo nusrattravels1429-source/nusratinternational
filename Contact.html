@@ -9,12 +9,22 @@
   
   <link rel="stylesheet" href="Contact.css">
 <link rel="stylesheet" href="common.css">
-  <link rel="stylesheet" href="slider_container.css">
-  <link rel="stylesheet" href="sections.css">
-  <link rel="stylesheet" href="cards.css">
-  <link rel="stylesheet" href="contact.css">
-  <link rel="stylesheet" href="contact.css">
+
+  
 </head>
+<style>
+  #navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: var(--transition);
+  background: black;
+  color: white;
+  padding: 0;
+}
+</style>
 <body>
 
 <!-- ================= NAVBAR ================= -->
@@ -35,11 +45,11 @@
     </button>
 
     <ul class="nav-links" id="nav-links">
-      <li><a href="index.html" class="active">Home | হোম</a></li>
+      <li><a href="index.html" >Home | হোম</a></li>
       <li><a href="Travel.html" >Travel | ভ্রমণ</a></li>
       <li><a href="Hajj.html">Hajj | হাজ্জ</a></li>
       <li><a href="Work.html">Work | কাজ</a></li>
-      <li><a href="Contact.html">Contact | যোগাযোগ</a></li>
+      <li><a href="Contact.html">class="active"Contact | যোগাযোগ</a></li>
       <li><a href="About_us.html">About | আমাদের সম্পর্কে</a></li>
     </ul>
   </div>
@@ -74,6 +84,14 @@
           </div>
         </div>
 
+           <div class="info-row">
+          <div class="info-row-label">🕐 HOURS</div>
+          <div class="info-row-val">
+            Sat – Thu &nbsp; 9:00 AM – 9:00 PM<br>
+            <span class="closed-note">Friday: Closed</span>
+          </div>
+        </div>  
+
         <div class="info-row">
           <div class="info-row-label">📞 TELEPHONE</div>
           <div class="info-row-val">
@@ -87,24 +105,17 @@
           <div class="info-row-val">
             <a href="tel:01713165116">01713-165116</a><br>
             <a href="tel:01831350583">01831-350583</a><br>
-            <a href="tel:01715347859">01715-347859</a>
           </div>
         </div>
 
         <div class="info-row">
           <div class="info-row-label">✉ EMAIL</div>
           <div class="info-row-val">
-            <a href="mailto:nusratinternational@gmail.com">nusratinternational<br>@gmail.com</a>
+            <a href="mailto:nusratinternational@gmail.com">nusratinternational@gmail.com</a>
           </div>
         </div>
 
-        <div class="info-row">
-          <div class="info-row-label">🕐 HOURS</div>
-          <div class="info-row-val">
-            Sat – Thu &nbsp; 9:00 AM – 9:00 PM<br>
-            <span class="closed-note">Friday: Closed</span>
-          </div>
-        </div>
+       
 
       </div>
 
@@ -141,7 +152,7 @@
 
     <!-- Decorative step label -->
     <div class="step-label">
-      <span class="step-num">02</span>
+      <span class="step-num">01</span>
       <span class="step-text">SEND A MESSAGE</span>
     </div>
 
@@ -170,17 +181,7 @@
         <input type="email" placeholder="your@email.com">
       </div>
 
-      <div class="cform-field">
-        <label>Service You're Interested In <span class="req">*</span></label>
-        <div class="service-chips" id="chips">
-          <button type="button" class="chip" onclick="selectChip(this)">✈ Travel</button>
-          <button type="button" class="chip" onclick="selectChip(this)">🕋 Hajj</button>
-          <button type="button" class="chip" onclick="selectChip(this)">🤲 Umrah</button>
-          <button type="button" class="chip" onclick="selectChip(this)">💼 Work Visa</button>
-          <button type="button" class="chip" onclick="selectChip(this)">💬 General Enquiry</button>
-        </div>
-        <input type="hidden" id="selectedService" name="service">
-      </div>
+      
 
       <div class="cform-field">
         <label>Your Message <span class="req">*</span></label>
@@ -226,28 +227,7 @@
       </div>
     </div>
 
-    <!-- FAQ -->
-    <div class="faq-wrap">
-      <h3 class="faq-title">Common Questions</h3>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>How do I apply for a work visa?</summary>
-          <p>Contact us via WhatsApp or visit our Banani office. We'll guide you through job matching, documentation, and the full visa process from start to approval.</p>
-        </details>
-        <details class="faq-item">
-          <summary>How early should I book Hajj?</summary>
-          <p>We recommend at least 6–8 months ahead. Hajj slots fill quickly — reach out as early as possible to secure your preferred package and group date.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Do you offer flexible payment?</summary>
-          <p>Yes. Selected packages have installment options available. Speak directly with our team to find a plan that fits your budget and timeline.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Can I WhatsApp you directly?</summary>
-          <p>Absolutely — message us at <strong>01713-165116</strong> any day Saturday through Thursday. We usually reply within a couple of hours during office hours.</p>
-        </details>
-      </div>
-    </div>
+    
 
   </main>
 </div>

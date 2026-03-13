@@ -102,8 +102,8 @@ a {
 }
 
 .logo a img {
-  height: 42px;
-  width: 42px;
+  height: 50px;
+  width: 50px;
   
   object-fit: cover;
 }
@@ -374,4 +374,583 @@ footer {
     grid-template-columns: 1fr;
     gap: 24px;
   }
+}
+/* ============================================================
+   ABOUT DROPDOWN — Desktop hover + Mobile tap
+   ============================================================ */
+
+/* The parent <li> */
+.has-dropdown {
+  position: relative;
+}
+
+/* The trigger button mimics a nav link visually */
+.dropdown-trigger {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.3s ease, border-color 0.3s ease;
+  white-space: nowrap;
+}
+
+.dropdown-trigger:hover {
+  color: white;
+  border-bottom-color: #f8c640;
+}
+
+/* When navbar is scrolled — dark trigger */
+#navbar.scrolled .dropdown-trigger {
+  color: var(--text);
+}
+
+#navbar.scrolled .dropdown-trigger:hover {
+  color: var(--blue);
+  border-bottom-color: var(--blue);
+}
+
+/* The rotating arrow */
+.drop-arrow {
+  font-size: 11px;
+  display: inline-block;
+  transition: transform 0.25s ease;
+  line-height: 1;
+}
+.has-dropdown {
+  position: relative;
+  padding-bottom: 14px; /* invisible area to move mouse */
+}
+/* Arrow rotates when panel is open */
+.has-dropdown:hover .drop-arrow,
+.has-dropdown.mobile-open .drop-arrow {
+  transform: rotate(180deg);
+}
+
+/* ── The dropdown panel ── */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  list-style: none;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid rgba(0,0,0,0.07);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.15);
+  padding: 8px;
+  min-width: 275px;
+  z-index: 9999;
+
+  /* Hidden state */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+/* Show on hover (desktop) */
+.has-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+  
+}
+
+/* Small caret pointer at the top-right */
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  right: 22px;
+  width: 13px;
+  height: 13px;
+  background: white;
+  border-left: 1px solid rgba(0,0,0,0.07);
+  border-top: 1px solid rgba(0,0,0,0.07);
+  transform: rotate(45deg);
+  border-radius: 2px 0 0 0;
+}
+
+/* Each menu row */
+.dropdown-menu li a {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 11px 13px;
+  border-radius: 11px;
+  color: #1a1f2e;
+  font-size: 13px;
+  border-bottom: none !important;
+  transition: background 0.2s, color 0.2s;
+  text-decoration: none;
+}
+.nav-close {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nav-close {
+    display: flex;
+  }
+}
+.dropdown-menu li a:hover {
+  background: #f0f5ff;
+  color: #1a56db;
+}
+
+/* Icon box */
+.dm-icon {
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  background: #f5f7fa;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.dropdown-menu li a:hover .dm-icon {
+  background: #dce8ff;
+}
+
+/* Text stack */
+.dm-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dm-text strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0d1117;
+  display: block;
+  line-height: 1.3;
+}
+
+.dm-text small {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+/* ============================================================
+   MOBILE  (≤ 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* The trigger becomes a full-width row in the drawer */
+  .dropdown-trigger {
+    color: var(--text);
+    font-size: 15px;
+    padding: 16px 28px;
+    width: 100%;
+    justify-content: space-between;
+    border-bottom: none;
+    border-radius: 0;
+  }
+
+  .dropdown-trigger:hover {
+    color: var(--blue);
+    background: #f0f5ff;
+    padding-left: 38px;
+    border-bottom: none;
+  }
+
+  /* Arrow always visible on mobile */
+  .drop-arrow {
+    font-size: 13px;
+  }
+
+  /* Panel sits inline (not floating) inside the drawer */
+  .dropdown-menu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    min-width: 100%;
+    background: #f8f9ff;
+
+    /* Collapsed by default — JS toggles this */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+
+  /* JS adds .mobile-open to the <li> to expand */
+  .has-dropdown.mobile-open .dropdown-menu {
+    max-height: 400px;
+  }
+
+  /* Hide the floating caret on mobile */
+  .dropdown-menu::before {
+    display: none;
+  }
+
+  .dropdown-menu li {
+    border-bottom: 1px solid #eaecf5;
+  }
+
+  .dropdown-menu li:last-child {
+    border-bottom: none;
+  }
+
+  .dropdown-menu li a {
+    padding: 13px 28px 13px 40px;
+    border-radius: 0;
+    font-size: 14px;
+  }
+}
+/* ===========================
+   TICKETING SECTION
+   =========================== */
+
+.ticketing-section {
+  background: #f5f7fa;
+  padding: 80px 40px;
+  overflow: hidden;
+}
+
+.ticketing-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.ticketing-text .section-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 14px;
+}
+
+.ticketing-text h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 700;
+  color: #0d1117;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.ticketing-text h2 .bn-sub {
+  display: block;
+  font-size: 0.62em;
+  color: #6b7280;
+  font-style: italic;
+  font-weight: 400;
+  margin-top: 6px;
+}
+
+.ticketing-text p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+
+.btn-ticket-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  background: var(--blue);
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 50px;
+  transition: 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-ticket-cta:hover {
+  background: var(--blue-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(26,86,219,0.3);
+}
+
+/* Flag rolling tracks */
+.ticketing-track-wrap {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.flag-track {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.flag-row {
+  display: flex;
+  gap: 14px;
+  animation: flagScrollLeft 28s linear infinite;
+  width: max-content;
+}
+
+.flag-row.reverse {
+  animation: flagScrollRight 32s linear infinite;
+}
+
+@keyframes flagScrollLeft {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes flagScrollRight {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* Pause on hover */
+.ticketing-track-wrap:hover .flag-row { animation-play-state: paused; }
+
+.flag-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 14px 20px;
+  min-width: 110px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+
+.flag-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.flag-item span:last-child {
+  font-size: 11px;
+  font-weight: 600;
+  color: #374151;
+  text-align: center;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.ticket-contact-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #0c1628;
+  color: rgba(255,255,255,0.7);
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-size: 13px;
+  font-weight: 500;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.ticket-contact-bar a {
+  color: #c9a227;
+  font-weight: 700;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+
+.ticket-contact-bar a:hover { color: #f0c040; }
+
+/* ===========================
+   CERTIFICATION SECTION
+   =========================== */
+
+.cert-section {
+  padding: 80px 20px;
+  background: #f5f7fa;
+}
+
+  .cert-container h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 700;
+  color: #0d1117;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+  .cert-container h2 .bn-sub {
+  display: block;
+  font-size: 0.62em;
+  color: #6b7280;
+  font-style: italic;
+  font-weight: 400;
+  margin-top: 6px;
+}
+
+.cert-container {
+  max-width: 1100px;
+  margin: auto;
+}
+
+.cert-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.cert-badge-main {
+  display: inline-block;
+  padding: 14px 30px;
+  border: 2px solid #1f2937;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.cert-badge-num {
+  display: block;
+  font-size: 34px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.cert-badge-label {
+  font-size: 13px;
+  color: #555;
+}
+
+.cert-header p {
+  max-width: 600px;
+  margin: auto;
+  color: #666;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.cert-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.cert-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 32px 26px;
+  text-align: center;
+  background: #fff;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.cert-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+}
+
+.cert-card.featured {
+  transform: scale(1.05);
+  border-color: #cbd5e1;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+}
+
+.cert-logo-wrap {
+  height: 60px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cert-logo-wrap img {
+  max-height: 50px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.cert-divider {
+  width: 40px;
+  height: 2px;
+  background: #e5e7eb;
+  margin: 14px auto;
+}
+
+.cert-card h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+.cert-card p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.cert-tag {
+  font-size: 11px;
+  padding: 5px 14px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  color: #555;
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+
+@media (max-width: 1024px) {
+  .cert-cards { grid-template-columns: 1fr 1fr; }
+  .cert-card.featured { transform: none; }
+  .ticketing-inner { grid-template-columns: 1fr; gap: 36px; }
+}
+
+@media (max-width: 768px) {
+  .nav-inner { padding: 16px 20px; }
+  .hamburger { display: flex; }
+  .nav-links {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    flex-direction: column;
+    padding-top: 80px;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+  .nav-links.open { transform: translateY(0); }
+  .nav-links a { color: var(--text); padding: 15px 20px; display: block; }
+  .package-section { padding: 70px 20px; }
+  .section-intro { flex-direction: column; align-items: flex-start; }
+  .hajj-grid { grid-template-columns: 1fr; }
+  .pkg-card.horizontal { flex-direction: column; }
+  .pkg-img-wrap.small { width: 100%; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .cert-section { padding: 60px 20px; }
+  .cert-cards { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+  .ticketing-section { padding: 60px 20px; }
 }
