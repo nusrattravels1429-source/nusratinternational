@@ -8,11 +8,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="common.css">
-  <link rel="stylesheet" href="travling.css">
-  <link rel="stylesheet" href="slider_container.css">
-  <link rel="stylesheet" href="sections.css"> 
-  <link rel="stylesheet" href="cards.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/travling.css">
+  <link rel="stylesheet" href="css/slider_container.css">
+  <link rel="stylesheet" href="css/sections.css"> 
+  <link rel="stylesheet" href="css/cards.css">
+  
 </head>
 <body>
 
@@ -160,8 +161,7 @@
       <h2>Ready to Fly?</h2>
       <p>Contact us today and get your ticket booked within hours.<br>আজই যোগাযোগ করুন এবং ঘণ্টার মধ্যে টিকেট পান।</p>
       <div class="cta-btns">
-        <a href="tel:01713165116" class="btn-primary">📞 Call Now</a>
-        <a href="https://wa.me/8801713165116" class="btn-ghost-dark" target="_blank">💬 WhatsApp</a>
+
         <a href="Contact.html" class="btn-ghost-dark">✉ Contact Form</a>
       </div>
     </div>
@@ -204,70 +204,6 @@
     </div>
   </footer>
 
-  <script>
-    // Navbar scroll
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 50);
-    });
-
-    // Hamburger
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('nav-links');
-    const navItems = navLinks.querySelectorAll('li');
-
-    function openMenu() {
-      hamburger.classList.add('open');
-      navLinks.classList.add('open');
-      document.body.classList.add('menu-open');
-      navItems.forEach((item, i) => {
-        item.style.transitionDelay = `${0.06 + i * 0.07}s`;
-        setTimeout(() => item.classList.add('revealed'), 20);
-      });
-    }
-
-    function closeMenu() {
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
-      document.body.classList.remove('menu-open');
-      navItems.forEach(item => {
-        item.classList.remove('revealed');
-        item.style.transitionDelay = '0s';
-      });
-      const aboutDropdown = document.getElementById('aboutDropdown');
-      const dropTrigger = aboutDropdown.querySelector('.dropdown-trigger');
-      aboutDropdown.classList.remove('mobile-open');
-      dropTrigger.setAttribute('aria-expanded', 'false');
-    }
-
-    hamburger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      hamburger.classList.contains('open') ? closeMenu() : openMenu();
-    });
-
-    document.querySelectorAll('.nav-links a').forEach(link => {
-      link.addEventListener('click', closeMenu);
-    });
-
-    document.addEventListener('click', (e) => {
-      if (navLinks.classList.contains('open') &&
-          !navLinks.contains(e.target) &&
-          !hamburger.contains(e.target)) {
-        closeMenu();
-      }
-    });
-
-    // About dropdown
-    const aboutDropdown = document.getElementById('aboutDropdown');
-    const dropTrigger = aboutDropdown.querySelector('.dropdown-trigger');
-    dropTrigger.addEventListener('click', function(e) {
-      if (window.innerWidth <= 768) {
-        e.preventDefault();
-        e.stopPropagation();
-        const isOpen = aboutDropdown.classList.toggle('mobile-open');
-        this.setAttribute('aria-expanded', isOpen);
-      }
-    });
-  </script>
+ <script src="common.js"></script>
 </body>
 </html>

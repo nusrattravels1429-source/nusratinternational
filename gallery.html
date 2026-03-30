@@ -6,8 +6,8 @@
   <title>Gallery — Nusrat International</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="common.css">
-    <link rel="stylesheet" href="gallery.css">
+  <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/gallery.css">
 </head>
 <body>
 
@@ -55,33 +55,49 @@
 
   <!-- GALLERY -->
   
-<!-- SIMPLE COLUMN GALLERY -->
+<!-- TIMELINE GALLERY -->
 <div class="gallery">
 
-  {{-- Laravel Example --}}
-  {{-- 
-  @foreach($images as $image)
-      <div class="gallery-item">
-          <img src="{{ $image->url }}" alt="{{ $image->title }}">
-      </div>
-  @endforeach
-  --}}
-
-  <!-- Static images for now -->
-  <div class="gallery-item">
-    <img src="https://picsum.photos/900/600?1" alt="">
+ 
+  <!-- Static milestones for now -->
+  <div class="timeline-item">
+    <div class="timeline-image">
+      <img src="https://picsum.photos/900/600?1" alt="" data-src="https://picsum.photos/900/600?1">
+    </div>
+    <div class="timeline-content">
+      <h3>2010</h3>
+      <p>Founded Nusrat International, beginning our commitment to exceptional travel and Hajj services.</p>
+    </div>
   </div>
 
-  <div class="gallery-item">
-    <img src="https://picsum.photos/900/600?2" alt="">
+  <div class="timeline-item">
+    <div class="timeline-image">
+      <img src="https://picsum.photos/900/600?2" alt="" data-src="https://picsum.photos/900/600?2">
+    </div>
+    <div class="timeline-content">
+      <h3>2015</h3>
+      <p>Expanded operations to include international work visas and placements.</p>
+    </div>
   </div>
 
-  <div class="gallery-item">
-    <img src="https://picsum.photos/900/600?3" alt="">
+  <div class="timeline-item">
+    <div class="timeline-image">
+      <img src="https://picsum.photos/900/600?3" alt="" data-src="https://picsum.photos/900/600?3">
+    </div>
+    <div class="timeline-content">
+      <h3>2020</h3>
+      <p>Achieved IATA certification, enhancing our global travel expertise.</p>
+    </div>
   </div>
 
-  <div class="gallery-item">
-    <img src="https://picsum.photos/900/600?4" alt="">
+  <div class="timeline-item">
+    <div class="timeline-image">
+      <img src="https://picsum.photos/900/600?4" alt="" data-src="https://picsum.photos/900/600?4">
+    </div>
+    <div class="timeline-content">
+      <h3>2023</h3>
+      <p>Launched comprehensive ticketing services and strengthened our team.</p>
+    </div>
   </div>
 
 </div>
@@ -151,7 +167,7 @@
     /* Lightbox */
     const lb    = document.getElementById('lightbox');
     const lbImg = document.getElementById('lbImg');
-    const items = [...document.querySelectorAll('.gallery-item')];
+    const items = [...document.querySelectorAll('.timeline-image img')];
     let cur = 0;
 
     function show(idx) {

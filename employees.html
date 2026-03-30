@@ -6,8 +6,8 @@
   <title>Our Team — Nusrat International</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="common.css">
-  <link rel="stylesheet" href="employees.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/employees.css">
 </head>
 <body>
 
@@ -59,31 +59,6 @@
   @endforeach
   -->
 
-  <!-- Static cards for now -->
-  <div class="employee-card">
-    <img src="https://picsum.photos/300/300?1" alt="">
-    <h3>Md. Nusrat Ullah</h3>
-    <p>Managing Director</p>
-  </div>
-
-  <div class="employee-card">
-    <img src="https://picsum.photos/300/300?2" alt="">
-    <h3>Karim Hossain</h3>
-    <p>Travel Manager</p>
-  </div>
-
-  <div class="employee-card">
-    <img src="https://picsum.photos/300/300?3" alt="">
-    <h3>Sultana Parvin</h3>
-    <p>Ticketing Officer</p>
-  </div>
-
-  <div class="employee-card">
-    <img src="https://picsum.photos/300/300?4" alt="">
-    <h3>Farhan Ahmed</h3>
-    <p>Travel Consultant</p>
-  </div>
-
 </div>
   <footer>
     <div class="footer-inner">
@@ -110,6 +85,28 @@
     document.querySelectorAll('.nav-links a').forEach(l=>l.addEventListener('click',closeMenu));
     document.addEventListener('click',e=>{if(navLinks.classList.contains('open')&&!navLinks.contains(e.target)&&!hamburger.contains(e.target))closeMenu();});
     dropTrig.addEventListener('click',function(e){if(window.innerWidth<=768){e.preventDefault();e.stopPropagation();aboutDD.classList.toggle('mobile-open');this.setAttribute('aria-expanded',aboutDD.classList.contains('mobile-open'));}});
+  </script>
+
+  <script>
+    const employees = [
+      { name: "Md. Nusrat Ullah", position: "Managing Director", image: "https://picsum.photos/300/300?1" },
+      { name: "Karim Hossain", position: "Travel Manager", image: "https://picsum.photos/300/300?2" },
+      { name: "Sultana Parvin", position: "Ticketing Officer", image: "https://picsum.photos/300/300?3" },
+      { name: "Farhan Ahmed", position: "Travel Consultant", image: "https://picsum.photos/300/300?4" }
+    ];
+
+    const employeesContainer = document.querySelector('.employees');
+
+    employees.forEach(emp => {
+      const card = document.createElement('div');
+      card.className = 'employee-card';
+      card.innerHTML = `
+        <img src="${emp.image}" alt="${emp.name}">
+        <h3>${emp.name}</h3>
+        <p>${emp.position}</p>
+      `;
+      employeesContainer.appendChild(card);
+    });
   </script>
 </body>
 </html>

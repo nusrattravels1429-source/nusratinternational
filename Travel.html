@@ -8,41 +8,97 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="Travel.css">
-  <link rel="stylesheet" href="common.css">
-  <link rel="stylesheet" href="cards.css">
-  <link rel="stylesheet" href="contact.css">
+  <link rel="stylesheet" href="css/Travel.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/contact.css">
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
-<nav id="navbar">
-  <div class="nav-inner">
+  <!-- ================= HEADER ================= -->
+  <nav id="navbar">
+    <div class="nav-inner">
 
-    <div class="logo">
-      <a href="home.html">
-        <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg"
-             alt="Nusrat International Logo"
-             onerror="this.style.display='none'">
-        <span>Nusrat International</span>
-      </a>
+      <div class="logo">
+        <a href="index.html">
+          <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg"
+              alt="Nusrat International Logo"
+              onerror="this.style.display='none'">
+           <div class="logo-text">
+            <span>Nusrat International <br> Nusrat Travels</span>
     </div>
+        </a>
+      </div>
 
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
 
-    <ul class="nav-links" id="nav-links">
-      <li><a href="index.html" >Home | হোম</a></li>
-      <li><a href="Travel.html" class="active">Travel | ভ্রমণ</a></li>
-      <li><a href="Hajj.html">Hajj | হাজ্জ</a></li>
-      <li><a href="Work.html">Work | কাজ</a></li>
-      <li><a href="Contact.html">Contact | যোগাযোগ</a></li>
-      <li><a href="About.html">About | আমাদের সম্পর্কে</a></li>
-    </ul>
-  </div>
-</nav>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html" class="active">Home | হোম</a></li>
+        <li><a href="Travel.html" >Tickting | ভ্রমণ</a></li>
+        <li><a href="Travel.html" >Travel | ভ্রমণ</a></li>
+        <li><a href="Hajj.html">Hajj | হাজ্জ</a></li>
+        <li><a href="Work.html">Work | কাজ</a></li>
+        <li><a href="Contact.html">Contact | যোগাযোগ</a></li>
+        
+        <!-- About with hover dropdown -->
+        <li class="has-dropdown" id="aboutDropdown">
+          <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+            About | আমাদের সম্পর্কে
+            <span class="drop-arrow">▾</span>
+          </button>
+
+          <ul class="dropdown-menu" role="menu">
+
+            <li role="none">
+              <a href="About_us.html" role="menuitem">
+          
+                <span class="dm-text">
+                  <strong>About Us</strong>
+                  <small>Our story &amp; leadership</small>
+                </span>
+              </a>
+            </li>
+
+            <li role="none">
+              <a href="gallery.html" role="menuitem">
+                
+                <span class="dm-text">
+                  <strong>Gallery</strong>
+                  <small>Photos &amp; memories</small>
+                </span>
+              </a>
+            </li>
+
+            <li role="none">
+              <a href="employees.html" role="menuitem">
+                
+                <span class="dm-text">
+                  <strong>Our Team</strong>
+                  <small>Meet our employees</small>
+                </span>
+              </a>
+            </li>
+
+            <li role="none">
+              <a href="About_us.html#certifications" role="menuitem">
+
+                <span class="dm-text">
+                  <strong>Approvals &amp; Certifications</strong>
+                  <small>BAIRA · IATA · ATAB · RL-1429 and many moder </small>
+                </span>
+              </a>
+            </li>
+
+          </ul>
+        </li>
+
+      </ul><!-- /nav-links -->
+    </div>
+  </nav>
+
 
 <!-- ================= PAGE HERO ================= -->
 <div class="page-hero">
@@ -51,27 +107,6 @@
   <p>সকল ট্র্যাভেল প্যাকেজ — Discover your perfect destination from our full collection.</p>
 </div>
 
-<!-- ================= FILTER BAR ================= -->
-<div class="filter-bar">
-  <div class="filter-left">
-    <span class="filter-label">Filter:</span>
-    <button class="filter-btn active" onclick="filterCards(this, 'all')">All</button>
-    <button class="filter-btn" onclick="filterCards(this, 'budget')">Budget</button>
-    <button class="filter-btn" onclick="filterCards(this, 'premium')">Premium</button>
-    <button class="filter-btn" onclick="filterCards(this, 'beach')">Beach</button>
-    <button class="filter-btn" onclick="filterCards(this, 'mountain')">Mountain</button>
-    <button class="filter-btn" onclick="filterCards(this, 'city')">City</button>
-  </div>
-  <div class="filter-right">
-    <select class="sort-select" onchange="sortCards(this)">
-      <option value="default">Sort by: Default</option>
-      <option value="price-low">Price: Low to High</option>
-      <option value="price-high">Price: High to Low</option>
-      <option value="rating">Top Rated</option>
-    </select>
-    <span class="results-count" id="resultsCount">12 packages</span>
-  </div>
-</div>
 
 <!-- ================= PACKAGES GRID ================= -->
 <main>
@@ -284,79 +319,6 @@
   </div>
 </main>
 
-<!-- ================= PAGINATION ================= -->
-<div class="pagination">
-  <button class="page-btn">&#8592;</button>
-  <button class="page-btn active">1</button>
-  <button class="page-btn">2</button>
-  <button class="page-btn">3</button>
-  <button class="page-btn ellipsis">...</button>
-  <button class="page-btn">8</button>
-  <button class="page-btn">&#8594;</button>
-</div>
-
-<!-- ================= CONTACT SECTION ================= -->
-<section class="contact-section" id="contact">
-  <div class="contact-inner">
-    <div class="contact-info">
-      <span class="section-tag">📞 GET IN TOUCH</span>
-      <h2>Contact Us<br><span class="bn-sub">আমাদের সাথে যোগাযোগ করুন</span></h2>
-      <p>Have questions about a package? Our travel experts are here to help you plan your perfect journey.</p>
-      <div class="contact-items">
-        <div class="contact-item">
-          <span class="ci-icon">📍</span>
-          <div><strong>Address</strong><p>Banani Super Market, Dhaka, Bangladesh</p></div>
-        </div>
-        <div class="contact-item">
-          <span class="ci-icon">📞</span>
-          <div><strong>Phone</strong><p>+880 1712-345678</p></div>
-        </div>
-        <div class="contact-item">
-          <span class="ci-icon">✉️</span>
-          <div><strong>Email</strong><p>info@nusratinternational.com</p></div>
-        </div>
-        <div class="contact-item">
-          <span class="ci-icon">🕐</span>
-          <div><strong>Hours</strong><p>Sat–Thu: 9AM – 9PM</p></div>
-        </div>
-      </div>
-    </div>
-
-    <form class="contact-form" onsubmit="handleSubmit(event)">
-      <h3>Send a Message | বার্তা পাঠান</h3>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" placeholder="Your full name" required>
-        </div>
-        <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" placeholder="+880 XXXXXXXXX" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" placeholder="your@email.com" required>
-      </div>
-      <div class="form-group">
-        <label>Package Interest</label>
-        <select>
-          <option value="">Select package type...</option>
-          <option>Travel Package | ট্র্যাভেল প্যাকেজ</option>
-          <option>Hajj Package | হজ প্যাকেজ</option>
-          <option>Work Package | ওয়ার্ক প্যাকেজ</option>
-          <option>Umrah Package | উমরাহ প্যাকেজ</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Your Message</label>
-        <textarea rows="4" placeholder="Tell us about your travel plans..." required></textarea>
-      </div>
-      <button type="submit" class="btn-submit">Send Message | বার্তা পাঠান ✈</button>
-      <div class="form-success" id="formSuccess">✅ Message sent! We'll contact you shortly.</div>
-    </form>
-  </div>
-</section>
 
 <!-- ================= FOOTER ================= -->
 <footer>
@@ -409,108 +371,6 @@
 </footer>
 
 <!-- ================= JAVASCRIPT ================= -->
-<script>
-
-// ---- NAVBAR scroll effect ----
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 50);
-});
-
-// ---- HAMBURGER MENU (top dropdown) ----
-const hamburger = document.getElementById('hamburger');
-const navLinks = document.getElementById('nav-links');
-const navItems = navLinks.querySelectorAll('li');
-
-function openMenu() {
-  hamburger.classList.add('open');
-  navLinks.classList.add('open');
-  document.body.classList.add('menu-open');
-  // Stagger each item sliding down
-  navItems.forEach((item, i) => {
-    item.style.transitionDelay = `${0.06 + i * 0.07}s`;
-    // tiny delay to let the overlay start first
-    setTimeout(() => item.classList.add('revealed'), 20);
-  });
-}
-
-function closeMenu() {
-  hamburger.classList.remove('open');
-  navLinks.classList.remove('open');
-  document.body.classList.remove('menu-open');
-  navItems.forEach(item => {
-    item.classList.remove('revealed');
-    item.style.transitionDelay = '0s';
-  });
-}
-
-hamburger.addEventListener('click', (e) => {
-  e.stopPropagation();
-  hamburger.classList.contains('open') ? closeMenu() : openMenu();
-});
-
-// Close when a nav link is clicked
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', closeMenu);
-});
-
-// Close when clicking outside
-document.addEventListener('click', (e) => {
-  if (navLinks.classList.contains('open') &&
-      !navLinks.contains(e.target) &&
-      !hamburger.contains(e.target)) {
-    closeMenu();
-  }
-});
-
-
-// ---- FILTER ----
-function filterCards(btn, category) {
-  // Toggle active button
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-
-  const cards = document.querySelectorAll('#packagesGrid .pkg-card');
-  let visible = 0;
-
-  cards.forEach(card => {
-    const cats = card.dataset.category || '';
-    const show = category === 'all' || cats.includes(category);
-    card.style.display = show ? '' : 'none';
-    if (show) visible++;
-  });
-
-  document.getElementById('resultsCount').textContent = visible + ' packages';
-}
-
-// ---- SORT ----
-function sortCards(select) {
-  const grid = document.getElementById('packagesGrid');
-  const cards = Array.from(grid.querySelectorAll('.pkg-card'));
-
-  cards.sort((a, b) => {
-    const pa = parseFloat(a.dataset.price);
-    const pb = parseFloat(b.dataset.price);
-    const ra = parseFloat(a.dataset.rating);
-    const rb = parseFloat(b.dataset.rating);
-
-    if (select.value === 'price-low')  return pa - pb;
-    if (select.value === 'price-high') return pb - pa;
-    if (select.value === 'rating')     return rb - ra;
-    return 0;
-  });
-
-  cards.forEach(c => grid.appendChild(c));
-}
-
-// ---- CONTACT FORM ----
-function handleSubmit(e) {
-  e.preventDefault();
-  const success = document.getElementById('formSuccess');
-  success.style.display = 'block';
-  e.target.reset();
-  setTimeout(() => { success.style.display = 'none'; }, 5000);
-}
-</script>
+<script src="common.js"></script>
 </body>
 </html>

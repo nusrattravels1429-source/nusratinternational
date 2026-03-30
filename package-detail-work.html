@@ -8,43 +8,99 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="common.css">
-  <link rel="stylesheet" href="slider_container.css">
-  <link rel="stylesheet" href="sections.css">
-  <link rel="stylesheet" href="cards.css">
-  <link rel="stylesheet" href="contact.css">
-  <link rel="stylesheet" href="package-detail-work.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/slider_container.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/contact.css">
+  <link rel="stylesheet" href="css/package-detail-work.css">
 </head>
 
 <body>
 
 <!-- ================= HEADER ================= -->
-<nav id="navbar">
-  <div class="nav-inner">
+ <nav id="navbar">
+    <div class="nav-inner">
 
-    <div class="logo">
-      <a href="index.html">
-        <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg"
-             alt="Nusrat International Logo"
-             onerror="this.style.display='none'">
-        <span>Nusrat International</span>
-      </a>
+      <div class="logo">
+        <a href="index.html">
+          <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg"
+              alt="Nusrat International Logo"
+              onerror="this.style.display='none'">
+           <div class="logo-text">
+            <span>Nusrat International <br> Nusrat Travels</span>
     </div>
+        </a>
+      </div>
 
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
 
-    <ul class="nav-links" id="nav-links">
-      <li><a href="index.html" class="active">Home | হোম</a></li>
-      <li><a href="Travel.html" >Travel | ভ্রমণ</a></li>
-      <li><a href="Hajj.html">Hajj | হাজ্জ</a></li>
-      <li><a href="Work.html">Work | কাজ</a></li>
-      <li><a href="Contact.html">Contact | যোগাযোগ</a></li>
-      <li><a href="About_us.html">About | আমাদের সম্পর্কে</a></li>
-    </ul>
-  </div>
-</nav>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html" >Home | হোম</a></li>
+        <li><a href="Travel.html" >Tickting | ভ্রমণ</a></li>
+        <li><a href="Travel.html" class="active">Travel | ভ্রমণ</a></li>
+        <li><a href="Hajj.html">Hajj | হাজ্জ</a></li>
+        <li><a href="Work.html">Work | কাজ</a></li>
+        <li><a href="Contact.html">Contact | যোগাযোগ</a></li>
+        
+        <!-- About with hover dropdown -->
+        <li class="has-dropdown" id="aboutDropdown">
+          <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+            About | আমাদের সম্পর্কে
+            <span class="drop-arrow">▾</span>
+          </button>
+
+          <ul class="dropdown-menu" role="menu">
+
+            <li role="none">
+              <a href="About_us.html" role="menuitem">
+          
+                <span class="dm-text">
+                  <strong>About Us</strong>
+                  <small>Our story &amp; leadership</small>
+                </span>
+              </a>
+            </li>
+
+            <li role="none">
+              <a href="gallery.html" role="menuitem">
+                
+                <span class="dm-text">
+                  <strong>Gallery</strong>
+                  <small>Photos &amp; memories</small>
+                </span>
+              </a>
+            </li>
+
+            <li role="none">
+              <a href="employees.html" role="menuitem">
+                
+                <span class="dm-text">
+                  <strong>Our Team</strong>
+                  <small>Meet our employees</small>
+                </span>
+              </a>
+            </li>
+
+            <li role="none">
+              <a href="About_us.html#certifications" role="menuitem">
+
+                <span class="dm-text">
+                  <strong>Approvals &amp; Certifications</strong>
+                  <small>BAIRA · IATA · ATAB · RL-1429 and many moder </small>
+                </span>
+              </a>
+            </li>
+
+          </ul>
+        </li>
+
+      </ul><!-- /nav-links -->
+    </div>
+  </nav>
+
 
 
 <!-- ===== HERO ===== -->
@@ -58,7 +114,7 @@
     <div class="hero-meta">
       <div class="hmeta"><span class="hi">⏱</span><div><small>Contract</small><b>2-Year Renewable</b></div></div>
       <div class="hmeta"><span class="hi">💰</span><div><small>Monthly Salary</small><b>BDT 40,000+</b></div></div>
-      <div class="hmeta"><span class="hi">⭐</span><div><small>Rating</small><b>★ 4.7</b></div></div>
+      
       <span class="price-pill">$599</span>
     </div>
   </div>
@@ -142,94 +198,83 @@
     </div>
 
     <!-- Reviews -->
-    <div class="sc">
-      <div class="sc-head"><span>⭐</span> Reviews & Ratings</div>
-
-      <div class="rv-summary">
-        <div>
-          <div class="rv-score">4.7</div>
-          <div class="rv-stars">★★★★★</div>
-          
-        </div>
-        <div class="rv-bars">
-          <div class="bar-row"><span class="bar-lbl">5★</span><div class="bar-track"><div class="bar-fill" style="width:68%"></div></div><span class="bar-pct">68%</span></div>
-          <div class="bar-row"><span class="bar-lbl">4★</span><div class="bar-track"><div class="bar-fill" style="width:22%"></div></div><span class="bar-pct">22%</span></div>
-          <div class="bar-row"><span class="bar-lbl">3★</span><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div><span class="bar-pct">6%</span></div>
-          <div class="bar-row"><span class="bar-lbl">2★</span><div class="bar-track"><div class="bar-fill" style="width:3%"></div></div><span class="bar-pct">3%</span></div>
-          <div class="bar-row"><span class="bar-lbl">1★</span><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div><span class="bar-pct">1%</span></div>
-        </div>
-      </div>
-
-      <div class="rv-list" id="rvList">
-        <div class="rv-card">
-          <div class="rv-hdr">
-            <div class="rv-av">RM</div>
-            <div><div class="rv-name">Rahim Miah</div><div class="rv-date">March 2026</div></div>
-            <div class="rv-starz">★★★★★</div>
-          </div>
-          <div class="rv-text">Alhamdulillah! I got a good factory job in Kuala Lumpur through Nusrat International. The process was completely transparent with no hidden fees. My monthly salary is BDT 45,000. I am very happy and would recommend everyone!</div>
-        </div>
-        <div class="rv-card">
-          <div class="rv-hdr">
-            <div class="rv-av">JH</div>
-            <div><div class="rv-name">Jamal Hossain</div><div class="rv-date">January 2026</div></div>
-            <div class="rv-starz">★★★★☆</div>
-          </div>
-          <div class="rv-text">Good service overall. Everything was arranged properly. I got free food and accommodation from my employer. Nusrat team was very helpful and responsive throughout the whole process. Satisfied!</div>
-        </div>
-        <div class="rv-card">
-          <div class="rv-hdr">
-            <div class="rv-av">SA</div>
-            <div><div class="rv-name">Shahin Akter</div><div class="rv-date">December 2025</div></div>
-            <div class="rv-starz">★★★★★</div>
-          </div>
-          <div class="rv-text">Best agency in Dhaka! They are 100% honest and professional. They did exactly as they promised with absolutely zero hidden charges. My family is very proud. Nusrat International is truly trustworthy!</div>
-        </div>
-      </div>
-
-      <div class="write-rv">
-        <h4>✍️ Share Your Experience | আপনার অভিজ্ঞতা লিখুন</h4>
-        <div class="star-row" id="starRow">
-          <button class="sb" data-v="1">★</button>
-          <button class="sb" data-v="2">★</button>
-          <button class="sb" data-v="3">★</button>
-          <button class="sb" data-v="4">★</button>
-          <button class="sb" data-v="5">★</button>
-        </div>
-        <input class="rv-inp" id="rvName" type="text" placeholder="Your name | আপনার নাম">
-        <textarea class="rv-inp" id="rvText" rows="4" placeholder="How was your experience? | আপনার অভিজ্ঞতা কেমন ছিল?"></textarea>
-        <button class="btn-rv" id="btnRv">Submit Review | রিভিউ দিন 💼</button>
-        <div class="rv-ok" id="rvOk">✅ Thank you! Your review helps others. ধন্যবাদ!</div>
-      </div>
-    </div>
+    
   </div><!-- /left-col -->
 
   <!-- RIGHT COLUMN — BOOKING -->
-  <div class="booking-sticky">
-    <div class="booking-card">
-      <div class="bk-hdr">
-        <div class="bk-label">Service fee starting from</div>
-        <div class="bk-price">$599</div>
-        <div class="bk-per">one-time visa processing fee</div>
-        <div class="bk-meta"><span class="bk-stars">★★★★★</span><span>4.7 Rating </span></div>
-      </div>
-      <div class="bk-body">
-        <div class="bk-title">📝 Apply Now | আবেদন করুন</div>
-        <div class="bf-2col">
-          <div class="bf"><label>Full Name</label><input id="bfName" type="text" placeholder="Your full name"></div>
-          <div class="bf"><label>Phone Number</label><input id="bfPhone" type="tel" placeholder="+880 XXXXXXXXX"></div>
-        </div>
-        <div class="bf"><label>Email Address</label><input id="bfEmail" type="email" placeholder="you@email.com"></div>
-        
-        <div class="bf"><label>Additional Information</label><textarea id="bfNote" rows="3" placeholder="Work experience, languages known, any prior visa history... | অভিজ্ঞতা, ভাষা জ্ঞান..."></textarea></div>
-        <button class="btn-book" id="btnBook">Apply Now | এখনই আবেদন করুন 💼</button>
-        <div class="book-ok" id="bookOk">✅ Application received!<br>আমরা ২৪ ঘণ্টার মধ্যে আপনার সাথে যোগাযোগ করব।<br><small>Please keep your documents ready.</small></div>
-      </div>
-      
+ <div class="booking-sticky">
+  <div class="booking-card">
+
+    <div class="bk-hdr">
+      <div class="bk-label">Service fee starting from</div>
+      <div class="bk-price">$599</div>
+      <div class="bk-per">one-time visa processing fee</div>
     </div>
 
-    
+    <!-- FORM START -->
+    <form class="bk-body">
+
+      <div class="bk-title">📝 Apply Now | আবেদন করুন</div>
+
+      <div class="bf-2col">
+
+        <div class="bf">
+          <label>Full Name</label>
+          <input 
+            id="bfName"
+            type="text"
+            placeholder="Your full name"
+            required
+          >
+        </div>
+
+        <div class="bf">
+          <label>Phone Number</label>
+          <input 
+            id="bfPhone"
+            type="tel"
+            placeholder="+880 XXXXXXXXX"
+            required
+          >
+        </div>
+
+      </div>
+
+      <div class="bf">
+        <label>Email Address</label>
+        <input 
+          id="bfEmail"
+          type="email"
+          placeholder="you@email.com"
+        
+        >
+      </div>
+
+      <div class="bf">
+        <label>Additional Information</label>
+        <textarea 
+          id="bfNote"
+          rows="3"
+          placeholder="Work experience, languages known, any prior visa history... | অভিজ্ঞতা, ভাষা জ্ঞান..."
+          required
+        ></textarea>
+      </div>
+
+      <button type="submit" class="btn-book">
+        Apply Now | এখনই আবেদন করুন 💼
+      </button>
+
+      <div class="book-ok" id="bookOk">
+        ✅ Application received!<br>
+        আমরা ২৪ ঘণ্টার মধ্যে আপনার সাথে যোগাযোগ করব।<br>
+        <small>Please keep your documents ready.</small>
+      </div>
+
+    </form>
+    <!-- FORM END -->
+
   </div>
+</div>
 
 </div><!-- /detail-wrap -->
 

@@ -1,44 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Work Packages — Nusrat International</title>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelX — Explore The World</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/slider_container.css">
+    <link rel="stylesheet" href="css/sections.css"> 
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/work.css">
+    
+  </head>
 
-  <link rel="stylesheet" href="Work.css">
-  <link rel="stylesheet" href="common.css">
-  <link rel="stylesheet" href="cards.css">
-  <link rel="stylesheet" href="contact.css">
-  <link rel="stylesheet" href="work.css">
-</head>
-<body>
+  <body>
 
-<!-- ================= NAVBAR ================= -->
-<nav id="navbar">
-  <div class="nav-inner">
-    <div class="logo">
-      <a href="home.html">
-        <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg"
-             alt="Nusrat International Logo" onerror="this.style.display='none'">
-        <span>Nusrat International</span>
-      </a>
-    </div>
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="index.html" >Home | হোম</a></li>
-      <li><a href="Travel.html" >Travel | ভ্রমণ</a></li>
-      <li><a href="Hajj.html">Hajj | হাজ্জ</a></li>
-      <li><a href="Work.html"class="active">Work | কাজ</a></li>
-      <li><a href="Contact.html">Contact | যোগাযোগ</a></li>
-      <li><a href="About.html">About | আমাদের সম্পর্কে</a></li>
-    </ul>
-  </div>
-</nav>
+    <!-- ================= HEADER ================= -->
+    <nav id="navbar">
+      <div class="nav-inner">
+
+        <div class="logo">
+          <a href="index.html">
+            <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg"
+                alt="Nusrat International Logo"
+                onerror="this.style.display='none'">
+            <div class="logo-text">
+              <span>Nusrat International <br> Nusrat Travels</span>
+      </div>
+          </a>
+        </div>
+
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html" >Home | হোম</a></li>
+          <li><a href="Travel.html" >Tickting | ভ্রমণ</a></li>
+          <li><a href="Travel.html" >Travel | ভ্রমণ</a></li>
+          <li><a href="Hajj.html">Hajj | হাজ্জ</a></li>
+          <li><a href="Work.html" class="active">Work | কাজ</a></li>
+          <li><a href="Contact.html">Contact | যোগাযোগ</a></li>
+          
+          <!-- About with hover dropdown -->
+          <li class="has-dropdown" id="aboutDropdown">
+            <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+              About | আমাদের সম্পর্কে
+              <span class="drop-arrow">▾</span>
+            </button>
+
+            <ul class="dropdown-menu" role="menu">
+
+              <li role="none">
+                <a href="About_us.html" role="menuitem">
+            
+                  <span class="dm-text">
+                    <strong>About Us</strong>
+                    <small>Our story &amp; leadership</small>
+                  </span>
+                </a>
+              </li>
+
+              <li role="none">
+                <a href="gallery.html" role="menuitem">
+                  
+                  <span class="dm-text">
+                    <strong>Gallery</strong>
+                    <small>Photos &amp; memories</small>
+                  </span>
+                </a>
+              </li>
+
+              <li role="none">
+                <a href="employees.html" role="menuitem">
+                  
+                  <span class="dm-text">
+                    <strong>Our Team</strong>
+                    <small>Meet our employees</small>
+                  </span>
+                </a>
+              </li>
+
+              <li role="none">
+                <a href="About_us.html#certifications" role="menuitem">
+
+                  <span class="dm-text">
+                    <strong>Approvals &amp; Certifications</strong>
+                    <small>BAIRA · IATA · ATAB · RL-1429 and many moder </small>
+                  </span>
+                </a>
+              </li>
+
+            </ul>
+          </li>
+
+        </ul><!-- /nav-links -->
+      </div>
+    </nav>
 
 <!-- ================= PAGE HERO ================= -->
 <div class="page-hero work-hero">
@@ -52,27 +112,7 @@
   </div>
 </div>
 
-<!-- ================= FILTER BAR ================= -->
-<div class="filter-bar">
-  <div class="filter-left">
-    <span class="filter-label">Filter:</span>
-    <button class="filter-btn active" onclick="filterCards(this,'all')">All</button>
-    <button class="filter-btn" onclick="filterCards(this,'middle-east')">Middle East</button>
-    <button class="filter-btn" onclick="filterCards(this,'asia')">Asia</button>
-    <button class="filter-btn" onclick="filterCards(this,'europe')">Europe</button>
-    <button class="filter-btn" onclick="filterCards(this,'skilled')">Skilled</button>
-    <button class="filter-btn" onclick="filterCards(this,'unskilled')">General</button>
-  </div>
-  <div class="filter-right">
-    <select class="sort-select" onchange="sortCards(this)">
-      <option value="default">Sort by: Default</option>
-      <option value="price-low">Fee: Low to High</option>
-      <option value="price-high">Fee: High to Low</option>
-      <option value="rating">Top Rated</option>
-    </select>
-    <span class="results-count" id="resultsCount">9 packages</span>
-  </div>
-</div>
+
 
 <!-- ================= PACKAGES GRID ================= -->
 <main>
@@ -96,7 +136,7 @@
         </div>
         <p class="pkg-desc">Construction, cleaning, and hospitality roles with accommodation provided.</p>
         <p class="pkg-desc bn">নির্মাণ, পরিষ্কার ও আতিথেয়তা খাতে কাজের সুযোগ।</p>
-        <button class="view-btn green">View Details | বিস্তারিত দেখুন</button>
+        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
       </div>
     </div>
 
@@ -118,7 +158,7 @@
         </div>
         <p class="pkg-desc">Tax-free earnings in hospitality, retail, and construction sectors.</p>
         <p class="pkg-desc bn">ট্যাক্স-মুক্ত আয়; আতিথেয়তা ও নির্মাণ খাতে সুযোগ।</p>
-        <button class="view-btn green">View Details | বিস্তারিত দেখুন</button>
+        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
       </div>
     </div>
 
@@ -140,7 +180,7 @@
         </div>
         <p class="pkg-desc">Technical and skilled trade positions in Qatar's infrastructure boom.</p>
         <p class="pkg-desc bn">কাতারের অবকাঠামো উন্নয়নে দক্ষ কর্মীদের জন্য সুযোগ।</p>
-        <button class="view-btn green">View Details | বিস্তারিত দেখুন</button>
+        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
       </div>
     </div>
 
@@ -162,7 +202,7 @@
         </div>
         <p class="pkg-desc">Factory, plantation, and construction work with competitive salary packages.</p>
         <p class="pkg-desc bn">কারখানা, বাগান ও নির্মাণ কাজে প্রতিযোগিতামূলক বেতন।</p>
-        <button class="view-btn green">View Details | বিস্তারিত দেখুন</button>
+        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
       </div>
     </div>
 
@@ -184,7 +224,7 @@
         </div>
         <p class="pkg-desc">High-paying skilled and IT jobs in Singapore's booming economy.</p>
         <p class="pkg-desc bn">সিঙ্গাপুরের অর্থনীতিতে উচ্চ বেতনের দক্ষ কর্মীর চাকরি।</p>
-        <button class="view-btn green">View Details | বিস্তারিত দেখুন</button>
+        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
       </div>
     </div>
 
@@ -206,7 +246,7 @@
         </div>
         <p class="pkg-desc">EPS Employment Permit System — factory and agriculture work.</p>
         <p class="pkg-desc bn">ইপিএস প্রোগ্রামে কারখানা ও কৃষি খাতে কর্মসংস্থান।</p>
-        <button class="view-btn green">View Details | বিস্তারিত দেখুন</button>
+        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
       </div>
     </div>
 
@@ -228,7 +268,7 @@
         </div>
         <p class="pkg-desc">Skilled worker visa for engineers, electricians and healthcare workers.</p>
         <p class="pkg-desc bn">প্রকৌশলী, ইলেকট্রিশিয়ান ও স্বাস্থ্যকর্মীদের জন্য ভিসা।</p>
-        <button class="view-btn green">View Details | বিস্তারিত দেখুন</button>
+        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
       </div>
     </div>
 
@@ -250,7 +290,7 @@
         </div>
         <p class="pkg-desc">Agriculture, food processing, and warehouse work opportunities.</p>
         <p class="pkg-desc bn">কৃষি, খাদ্য প্রক্রিয়াকরণ ও গুদামঘরে কাজের সুযোগ।</p>
-        <button class="view-btn green">View Details | বিস্তারিত দেখুন</button>
+        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
       </div>
     </div>
 
@@ -299,164 +339,59 @@
   </div>
 </section>
 
-<!-- ================= CONTACT ================= -->
-<section class="contact-section" id="contact">
-  <div class="contact-inner">
-    <div class="contact-info">
-      <span class="section-tag">📞 GET IN TOUCH</span>
-      <h2>Contact Us<br><span class="bn-sub">আমাদের সাথে যোগাযোগ করুন</span></h2>
-      <p>Have questions about a work package? Our visa experts are ready to guide you.</p>
-      <div class="contact-items">
-        <div class="contact-item"><span class="ci-icon">📍</span><div><strong>Address</strong><p>Banani Super Market, Dhaka, Bangladesh</p></div></div>
-        <div class="contact-item"><span class="ci-icon">📞</span><div><strong>Phone</strong><p>+880 1712-345678</p></div></div>
-        <div class="contact-item"><span class="ci-icon">✉️</span><div><strong>Email</strong><p>work@nusratinternational.com</p></div></div>
-        <div class="contact-item"><span class="ci-icon">🕐</span><div><strong>Hours</strong><p>Sat–Thu: 9AM – 9PM</p></div></div>
-      </div>
-    </div>
-    <form class="contact-form" onsubmit="handleSubmit(event)">
-      <h3>Apply Now | আবেদন করুন</h3>
-      <div class="form-row">
-        <div class="form-group"><label>Full Name</label><input type="text" placeholder="Your full name" required></div>
-        <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+880 XXXXXXXXX" required></div>
-      </div>
-      <div class="form-group"><label>Email Address</label><input type="email" placeholder="your@email.com" required></div>
-      <div class="form-group">
-        <label>Preferred Country</label>
-        <select>
-          <option value="">Select destination country...</option>
-          <option>Saudi Arabia | সৌদি আরব</option>
-          <option>Dubai, UAE | দুবাই</option>
-          <option>Qatar | কাতার</option>
-          <option>Malaysia | মালয়েশিয়া</option>
-          <option>Singapore | সিঙ্গাপুর</option>
-          <option>Germany | জার্মানি</option>
-          <option>United Kingdom | যুক্তরাজ্য</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Your Skills / Experience</label><textarea rows="4" placeholder="Describe your skills and experience..." required></textarea></div>
-      <button type="submit" class="btn-submit" style="background:#0d9f6e;">Submit Application | আবেদন জমা দিন 💼</button>
-      <div class="form-success" id="formSuccess">✅ Application submitted! We'll contact you shortly.</div>
-    </form>
-  </div>
-</section>
 
 <!-- ================= FOOTER ================= -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div style="margin-bottom:12px;">
-        <a href="home.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-          <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Logo" style="height:36px;width:36px;border-radius:8px;object-fit:cover;" onerror="this.style.display='none'">
-          <span style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:white;">Nusrat International</span>
-        </a>
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">Nusrat International</div>
+        <p>Your trusted partner for travel, Hajj, Umrah & international work opportunities. Serving Bangladesh since 2010.</p>
+        <div class="social-links">
+          <a href="#">FB</a>
+          <a href="#">YT</a>
+          <a href="#">IG</a>
+          <a href="#">WA</a>
+        </div>
       </div>
-      <p>Your trusted partner for travel, Hajj, Umrah & international work. Serving Bangladesh since 2010.</p>
-      <div class="social-links">
-        <a href="#">FB</a><a href="#">YT</a><a href="#">IG</a><a href="#">WA</a>
+      <div class="footer-links">
+        <h4>Services</h4>
+        <a href="#">Travel Packages</a>
+        <a href="#">Hajj Packages</a>
+        <a href="#">Umrah Packages</a>
+        <a href="#">Work Visas</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Our Team</a>
+        <a href="#">Testimonials</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="footer-links">
+        <h4>Location</h4>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d289.0469505033273!2d90.40676792155625!3d23.793011243570064!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7002a36b06f%3A0x366721a37cc4f4c0!2z4Kao4KeB4Ka44Kaw4Ka-4KakIOCmh-CmqOCnjeCmn-CmvuCmsOCmqOCnjeCmr-CmvuCmtuCmqOCmvuCmsiBOdXNyYXQgSW50ZXJuYXRpb25hbA!5e0!3m2!1sen!2sbd!4v1774551450209!5m2!1sen!2sbd" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
-    <div class="footer-links">
-      <h4>Services</h4>
-      <a href="Travel.html">Travel Packages</a>
-      <a href="Hajj.html">Hajj Packages</a>
-      <a href="Hajj.html">Umrah Packages</a>
-      <a href="Work.html">Work Visas</a>
+    <div class="footer-bottom">
+      <p>© 2026 TravelX Bangladesh. All rights reserved. | সর্বস্বত্ব সংরক্ষিত।</p>
     </div>
-    <div class="footer-links">
-      <h4>Company</h4>
-      <a href="#">About Us</a><a href="#">Our Team</a><a href="#">Testimonials</a><a href="#contact">Contact</a>
-    </div>
-    <div class="footer-links">
-      <h4>Our Location</h4>
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.7194346099836!2d90.4049653103119!3d23.79300323072133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c70e90bb671d%3A0x7eab77d0896252c0!2sBanani%20Super%20Market!5e0!3m2!1sen!2sbd!4v1771968108612!5m2!1sen!2sbd" width="100%" height="200" style="border:0;border-radius:12px;display:block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
-  </div>
-  <div class="footer-bottom"><p>© 2026 Nusrat International Bangladesh. All rights reserved. | সর্বস্বত্ব সংরক্ষিত।</p></div>
-</footer>
+  </footer>
+  <!-- ================= JAVASCRIPT ================= -->
+  <script src="js/common.js"></script>
+  <script>
+    function scrollToContact(e) {
+      e.preventDefault();
+      const contactSection = document.getElementById('contact');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  </script>
 
-<script>
-
-// ---- NAVBAR scroll effect ----
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 50);
-});
-
-// ---- HAMBURGER MENU (top dropdown) ----
-const hamburger = document.getElementById('hamburger');
-const navLinks = document.getElementById('nav-links');
-const navItems = navLinks.querySelectorAll('li');
-
-function openMenu() {
-  hamburger.classList.add('open');
-  navLinks.classList.add('open');
-  document.body.classList.add('menu-open');
-  // Stagger each item sliding down
-  navItems.forEach((item, i) => {
-    item.style.transitionDelay = `${0.06 + i * 0.07}s`;
-    // tiny delay to let the overlay start first
-    setTimeout(() => item.classList.add('revealed'), 20);
-  });
-}
-
-function closeMenu() {
-  hamburger.classList.remove('open');
-  navLinks.classList.remove('open');
-  document.body.classList.remove('menu-open');
-  navItems.forEach(item => {
-    item.classList.remove('revealed');
-    item.style.transitionDelay = '0s';
-  });
-}
-
-hamburger.addEventListener('click', (e) => {
-  e.stopPropagation();
-  hamburger.classList.contains('open') ? closeMenu() : openMenu();
-});
-
-// Close when a nav link is clicked
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', closeMenu);
-});
-
-// Close when clicking outside
-document.addEventListener('click', (e) => {
-  if (navLinks.classList.contains('open') &&
-      !navLinks.contains(e.target) &&
-      !hamburger.contains(e.target)) {
-    closeMenu();
-  }
-});
-function filterCards(btn, category) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const cards = document.querySelectorAll('#packagesGrid .pkg-card');
-  let visible = 0;
-  cards.forEach(card => {
-    const show = category === 'all' || (card.dataset.category || '').includes(category);
-    card.style.display = show ? '' : 'none';
-    if (show) visible++;
-  });
-  document.getElementById('resultsCount').textContent = visible + ' packages';
-}
-function sortCards(select) {
-  const grid = document.getElementById('packagesGrid');
-  const cards = Array.from(grid.querySelectorAll('.pkg-card'));
-  cards.sort((a, b) => {
-    if (select.value === 'price-low')  return a.dataset.price - b.dataset.price;
-    if (select.value === 'price-high') return b.dataset.price - a.dataset.price;
-    if (select.value === 'rating')     return b.dataset.rating - a.dataset.rating;
-    return 0;
-  });
-  cards.forEach(c => grid.appendChild(c));
-}
-function handleSubmit(e) {
-  e.preventDefault();
-  const s = document.getElementById('formSuccess');
-  s.style.display = 'block';
-  e.target.reset();
-  setTimeout(() => s.style.display = 'none', 5000);
-}
-</script>
-</body>
-</html>
+  </body>
+  </html>last task
+render cardss data and other static data from the mongodb oof Hajj.html Travel.html and Work.html pages using nodejs express and ejs template engine. 
+ 2nd task in index.html Hajj.html Travel.html and Work.html make then link to  View Details 
+ go to travel-detlail.html work-detail.html hajj-detail.html and render the details of the card that is clicked using nodejs express and ejs template engine.
+ last ly make a common header and footer for all the pages and render them using ejs partials.
