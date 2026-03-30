@@ -1,0 +1,277 @@
+/* ===========================
+   sections.css
+   Stats Bar, Section Headers,
+   Hajj Grid, etc.
+   =========================== */
+
+/* ---- STATS BAR ---- */
+.stats-bar {
+  background: white;
+  padding: 30px 40px;
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 60px;
+  border-right: 1px solid #e5e7eb;
+}
+
+.stat:last-child { border-right: none; }
+
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 900;
+  color: #1a1f2e;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ---- SECTION WRAPPER ---- */
+.package-section {
+  padding: 80px 40px;
+  max-width: 1380px;
+  margin: 0 auto;
+}
+
+.package-section.hajj-bg {
+  max-width: 100%;
+  background: linear-gradient(135deg, #0d1117 0%, #1a2035 100%);
+  padding: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.package-section.hajj-bg::before {
+  content: '☪';
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  font-size: 300px;
+  opacity: 0.03;
+  color: #c9a227;
+  pointer-events: none;
+}
+
+.package-section.hajj-bg .section-intro h2,
+.package-section.hajj-bg .section-intro p {
+  color: white;
+}
+
+.package-section.hajj-bg .section-intro .bn-sub {
+  color: #c9a227;
+}
+
+/* ---- SECTION INTRO ---- */
+.section-intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #1a56db;
+  margin-bottom: 12px;
+}
+
+.section-tag.gold { color: #c9a227; }
+.section-tag.green { color: #0d9f6e; }
+
+.section-intro h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #0d1117;
+}
+
+.section-intro .bn-sub {
+  display: block;
+  font-size: 0.7em;
+  color: #6b7280;
+  font-style: italic;
+  font-weight: 400;
+  margin-top: 4px;
+}
+
+.section-intro p {
+  font-size: 15px;
+  color: #6b7280;
+  max-width: 500px;
+  margin-top: 12px;
+}
+
+/* View All Button */
+.view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a56db;
+  border: 2px solid #1a56db;
+  padding: 12px 24px;
+  border-radius: 50px;
+  transition: 0.3s ease;
+  white-space: nowrap;
+}
+
+.view-all-btn:hover {
+  background: #1a56db;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(26,86,219,0.25);
+}
+
+.view-all-btn.gold {
+  color: #c9a227;
+  border-color: #c9a227;
+}
+
+.view-all-btn.gold:hover {
+  background: #c9a227;
+  color: white;
+  box-shadow: 0 8px 20px rgba(201,162,39,0.25);
+}
+
+.view-all-btn.green {
+  color: #0d9f6e;
+  border-color: #0d9f6e;
+}
+
+.view-all-btn.green:hover {
+  background: #0d9f6e;
+  color: white;
+  box-shadow: 0 8px 20px rgba(13,159,110,0.25);
+}
+
+/* ---- HAJJ GRID ---- */
+.hajj-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 30px;
+  align-items: stretch;
+}
+
+.hajj-featured {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  min-height: 420px;
+}
+
+.hajj-featured img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hajj-featured-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 36px;
+}
+
+.hajj-featured-overlay h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.hajj-featured-overlay p {
+  color: #c9a227;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.hajj-featured-overlay .tagline {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+/* Hajj card column */
+.hajj-cards-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Horizontal card variant */
+.pkg-card.horizontal {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  border-radius: 16px;
+}
+
+.pkg-card.horizontal .pkg-img-wrap.small {
+  border-radius: 16px 0 0 16px;
+}
+
+.pkg-card.horizontal .pkg-img-wrap.small img {
+  height: 100%;
+  border-radius: 16px 0 0 16px;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 1100px) {
+  .hajj-grid {
+    grid-template-columns: 1fr;
+  }
+  .hajj-featured {
+    min-height: 320px;
+  }
+  .package-section.hajj-bg {
+    padding: 60px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-bar { gap: 0; }
+  .stat {
+    padding: 16px 24px;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    width: 50%;
+  }
+  .stat:nth-child(odd) { border-right: 1px solid #e5e7eb; }
+  .stat:last-child, .stat:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+
+  .package-section { padding: 50px 20px; }
+  .section-intro { flex-direction: column; align-items: flex-start; }
+
+  .pkg-card.horizontal {
+    grid-template-columns: 1fr;
+  }
+  .pkg-card.horizontal .pkg-img-wrap.small { border-radius: 16px 16px 0 0; }
+  .pkg-card.horizontal .pkg-img-wrap.small img { height: 200px; border-radius: 16px 16px 0 0; }
+}

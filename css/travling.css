@@ -1,0 +1,454 @@
+/* ===========================
+   traveling.css
+   Travel / Ticketing Page Styles
+   =========================== */
+
+/* ---- PAGE HERO ---- */
+.page-hero {
+  position: relative;
+  height: 65vh;
+  min-height: 420px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-hero-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.page-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.page-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.3) 0%,
+    rgba(0,0,0,0.6) 100%
+  );
+  z-index: 1;
+}
+
+.page-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+  padding: 0 20px;
+  max-width: 700px;
+  margin-top: 60px;
+}
+
+.page-hero-content .hero-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 8px 20px;
+  border-radius: 30px;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.page-hero-content h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(38px, 6vw, 68px);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.page-hero-content h1 em {
+  font-style: italic;
+  color: #f8c640;
+}
+
+.page-hero-content p {
+  font-size: clamp(14px, 1.8vw, 17px);
+  opacity: 0.9;
+  margin-bottom: 30px;
+  line-height: 1.8;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 14px 36px;
+  background: #f8c640;
+  color: #0d1117;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: white;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+
+/* ---- TICKETING SECTION (reused from common, extended here) ---- */
+.ticketing-section {
+  background: #f5f7fa;
+  padding: 90px 40px;
+  overflow: hidden;
+}
+
+.ticketing-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.ticketing-text .section-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 14px;
+}
+
+.ticketing-text h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 700;
+  color: #0d1117;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.ticketing-text h2 .bn-sub {
+  display: block;
+  font-size: 0.62em;
+  color: #6b7280;
+  font-style: italic;
+  font-weight: 400;
+  margin-top: 6px;
+}
+
+.ticketing-text p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+
+.btn-ticket-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  background: var(--blue);
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 50px;
+  transition: 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-ticket-cta:hover {
+  background: var(--blue-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(26,86,219,0.3);
+}
+
+.ticketing-track-wrap {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.flag-track {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.flag-row {
+  display: flex;
+  gap: 14px;
+  animation: flagScrollLeft 28s linear infinite;
+  width: max-content;
+}
+
+.flag-row.reverse {
+  animation: flagScrollRight 32s linear infinite;
+}
+
+@keyframes flagScrollLeft {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes flagScrollRight {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.ticketing-track-wrap:hover .flag-row {
+  animation-play-state: paused;
+}
+
+.flag-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 14px 20px;
+  min-width: 110px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+
+.flag-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.flag-emoji {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.flag-item span:last-child {
+  font-size: 11px;
+  font-weight: 600;
+  color: #374151;
+  text-align: center;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.ticket-contact-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #0c1628;
+  color: rgba(255,255,255,0.7);
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-size: 13px;
+  font-weight: 500;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.ticket-contact-bar a {
+  color: #c9a227;
+  font-weight: 700;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+
+.ticket-contact-bar a:hover { color: #f0c040; }
+
+/* ---- WHY SECTION ---- */
+.why-section {
+  background: #ffffff;
+  padding: 90px 40px;
+}
+
+.why-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.why-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-tag-dark {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 14px;
+}
+
+.why-header h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(26px, 3.5vw, 40px);
+  font-weight: 700;
+  color: #0d1117;
+  line-height: 1.2;
+}
+
+.bn-sub-dark {
+  display: block;
+  font-size: 0.65em;
+  color: #6b7280;
+  font-style: italic;
+  font-weight: 400;
+  margin-top: 6px;
+}
+
+.why-header p {
+  font-size: 15px;
+  color: #6b7280;
+  margin-top: 14px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+.why-card {
+  background: #f5f7fa;
+  border-radius: 18px;
+  padding: 36px 24px;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.why-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.09);
+  background: white;
+}
+
+.why-icon {
+  font-size: 36px;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+
+.why-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0d1117;
+  margin-bottom: 10px;
+}
+
+.why-card p {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.7;
+}
+
+/* ---- CTA SECTION ---- */
+.cta-section {
+  background: linear-gradient(135deg, #0c1628 0%, #1a2a50 100%);
+  padding: 90px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '✈';
+  position: absolute;
+  font-size: 300px;
+  opacity: 0.04;
+  color: white;
+  top: -60px;
+  right: -40px;
+  pointer-events: none;
+}
+
+.cta-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-inner h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(30px, 4vw, 48px);
+  font-weight: 700;
+  color: white;
+  margin-bottom: 16px;
+}
+
+.cta-inner p {
+  font-size: 16px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.8;
+  margin-bottom: 36px;
+}
+
+.cta-btns {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-ghost-dark {
+  display: inline-block;
+  padding: 14px 28px;
+  background: transparent;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 50px;
+  transition: 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-ghost-dark:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: white;
+  transform: translateY(-3px);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 1024px) {
+  .ticketing-inner {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .ticketing-section { padding: 60px 20px; }
+  .why-section { padding: 60px 20px; }
+  .cta-section { padding: 60px 20px; }
+  .why-grid { grid-template-columns: 1fr 1fr; }
+  .cta-btns { flex-direction: column; align-items: center; }
+}
+
+@media (max-width: 480px) {
+  .why-grid { grid-template-columns: 1fr; }
+}

@@ -938,4 +938,8 @@
     .leadership-visual { flex-direction: column; }
     .cred-card.top-right, .cred-card.bottom-right { display: none; }
     .credential-stack { aspect-ratio: auto; height: 320px; }
+<<<<<<< HEAD
   }
+=======
+  }
+>>>>>>> b590dba (Added nested file)

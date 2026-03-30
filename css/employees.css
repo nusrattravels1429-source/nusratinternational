@@ -1,0 +1,102 @@
+
+    #navbar { background: rgba(13,17,23,0.97) !important; box-shadow: 0 4px 24px rgba(0,0,0,0.18); }
+    #navbar .nav-links a, #navbar .dropdown-trigger { color: rgba(255,255,255,0.9) !important; }
+    #navbar .logo span { color: white !important; }
+    #navbar .hamburger span { background: white !important; }
+    body { padding-top: 80px; background: #f5f7fa; color: #1a1f2e; }
+
+    .page-title { text-align: center; padding: 60px 20px 44px; }
+    .page-title .ptag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #1a56db; margin-bottom: 14px; }
+    .page-title h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 5vw, 50px); font-weight: 900; color: #0d1117; line-height: 1.15; margin-bottom: 10px; }
+    .page-title h1 em { font-style: italic; color: #1a56db; }
+    .page-title p { font-size: 15px; color: #6b7280; max-width: 480px; margin: 0 auto; line-height: 1.8; }
+
+/* Employee Section */
+
+.employees{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+
+/* Card */
+
+.employee-card{
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+
+  text-align: center;
+
+  border: 1px solid #eef2f7;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+
+  transition: all 0.25s ease;
+}
+
+.employee-card:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+}
+
+
+/* Image */
+
+.employee-card img{
+  width:200px;
+  height:200px;
+
+  border-radius:50%;
+  object-fit:cover;
+
+  border:4px solid #f3f4f6;
+
+  display:block;
+  margin:0 auto 15px;
+
+  transition: all 0.3s ease;
+}
+.employee-card:hover img{
+  border-color:#1a56db;
+  transform: scale(1.05);
+}
+
+
+/* Name */
+
+.employee-card h3{
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:6px;
+  color:#111827;
+}
+
+
+/* Position */
+
+.employee-card p{
+  font-size:14px;
+  font-weight:600;
+  color:#1a56db;
+}
+
+
+/* Mobile */
+
+@media (max-width:600px){
+
+  .employee-card{
+    padding:30px 20px;
+  }
+
+  .employee-card img{
+    width:100px;
+    height:100px;
+  }
+
+}
