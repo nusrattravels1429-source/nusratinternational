@@ -9,11 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/common.css">
-  <link rel="stylesheet" href="css/travling.css">
-  <link rel="stylesheet" href="css/slider_container.css">
-  <link rel="stylesheet" href="css/sections.css"> 
-  <link rel="stylesheet" href="css/cards.css">
-  
+  <link rel="stylesheet" href="css/traveling.css">
 </head>
 <body>
 
@@ -78,7 +74,7 @@
   <!-- ================= PAGE HERO ================= -->
   <section class="page-hero">
     <div class="page-hero-bg">
-      <img src="https://ababilhajjgroup.com/wp-content/uploads/2024/12/air-ticket.png" alt="Air Ticketing">
+      <img src="https://picsum.photos/id/1015/1600/600" alt="Air Ticketing">
     </div>
     <div class="page-hero-overlay"></div>
     <div class="page-hero-content">
@@ -155,13 +151,47 @@
     </div>
   </section>
 
+  <!-- ================= WHY CHOOSE US ================= -->
+  <section class="why-section">
+    <div class="why-inner">
+      <div class="why-header">
+        <span class="section-tag-dark">⭐ WHY NUSRAT TRAVELS</span>
+        <h2>Trusted by Thousands<br><span class="bn-sub-dark">হাজারো যাত্রীর বিশ্বস্ত সঙ্গী</span></h2>
+        <p>We've been helping Bangladeshis reach their destinations safely and affordably since 2010.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">✈</div>
+          <h3>IATA Accredited</h3>
+          <p>Direct ticketing authority for all major international airlines. No middlemen, best prices.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🛡</div>
+          <h3>Govt. Approved</h3>
+          <p>Licensed under RL-1429, fully regulated by the Bangladesh Government.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">⚡</div>
+          <h3>Fast Processing</h3>
+          <p>Same-day ticket issuance for most destinations. Urgent travel? We've got you covered.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">💬</div>
+          <h3>Bengali Support</h3>
+          <p>Full customer support in Bengali. আমরা আপনার ভাষায় সেবা প্রদান করি।</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= CONTACT CTA ================= -->
   <section class="cta-section">
     <div class="cta-inner">
       <h2>Ready to Fly?</h2>
       <p>Contact us today and get your ticket booked within hours.<br>আজই যোগাযোগ করুন এবং ঘণ্টার মধ্যে টিকেট পান।</p>
       <div class="cta-btns">
-
+        <a href="tel:01713165116" class="btn-primary">📞 Call Now</a>
+        <a href="https://wa.me/8801713165116" class="btn-ghost-dark" target="_blank">💬 WhatsApp</a>
         <a href="Contact.html" class="btn-ghost-dark">✉ Contact Form</a>
       </div>
     </div>
@@ -204,6 +234,70 @@
     </div>
   </footer>
 
- <script src="common.js"></script>
+  <script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Hamburger
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    const navItems = navLinks.querySelectorAll('li');
+
+    function openMenu() {
+      hamburger.classList.add('open');
+      navLinks.classList.add('open');
+      document.body.classList.add('menu-open');
+      navItems.forEach((item, i) => {
+        item.style.transitionDelay = `${0.06 + i * 0.07}s`;
+        setTimeout(() => item.classList.add('revealed'), 20);
+      });
+    }
+
+    function closeMenu() {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+      document.body.classList.remove('menu-open');
+      navItems.forEach(item => {
+        item.classList.remove('revealed');
+        item.style.transitionDelay = '0s';
+      });
+      const aboutDropdown = document.getElementById('aboutDropdown');
+      const dropTrigger = aboutDropdown.querySelector('.dropdown-trigger');
+      aboutDropdown.classList.remove('mobile-open');
+      dropTrigger.setAttribute('aria-expanded', 'false');
+    }
+
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      hamburger.classList.contains('open') ? closeMenu() : openMenu();
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (navLinks.classList.contains('open') &&
+          !navLinks.contains(e.target) &&
+          !hamburger.contains(e.target)) {
+        closeMenu();
+      }
+    });
+
+    // About dropdown
+    const aboutDropdown = document.getElementById('aboutDropdown');
+    const dropTrigger = aboutDropdown.querySelector('.dropdown-trigger');
+    dropTrigger.addEventListener('click', function(e) {
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen = aboutDropdown.classList.toggle('mobile-open');
+        this.setAttribute('aria-expanded', isOpen);
+      }
+    });
+  </script>
 </body>
 </html>
