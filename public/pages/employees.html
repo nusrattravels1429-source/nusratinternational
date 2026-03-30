@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Approvals & Certifications</title>
+  <title>Our Team — Nusrat International</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/common.css">
-  <link rel="stylesheet" href="css/certifications.css">
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/employees.css">
 </head>
 <body>
 
@@ -94,32 +94,26 @@
     </div>
   </nav>
 
-  <!-- TITLE -->
-  <div class="cert-page-title">
-    <span class="cert-tag">📜 OFFICIAL LICENSES</span>
-    <h1>Approvals &amp; Certifications</h1>
-    <p>Every license we hold is a commitment to the highest standards of integrity and professionalism.</p>
+  <div class="page-title">
+    <span class="ptag">👥 OUR PEOPLE</span>
+    <h1>Meet Our <em>Team</em></h1>
+    <p>The dedicated professionals behind every journey, placement, and pilgrimage.</p>
   </div>
-<!-- CERT GRID -->
-  <div class="cert-section">
+<!-- EMPLOYEES -->
+<div class="employees">
 
-  <div class="cert-block">
-    <h2 class="cert-title">IATA Accredited</h2>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFLx9fgGY8XnFcJACwvAPGSenZJ-397upvyA&s" alt="IATA">
-  </div>
-
-  <div class="cert-block">
-    <h2 class="cert-title">BAIRA Member</h2>
-    <img src="https://www.baira.org.bd/assets/public/images/profile.jpg" alt="BAIRA">
-  </div>
-
-  <div class="cert-block">
-    <h2 class="cert-title">ATAB Member</h2>
-    <img src="https://www.tbsnews.net/sites/default/files/styles/big_2/public/images/2022/01/13/atab.jpg" alt="ATAB">
-  </div>
+  <!-- Laravel Example -->
+  <!--
+  @foreach($employees as $employee)
+    <div class="employee-card">
+      <img src="{{ $employee->image }}" alt="{{ $employee->name }}">
+      <h3>{{ $employee->name }}</h3>
+      <p>{{ $employee->position }}</p>
+    </div>
+  @endforeach
+  -->
 
 </div>
-
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
@@ -145,6 +139,28 @@
     document.querySelectorAll('.nav-links a').forEach(l=>l.addEventListener('click',closeMenu));
     document.addEventListener('click',e=>{if(navLinks.classList.contains('open')&&!navLinks.contains(e.target)&&!hamburger.contains(e.target))closeMenu();});
     dropTrig.addEventListener('click',function(e){if(window.innerWidth<=768){e.preventDefault();e.stopPropagation();aboutDD.classList.toggle('mobile-open');this.setAttribute('aria-expanded',aboutDD.classList.contains('mobile-open'));}});
+  </script>
+
+  <script>
+    const employees = [
+      { name: "Md. Nusrat Ullah", position: "Managing Director", image: "https://picsum.photos/300/300?1" },
+      { name: "Karim Hossain", position: "Travel Manager", image: "https://picsum.photos/300/300?2" },
+      { name: "Sultana Parvin", position: "Ticketing Officer", image: "https://picsum.photos/300/300?3" },
+      { name: "Farhan Ahmed", position: "Travel Consultant", image: "https://picsum.photos/300/300?4" }
+    ];
+
+    const employeesContainer = document.querySelector('.employees');
+
+    employees.forEach(emp => {
+      const card = document.createElement('div');
+      card.className = 'employee-card';
+      card.innerHTML = `
+        <img src="${emp.image}" alt="${emp.name}">
+        <h3>${emp.name}</h3>
+        <p>${emp.position}</p>
+      `;
+      employeesContainer.appendChild(card);
+    });
   </script>
 </body>
 </html>

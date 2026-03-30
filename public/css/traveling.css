@@ -449,6 +449,28 @@
   .cta-btns { flex-direction: column; align-items: center; }
 }
 
+/* ---- MAP STYLES ---- */
+.map-container {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.map-container iframe {
+  width: 100% !important;
+  height: 200px !important;
+  border: none !important;
+  border-radius: 8px !important;
+}
+
+@media (max-width: 768px) {
+  .map-container iframe {
+    height: 150px !important;
+  }
+}
+
 @media (max-width: 480px) {
   .why-grid { grid-template-columns: 1fr; }
 }
