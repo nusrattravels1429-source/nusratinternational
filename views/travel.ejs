@@ -1,0 +1,35 @@
+<%- include('partials/header', { pageTitle: 'Travel Packages', activePage: 'travel', bodyClass: '' }) %>
+
+<div class="page-hero">
+  <span class="section-tag">✈ EXPLORE THE WORLD</span>
+  <h1>All Traveling<br /><em>Packages</em></h1>
+  <p>সকল ট্র্যাভেল প্যাকেজ — Discover your perfect destination from our full collection.</p>
+</div>
+
+<main>
+  <div class="container" id="packagesGrid">
+    <% if (packages && packages.length > 0) { %>
+      <% packages.forEach(pkg => { %>
+        <div class="pkg-card">
+          <div class="pkg-img-wrap">
+            <img src="<%= pkg.image %>" alt="<%= pkg.title_en %>" />
+            <div class="pkg-price">$<%= pkg.price %></div>
+            <div class="pkg-duration"><%= pkg.duration %></div>
+          </div>
+          <div class="pkg-body">
+            <div class="pkg-top">
+              <div><h3><%= pkg.title_en %></h3><h4><%= pkg.title_bn || '' %></h4></div>
+              <span class="rating">★ <%= pkg.rating || 0 %></span>
+            </div>
+            <p class="pkg-desc"><%= pkg.desc_en %></p>
+            <a href="/travel/<%= pkg._id %>"><button class="view-btn">View Details | বিস্তারিত দেখুন</button></a>
+          </div>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <p>No travel packages are available at the moment.</p>
+    <% } %>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

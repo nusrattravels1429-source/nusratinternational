@@ -3,14 +3,6 @@ const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 50);
 });
-window.addEventListener('scroll', function() {
-    const navbar = document.getElementById('navbar');
-    if (window.scrollY > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
-  });
 // ---- HAMBURGER MENU (top dropdown) ----
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('nav-links');

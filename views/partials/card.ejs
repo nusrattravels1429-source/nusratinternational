@@ -1,0 +1,28 @@
+<div class="pkg-card">
+  <div class="pkg-img-wrap">
+    <img src="<%= pkg.hero_image_fallback || 'https://picsum.photos/500/350' %>" alt="<%= pkg.title_en %>">
+    <% if (pkg.badge) { %>
+      <div class="pkg-badge"><%= pkg.badge %></div>
+    <% } else if (type === 'hajj') { %>
+      <div class="hajj-badge">Hajj</div>
+    <% } %>
+    <div class="pkg-price">$<%= pkg.price %></div>
+    <div class="pkg-duration"><%= pkg.duration %></div>
+  </div>
+  <div class="pkg-body">
+    <div class="pkg-top">
+      <div>
+        <h3><%= pkg.title_en %></h3>
+        <% if (pkg.title_bn) { %>
+          <h4><%= pkg.title_bn %></h4>
+        <% } %>
+      </div>
+      <% if (pkg.rating) { %>
+        <span class="rating">★ <%= pkg.rating %></span>
+      <% } %>
+    </div>
+    <p class="pkg-desc"><%= pkg.shortDescription_en %></p>
+    <p class="pkg-desc bn"><%= pkg.shortDescription_bn %></p>
+    <button class="view-btn" onclick="window.location.href='/<%= type %>/<%= pkg.slug %>'">View Details | বিস্তারিত দেখুন</button>
+  </div>
+</div>

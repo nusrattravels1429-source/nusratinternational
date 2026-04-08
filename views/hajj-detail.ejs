@@ -1,0 +1,64 @@
+<%- include('partials/header', { pageTitle: pkg.title_en + ' - Hajj Details', activePage: 'hajj', bodyClass: bodyClass }) %>
+
+<div class="page-hero pkg-hero">
+  <img class="hero-bg-img" src="<%= pkg.image %>" alt="<%= pkg.title_en %>" />
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="type-badge">☪ HAJJ PACKAGE</span>
+    <h1><%= pkg.title_en %></h1>
+    <p class="hero-sub"><%= pkg.title_bn || '' %></p>
+    <div class="hero-meta">
+      <div class="hmeta"><span class="hi">⏱</span><div><small>Duration</small><b><%= pkg.duration %></b></div></div>
+      <span class="price-pill">$<%= pkg.price %></span>
+    </div>
+  </div>
+</div>
+
+<div class="detail-wrap">
+  <div class="left-col">
+    <div class="sc">
+      <div class="sc-head"><span>📋</span> About This Package</div>
+      <p class="about-text"><%= pkg.desc_en %></p>
+      <% if (pkg.desc_bn) { %><p class="about-text about-bn"><%= pkg.desc_bn %></p><% } %>
+    </div>
+
+    <div class="sc">
+      <div class="sc-head"><span>✨</span> Highlights</div>
+      <div class="hl-grid">
+        <% if (pkg.highlights && pkg.highlights.length) { %>
+          <% pkg.highlights.forEach(item => { %>
+            <div class="hl-item"><span class="hl-icon"><%= item.icon %></span><div class="hl-text"><b><%= item.title %></b><span><%= item.desc %></span></div></div>
+          <% }); %>
+        <% } else { %>
+          <div class="hl-item"><span class="hl-icon">🕋</span><div class="hl-text"><b>Spiritual Focus</b><span>Guided Hajj process with all rituals supported.</span></div></div>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="sc">
+      <div class="sc-head"><span>🗓️</span> Program</div>
+      <% if (pkg.programme && pkg.programme.length) { %>
+        <% pkg.programme.forEach(plan => { %>
+          <div class="tl-item"><div class="tl-num">Day<br /><%= plan.day %></div><div class="tl-body"><h4><%= plan.title %></h4><p><%= plan.desc %></p></div></div>
+        <% }); %>
+      <% } else { %>
+        <p>Complete schedule will be shared by our team after booking.</p>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="booking-sticky">
+    <div class="booking-card">
+      <div class="bk-hdr"><div class="bk-label">Starting from</div><div class="bk-price">$<%= pkg.price %></div><div class="bk-per">per person, <%= pkg.duration %></div></div>
+      <div class="bk-body">
+        <div class="bk-title">📝 Book This Package | বুকিং করুন</div>
+        <div class="bf-2col"><div class="bf"><label>Full Name</label><input type="text" placeholder="Your full name" /></div><div class="bf"><label>Phone Number</label><input type="tel" placeholder="+880 XXXXXXXXX" /></div></div>
+        <div class="bf"><label>Email Address</label><input type="email" placeholder="you@email.com" /></div>
+        <div class="bf"><label>Special Requests</label><textarea rows="3" placeholder="Any special needs... | বিশেষ চাহিদা"></textarea></div>
+        <button class="btn-book">Book Now | এখনই বুক করুন ☪</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,176 @@
+<%- include('partials/header', { pageTitle: 'Nusrat International - Home', activePage: 'home', bodyClass: '' }) %>
+
+<!-- ================= HERO SLIDER ================= -->
+<section class="hero-slider" id="home">
+  <div class="slider" id="slider">
+    <div class="slide"><img src="https://picsum.photos/id/1018/1600/900" alt="Mountain Adventure" /></div>
+    <div class="slide"><img src="https://picsum.photos/id/1015/1600/900" alt="Beautiful Landscape" /></div>
+    <div class="slide"><img src="https://picsum.photos/id/1019/1600/900" alt="Ocean View" /></div>
+    <div class="slide"><img src="https://picsum.photos/id/1057/1600/900" alt="Forest Path" /></div>
+  </div>
+  <div class="overlay"></div>
+  <div class="hero-content">
+    <span class="hero-tag"><%= (homepageHero && homepageHero.subtitle_en) || '✦ DISCOVER THE WORLD' %></span>
+    <h1><%= (homepageHero && homepageHero.title_en) || 'Explore Beyond<br /><em>The Horizon</em>' %></h1>
+    <p><%= (homepageHero && homepageHero.description_en) || 'Unforgettable journeys crafted for the curious soul.<br />বিশ্বজুড়ে অসাধারণ অভিজ্ঞতার সন্ধানে।' %></p>
+    <div class="hero-btns"><a href="#travel" class="btn-primary">Start Exploring</a></div>
+  </div>
+  <div class="slider-dots" id="dots"></div>
+  <button class="prev" aria-label="Previous">&#10094;</button>
+  <button class="next" aria-label="Next">&#10095;</button>
+</section>
+
+<section class="cert-section" id="certifications">
+  <div class="cert-container">
+    <span class="section-tag">📜 Our certifications & Approvels </span>
+    <h2>our services<br /><span class="bn-sub">জনপ্রিয় গন্তব্যসমূহ</span></h2>
+    <div class="cert-header">
+      <div class="cert-badge-main">
+        <span class="cert-badge-num">RL-1429</span>
+        <span class="cert-badge-label">Govt. Approved Recruiting Agency</span>
+      </div>
+      <p>Bangladesh Government approved recruiting agency, operating legally and transparently under full government oversight since 2010.</p>
+    </div>
+    <div class="cert-cards">
+      <div class="cert-card">
+        <div class="cert-logo-wrap"><img src="https://www.baira.org.bd/assets/public/images/profile.jpg" alt="BAIRA" /></div>
+        <div class="cert-divider"></div>
+        <h3>BAIRA Member</h3>
+        <p>Bangladesh Association of International Recruiting Agencies — the national body ensuring ethical overseas employment practices for all licensed agencies.</p>
+        <span class="cert-tag">Manpower Recruiting</span>
+      </div>
+      <div class="cert-card featured">
+        <div class="cert-logo-wrap"><img src="https://logowik.com/content/uploads/images/t_542_iata.jpg" alt="IATA" /></div>
+        <div class="cert-divider"></div>
+        <h3>IATA Accredited</h3>
+        <p>International Air Transport Association accreditation — the highest global standard, authorizing direct issuance of tickets for all major international airlines.</p>
+        <span class="cert-tag">Aviation & Travel</span>
+      </div>
+      <div class="cert-card">
+        <div class="cert-logo-wrap"><img src="https://www.tbsnews.net/sites/default/files/styles/big_2/public/images/2022/01/13/atab.jpg" alt="ATAB" /></div>
+        <div class="cert-divider"></div>
+        <h3>ATAB Member</h3>
+        <p>Association of Travel Agents of Bangladesh — ensuring professional standards and accountability in all travel and aviation services we provide.</p>
+        <span class="cert-tag">Travel Agency</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ticketing-section">
+  <div class="ticketing-inner">
+    <div class="ticketing-text">
+      <span class="section-tag">🎫 AIR TICKETING</span>
+      <h2>We Manage Ticketing Services<br /><span class="bn-sub">এই দেশগুলোর জন্য টিকেটিং সেবা</span></h2>
+      <p>As an IATA-accredited agency, Nusrat Travels provides direct airline ticketing to 20+ major global destinations. Fast, reliable, and affordable.</p>
+      <a href="/contact" class="btn-ticket-cta">Book Your Ticket →</a>
+    </div>
+    <div class="ticketing-track-wrap">
+      <div class="flag-track" id="flagTrack">
+        <div class="flag-row" id="flagRow1">
+          <div class="flag-item"><span class="flag-emoji">🇸🇦</span><span>Saudi Arabia</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇦🇪</span><span>UAE / Dubai</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇶🇦</span><span>Qatar</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇰🇼</span><span>Kuwait</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇧🇭</span><span>Bahrain</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇴🇲</span><span>Oman</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇲🇾</span><span>Malaysia</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇸🇬</span><span>Singapore</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇰🇷</span><span>South Korea</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇯🇵</span><span>Japan</span></div>
+        </div>
+        <div class="flag-row reverse" id="flagRow2">
+          <div class="flag-item"><span class="flag-emoji">🇬🇧</span><span>United Kingdom</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇩🇪</span><span>Germany</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇮🇹</span><span>Italy</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇵🇱</span><span>Poland</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇹🇷</span><span>Turkey</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇹🇭</span><span>Thailand</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇮🇳</span><span>India</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇨🇳</span><span>China</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇺🇸</span><span>USA</span></div>
+          <div class="flag-item"><span class="flag-emoji">🇦🇺</span><span>Australia</span></div>
+        </div>
+      </div>
+      <div class="ticket-contact-bar">
+        <span>📞 Book your ticket today —</span>
+        <a href="tel:01713165116">01713-165116</a>
+        <span>|</span>
+        <a href="https://wa.me/8801713165116" target="_blank">WhatsApp Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRAVEL PACKAGES SECTION ================= -->
+<section class="package-section" id="travel">
+  <div class="section-intro">
+    <div>
+      <span class="section-tag">✈ TRAVEL PACKAGES</span>
+      <h2>Popular Destinations<br /><span class="bn-sub">জনপ্রিয় গন্তব্যসমূহ</span></h2>
+      <p>Hand-picked destinations for the modern explorer. Adventure awaits at every turn.</p>
+    </div>
+    <a href="#" class="view-all-btn">View All Packages <span>→</span></a>
+  </div>
+
+  <div class="cards-slider-wrap">
+    <button class="cards-prev" aria-label="Previous">&#10094;</button>
+    <div class="cards-viewport" id="travelViewport">
+      <div class="cards-track" id="travelTrack">
+        <% travelPackages.forEach(pkg => { %>
+          <%- include('partials/card', { pkg: pkg, type: 'travel' }) %>
+        <% }); %>
+      </div>
+    </div>
+    <button class="cards-next" aria-label="Next">&#10095;</button>
+  </div>
+</section>
+
+<!-- ================= HAJJ PACKAGES SECTION ================= -->
+<section class="package-section hajj-bg" id="hajj">
+  <div class="section-intro">
+    <div>
+      <span class="section-tag gold">☪ HAJJ PACKAGES</span>
+      <h2>Sacred Journey Packages<br /><span class="bn-sub">পবিত্র হজ প্যাকেজসমূহ</span></h2>
+      <p>Embark on the most sacred journey of your life. We take care of every detail.</p>
+    </div>
+    <a href="#" class="view-all-btn">View All Hajj Packages <span>→</span></a>
+  </div>
+
+  <div class="cards-slider-wrap">
+    <button class="cards-prev" aria-label="Previous">&#10094;</button>
+    <div class="cards-viewport" id="hajjViewport">
+      <div class="cards-track" id="hajjTrack">
+        <% hajjPackages.forEach(pkg => { %>
+          <%- include('partials/card', { pkg: pkg, type: 'hajj' }) %>
+        <% }); %>
+      </div>
+    </div>
+    <button class="cards-next" aria-label="Next">&#10095;</button>
+  </div>
+</section>
+
+<section class="package-section" id="work">
+  <div class="section-intro">
+    <div>
+      <span class="section-tag green">💼 WORK PACKAGES</span>
+      <h2>Work Abroad Programs<br /><span class="bn-sub">বিদেশে কাজের সুযোগ</span></h2>
+      <p>Secure job placements in high-demand countries with visa support.</p>
+    </div>
+    <a href="#" class="view-all-btn">View All Work Packages <span>→</span></a>
+  </div>
+
+  <div class="cards-slider-wrap">
+    <button class="cards-prev" aria-label="Previous">&#10094;</button>
+    <div class="cards-viewport" id="workViewport">
+      <div class="cards-track" id="workTrack">
+        <% workPackages.forEach(pkg => { %>
+          <%- include('partials/card', { pkg: pkg, type: 'work' }) %>
+        <% }); %>
+      </div>
+    </div>
+    <button class="cards-next" aria-label="Next">&#10095;</button>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
