@@ -1,0 +1,341 @@
+<%- include('partials/header', { title: 'Nusrat International - Home', activePage: 'home' }) %>
+
+<!-- ================= HERO SLIDER ================= -->
+<section class="hero-slider" id="home">
+  <div class="slider" id="slider">
+    <% if (homepageContent && homepageContent.heroSlides) { %>
+      <% homepageContent.heroSlides.forEach((slide, index) => { %>
+        <div class="slide">
+          <img src="<%= slide.image %>" alt="<%= slide.title.en %>">
+        </div>
+      <% }); %>
+    <% } else { %>
+      <!-- Fallback slides -->
+      <div class="slide"><img src="https://picsum.photos/id/1018/1600/900" alt="Mountain Adventure"></div>
+      <div class="slide"><img src="https://picsum.photos/id/1015/1600/900" alt="Beautiful Landscape"></div>
+      <div class="slide"><img src="https://picsum.photos/id/1019/1600/900" alt="Ocean View"></div>
+      <div class="slide"><img src="https://picsum.photos/id/1057/1600/900" alt="Forest Path"></div>
+    <% } %>
+  </div>
+
+  <div class="overlay"></div>
+
+  <div class="hero-content">
+    <span class="hero-tag">✦ DISCOVER THE WORLD</span>
+    <h1>Explore Beyond<br><em>The Horizon</em></h1>
+    <p>Unforgettable journeys crafted for the curious soul.<br>বিশ্বজুড়ে অসাধারণ অভিজ্ঞতার সন্ধানে।</p>
+    <div class="hero-btns">
+      <a href="#travel" class="btn-primary">Start Exploring</a>
+    </div>
+  </div>
+
+  <div class="slider-dots" id="dots"></div>
+  <button class="prev" aria-label="Previous">&#10094;</button>
+  <button class="next" aria-label="Next">&#10095;</button>
+</section>
+
+<!-- ================= CERTIFICATIONS ================= -->
+<section class="cert-section" id="certifications">
+  <div class="cert-container">
+    <span class="section-tag">📜 Our certifications & Approvals</span>
+    <h2>our services<br><span class="bn-sub">জনপ্রিয় গন্তব্যসমূহ</span></h2>
+    
+    <div class="cert-header">
+      <div class="cert-badge-main">
+        <span class="cert-badge-num">RL-1429</span>
+        <span class="cert-badge-label">Govt. Approved Recruiting Agency</span>
+      </div>
+      <p>
+        Bangladesh Government approved recruiting agency, operating legally
+        and transparently under full government oversight since 2010.
+      </p>
+    </div>
+
+    <div class="cert-cards">
+      <% if (homepageContent && homepageContent.certifications) { %>
+        <% homepageContent.certifications.forEach(cert => { %>
+          <div class="cert-card">
+            <div class="cert-logo-wrap">
+              <img src="<%= cert.logo || 'https://via.placeholder.com/150' %>" alt="<%= cert.name.en %>">
+            </div>
+            <div class="cert-divider"></div>
+            <h3><%= cert.name.en %></h3>
+            <p><%= cert.description || cert.name.bn %></p>
+            <span class="cert-tag"><%= cert.tag || 'Certification' %></span>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <!-- Fallback certifications -->
+        <div class="cert-card">
+          <div class="cert-logo-wrap">
+            <img src="https://www.baira.org.bd/assets/public/images/profile.jpg" alt="BAIRA">
+          </div>
+          <div class="cert-divider"></div>
+          <h3>BAIRA Member</h3>
+          <p>Bangladesh Association of International Recruiting Agencies</p>
+          <span class="cert-tag">Manpower Recruiting</span>
+        </div>
+        <div class="cert-card featured">
+          <div class="cert-logo-wrap">
+            <img src="https://logowik.com/content/uploads/images/t_542_iata.jpg" alt="IATA">
+          </div>
+          <div class="cert-divider"></div>
+          <h3>IATA Accredited</h3>
+          <p>International Air Transport Association accreditation</p>
+          <span class="cert-tag">Aviation & Travel</span>
+        </div>
+        <div class="cert-card">
+          <div class="cert-logo-wrap">
+            <img src="https://www.tbsnews.net/sites/default/files/styles/big_2/public/images/2022/01/13/atab.jpg" alt="ATAB">
+          </div>
+          <div class="cert-divider"></div>
+          <h3>ATAB Member</h3>
+          <p>Association of Travel Agents of Bangladesh</p>
+          <span class="cert-tag">Travel Agency</span>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TICKETING SECTION ================= -->
+<section class="ticketing-section">
+  <div class="ticketing-inner">
+    <div class="ticketing-text">
+      <span class="section-tag">🎫 AIR TICKETING</span>
+      <h2>We Manage Ticketing Services<br><span class="bn-sub">এই দেশগুলোর জন্য টিকেটিং সেবা</span></h2>
+      <p>As an IATA-accredited agency, Nusrat Travels provides direct airline ticketing to 20+ major global destinations. Fast, reliable, and affordable.</p>
+      <a href="/contact.html" class="btn-ticket-cta">Book Your Ticket →</a>
+    </div>
+    <div class="ticketing-track-wrap">
+      <div class="flag-track" id="flagTrack">
+        <div class="flag-row" id="flagRow1">
+          <% if (homepageContent && homepageContent.countries) { %>
+            <% homepageContent.countries.forEach(country => { %>
+              <div class="flag-item"><span class="flag-emoji"><%= country.flag %></span><span><%= country.name.en %></span></div>
+            <% }); %>
+            <!-- Duplicate for seamless loop -->
+            <% homepageContent.countries.forEach(country => { %>
+              <div class="flag-item"><span class="flag-emoji"><%= country.flag %></span><span><%= country.name.en %></span></div>
+            <% }); %>
+          <% } else { %>
+            <div class="flag-item"><span class="flag-emoji">🇸🇦</span><span>Saudi Arabia</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇦🇪</span><span>UAE / Dubai</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇶🇦</span><span>Qatar</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇰🇼</span><span>Kuwait</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇧🇭</span><span>Bahrain</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇴🇲</span><span>Oman</span></div>
+          <% } %>
+        </div>
+      </div>
+      <div class="ticket-contact-bar">
+        <span>📞 Book your ticket today —</span>
+        <a href="tel:01713165116">01713-165116</a>
+        <span>|</span>
+        <a href="https://wa.me/8801713165116" target="_blank">WhatsApp Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRAVEL PACKAGES SECTION ================= -->
+<section class="package-section" id="travel">
+  <div class="section-intro">
+    <div>
+      <span class="section-tag">✈ TRAVEL PACKAGES</span>
+      <h2>Popular Destinations<br><span class="bn-sub">জনপ্রিয় গন্তব্যসমূহ</span></h2>
+      <p>Hand-picked destinations for the modern explorer. Adventure awaits at every turn.</p>
+    </div>  
+    <a href="/travel" class="view-all-btn">View All Packages <span>→</span></a>
+  </div>
+
+  <div class="cards-slider-wrap">
+    <button class="cards-prev" aria-label="Previous">&#10094;</button>
+    <div class="cards-viewport" id="travelViewport">
+      <div class="cards-track" id="travelTrack">
+        <% if (travelPackages && travelPackages.length > 0) { %>
+          <% travelPackages.slice(0, 6).forEach(pkg => { %>
+            <%- include('partials/card', { pkg: pkg, type: 'travel' }) %>
+          <% }); %>
+        <% } else { %>
+          <!-- Fallback cards -->
+          <div class="pkg-card">
+            <div class="pkg-img-wrap">
+              <img src="https://picsum.photos/id/1018/500/350" alt="Greece">
+              <div class="pkg-price">$799</div>
+              <div class="pkg-duration">7 Days</div>
+            </div>
+            <div class="pkg-body">
+              <div class="pkg-top">
+                <div><h3>Santorini, Greece</h3><h4>সান্তোরিনি, গ্রীস</h4></div>
+                <span class="rating">★ 4.8</span>
+              </div>
+              <p class="pkg-desc">Whitewashed houses and magical sunsets over the Aegean Sea.</p>
+              <p class="pkg-desc bn">সাদা রঙের বাড়ি ও এজিয়ান সাগরের মনোমুগ্ধকর সূর্যাস্ত।</p>
+              <button class="view-btn">View Details | বিস্তারিত দেখুন</button>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+    <button class="cards-next" aria-label="Next">&#10095;</button>
+  </div>
+</section>
+
+<!-- ================= HAJJ PACKAGES SECTION ================= -->
+<section class="package-section" id="hajj">
+  <div class="section-intro">
+    <div>
+      <span class="section-tag">☪ HAJJ & UMRAH</span>
+      <h2>Sacred Journeys<br><span class="bn-sub">পবিত্র যাত্রা</span></h2>
+      <p>Complete assistance for your Hajj and Umrah pilgrimage with experienced guides.</p>
+    </div>  
+    <a href="/hajj" class="view-all-btn">View All Packages <span>→</span></a>
+  </div>
+
+  <div class="cards-slider-wrap">
+    <button class="cards-prev" aria-label="Previous">&#10094;</button>
+    <div class="cards-viewport" id="hajjViewport">
+      <div class="cards-track" id="hajjTrack">
+        <% if (hajjPackages && hajjPackages.length > 0) { %>
+          <% hajjPackages.slice(0, 6).forEach(pkg => { %>
+            <%- include('partials/card', { pkg: pkg, type: 'hajj' }) %>
+          <% }); %>
+        <% } else { %>
+          <!-- Fallback cards -->
+          <div class="pkg-card">
+            <div class="pkg-img-wrap">
+              <img src="https://picsum.photos/id/1015/500/350" alt="Makkah">
+              <div class="pkg-price">$3,500</div>
+              <div class="pkg-duration">20 Days</div>
+            </div>
+            <div class="pkg-body">
+              <div class="pkg-top">
+                <div><h3>Economy Hajj Package</h3><h4>অর্থনৈতিক হজ প্যাকেজ</h4></div>
+                <span class="rating">★ 4.9</span>
+              </div>
+              <p class="pkg-desc">Affordable Hajj package with basic facilities near Haram.</p>
+              <p class="pkg-desc bn">হারামের কাছে মৌলিক সুবিধা সহ সাশ্রয়ী হজ প্যাকেজ।</p>
+              <button class="view-btn">View Details | বিস্তারিত দেখুন</button>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+    <button class="cards-next" aria-label="Next">&#10095;</button>
+  </div>
+</section>
+
+<!-- ================= WORK PACKAGES SECTION ================= -->
+<section class="package-section" id="work">
+  <div class="section-intro">
+    <div>
+      <span class="section-tag">💼 WORK OPPORTUNITIES</span>
+      <h2>Work Abroad<br><span class="bn-sub">বিদেশে চাকরি</span></h2>
+      <p>Legitimate work visa opportunities in Gulf countries with proper documentation.</p>
+    </div>  
+    <a href="/work" class="view-all-btn">View All Packages <span>→</span></a>
+  </div>
+
+  <div class="cards-slider-wrap">
+    <button class="cards-prev" aria-label="Previous">&#10094;</button>
+    <div class="cards-viewport" id="workViewport">
+      <div class="cards-track" id="workTrack">
+        <% if (workPackages && workPackages.length > 0) { %>
+          <% workPackages.slice(0, 6).forEach(pkg => { %>
+            <%- include('partials/card', { pkg: pkg, type: 'work' }) %>
+          <% }); %>
+        <% } else { %>
+          <!-- Fallback cards -->
+          <div class="pkg-card">
+            <div class="pkg-img-wrap">
+              <img src="https://picsum.photos/id/1019/500/350" alt="Dubai">
+              <div class="pkg-price">$800/mo</div>
+              <div class="pkg-duration">2 Years</div>
+            </div>
+            <div class="pkg-body">
+              <div class="pkg-top">
+                <div><h3>Driver Job Saudi Arabia</h3><h4>ড্রাইভার চাকরি সৌদি আরব</h4></div>
+                <span class="rating">★ 4.7</span>
+              </div>
+              <p class="pkg-desc">Professional driver position with accommodation provided.</p>
+              <p class="pkg-desc bn">থাকা ব্যবস্থা সহ পেশাদার ড্রাইভার পদ।</p>
+              <button class="view-btn">View Details | বিস্তারিত দেখুন</button>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+    <button class="cards-next" aria-label="Next">&#10095;</button>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+  // Hero slider functionality
+  const slider = document.getElementById('slider');
+  const slides = Array.from(slider.querySelectorAll('.slide'));
+  const dotsContainer = document.getElementById('dots');
+  const prevBtn = document.querySelector('.prev');
+  const nextBtn = document.querySelector('.next');
+  
+  let currentSlide = 0;
+  
+  function createDots() {
+    dotsContainer.innerHTML = '';
+    slides.forEach((_, index) => {
+      const dot = document.createElement('span');
+      dot.className = index === 0 ? 'dot active' : 'dot';
+      dot.addEventListener('click', () => goToSlide(index));
+      dotsContainer.appendChild(dot);
+    });
+  }
+  
+  function goToSlide(index) {
+    slides[currentSlide].classList.remove('active');
+    dotsContainer.children[currentSlide].classList.remove('active');
+    currentSlide = index;
+    slides[currentSlide].classList.add('active');
+    dotsContainer.children[currentSlide].classList.add('active');
+  }
+  
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    goToSlide(currentSlide);
+  }
+  
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    goToSlide(currentSlide);
+  }
+  
+  // Initialize
+  if (slides.length > 0) {
+    createDots();
+    slides[0].classList.add('active');
+    setInterval(nextSlide, 5000);
+    
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+  }
+  
+  // Card sliders
+  document.querySelectorAll('.cards-slider-wrap').forEach(wrap => {
+    const track = wrap.querySelector('.cards-track');
+    const prev = wrap.querySelector('.cards-prev');
+    const next = wrap.querySelector('.cards-next');
+    
+    if (track && prev && next) {
+      prev.addEventListener('click', () => {
+        track.scrollBy({ left: -300, behavior: 'smooth' });
+      });
+      next.addEventListener('click', () => {
+        track.scrollBy({ left: 300, behavior: 'smooth' });
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

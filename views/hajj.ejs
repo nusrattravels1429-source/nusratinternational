@@ -1,0 +1,65 @@
+<%- include('partials/header', { title: 'All Hajj & Umrah Packages - Nusrat International', activePage: 'hajj' }) %>
+
+<!-- ================= PAGE HERO ================= -->
+<div class="page-hero">
+  <span class="section-tag">☪ SACRED JOURNEYS</span>
+  <h1>All Hajj & Umrah<br><em>Packages</em></h1>
+  <p>সকল হজ ও উমরা প্যাকেজ — Complete assistance for your sacred pilgrimage.</p>
+</div>
+
+<!-- ================= PACKAGES GRID ================= -->
+<main>
+  <div class="container" id="packagesGrid">
+    <% if (packages && packages.length > 0) { %>
+      <% packages.forEach(pkg => { %>
+        <%- include('partials/card', { pkg: pkg, type: 'hajj' }) %>
+      <% }); %>
+    <% } else { %>
+      <div class="no-packages">
+        <p>No Hajj/Umrah packages available at the moment.</p>
+      </div>
+    <% } %>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<style>
+  .page-hero {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    text-align: center;
+    padding: 80px 20px 60px;
+  }
+  .page-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    margin: 20px 0 10px;
+  }
+  .page-hero p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  main {
+    padding: 60px 20px;
+  }
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+  }
+  .no-packages {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px;
+    font-size: 1.2rem;
+    color: #666;
+  }
+</style>
+
+</body>
+</html>

@@ -1,0 +1,576 @@
+<%- include('partials/header', { title: pkg ? pkg.title.en + ' - Nusrat Travels' : 'Travel Package Details', activePage: 'travel' }) %>
+
+<% if (!pkg) { %>
+  <div class="error-page">
+    <h1>Package Not Found</h1>
+    <p>The travel package you're looking for doesn't exist.</p>
+    <a href="/travel" class="btn-primary">Browse All Packages</a>
+  </div>
+<% } else { %>
+
+<!-- ── HERO ── -->
+<section class="pkg-hero">
+  <img class="hero-bg-img" src="<%= pkg.image %>" alt="<%= pkg.title.en %>" onerror="this.src='https://picsum.photos/id/1018/1600/900'">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="type-badge">✈ TRAVEL PACKAGE</span>
+    <h1><%= pkg.title.en %>, <em><%= pkg.title.bn.split(',')[0] || '' %></em></h1>
+    <p class="hero-sub"><%= pkg.title.bn %></p>
+    <div class="hero-meta">
+      <div class="hmeta"><span class="hi">⏱</span><div><small>Duration</small><b><%= pkg.duration %></b></div></div>
+      <span class="price-pill">$<%= pkg.price.toLocaleString() %></span>
+    </div>
+  </div>
+</section>
+
+<!-- ── MAIN LAYOUT ── -->
+<div class="detail-wrap">
+  <div class="left-col">
+
+    <!-- ════ GALLERY ════ -->
+    <div class="gallery-wrap">
+      <div class="gallery-head">
+        <h2>📸 Photo Gallery</h2>
+        <span class="gallery-counter">1 / <%= (pkg.images && pkg.images.length) || 1 %></span>
+      </div>
+      <div class="gallery-stage">
+        <img id="mainImg" src="<%= pkg.image %>" alt="<%= pkg.title.en %>" onerror="this.src='https://picsum.photos/id/1018/800/500'">
+        <span class="g-hint">🔍 Click to enlarge</span>
+        <div class="g-caption"><%= pkg.title.en %></div>
+        <button class="stage-arrow s-prev">&#8249;</button>
+        <button class="stage-arrow s-next">&#8250;</button>
+      </div>
+      <% if (pkg.images && pkg.images.length > 0) { %>
+      <div class="gallery-thumbs">
+        <div class="g-thumb active">
+          <img src="<%= pkg.image %>" alt="1" onerror="this.src='https://picsum.photos/id/1018/300/200'">
+          <span class="g-num">1</span>
+        </div>
+        <% pkg.images.forEach((img, idx) => { %>
+          <div class="g-thumb">
+            <img src="<%= img %>" alt="<%= idx + 2 %>" onerror="this.src='https://picsum.photos/id/<%= 1018 + idx %>/300/200'">
+            <span class="g-num"><%= idx + 2 %></span>
+          </div>
+        <% }); %>
+      </div>
+      <% } %>
+    </div>
+
+    <!-- Travel Quote -->
+    <div class="verse-block">
+      <div class="ar">"Travel is the only thing you buy that makes you richer."</div>
+      <div class="tr">"ভ্রমণই একমাত্র জিনিস যা কিনলে আপনি আরও ধনী হন।"</div>
+    </div>
+
+    <!-- About -->
+    <div class="sc">
+      <div class="sc-head"><span>📋</span> About This Package</div>
+      <p class="about-text"><%= pkg.description.en %></p>
+      <p class="about-text about-bn"><%= pkg.description.bn %></p>
+    </div>
+
+    <!-- Highlights -->
+    <% if (pkg.features && pkg.features.length > 0) { %>
+    <div class="sc">
+      <div class="sc-head"><span>✨</span> Package Highlights</div>
+      <div class="hl-grid">
+        <% pkg.features.forEach(feature => { %>
+          <div class="hl-item"><span class="hl-icon">✓</span><div class="hl-text"><b><%= feature %></b></div></div>
+        <% }); %>
+      </div>
+    </div>
+    <% } %>
+
+    <!-- Itinerary -->
+    <% if (pkg.details && pkg.details.itinerary && pkg.details.itinerary.length > 0) { %>
+    <div class="sc">
+      <div class="sc-head"><span>🗓️</span> Itinerary</div>
+      <% pkg.details.itinerary.forEach((item, idx) => { %>
+        <div class="tl-item">
+          <div class="tl-num">Day<br><%= (idx + 1).toString().padStart(2, '0') %></div>
+          <div class="tl-body"><p><%= item %></p></div>
+        </div>
+      <% }); %>
+    </div>
+    <% } %>
+
+    <!-- Includes / Excludes -->
+    <div class="sc">
+      <div class="sc-head"><span>🎒</span> Included &amp; Excluded</div>
+      <div class="inc-grid">
+        <% if (pkg.included && pkg.included.length > 0) { %>
+          <% pkg.included.forEach(item => { %>
+            <div class="inc-item"><span class="inc-ok">✓</span><span><%= item %></span></div>
+          <% }); %>
+        <% } %>
+        <% if (pkg.details && pkg.details.requirements && pkg.details.requirements.length > 0) { %>
+          <% pkg.details.requirements.forEach(req => { %>
+            <div class="inc-item"><span class="inc-no">✗</span><span><%= req %></span></div>
+          <% }); %>
+        <% } %>
+      </div>
+    </div>
+
+  </div><!-- /left-col -->
+
+  <!-- BOOKING SIDEBAR -->
+  <div class="booking-sticky">
+    <div class="booking-card">
+      <div class="bk-hdr">
+        <div class="bk-label">Starting from</div>
+        <div class="bk-price">$<%= pkg.price.toLocaleString() %></div>
+        <div class="bk-per">per person, <%= pkg.duration %></div>
+      </div>
+      <div class="bk-body">
+        <div class="bk-title">📝 Book This Package | বুকিং করুন</div>
+        <div class="bf-2col">
+          <div class="bf"><label>Full Name</label><input id="bfName" type="text" placeholder="Your full name"></div>
+          <div class="bf"><label>Phone Number</label><input id="bfPhone" type="tel" placeholder="+880 XXXXXXXXX"></div>
+        </div>
+        <div class="bf"><label>Email Address</label><input id="bfEmail" type="email" placeholder="you@email.com"></div>
+        <div class="bf"><label>Special Requests</label><textarea id="bfNote" rows="3" placeholder="Any special needs... | বিশেষ চাহিদা"></textarea></div>
+        <button class="btn-book" id="btnBook">Book Now | এখনই বুক করুন ✈</button>
+        <div class="book-ok" id="bookOk">✅ Booking received!<br>আমরা ২৪ ঘণ্টার মধ্যে আপনার সাথে যোগাযোগ করব।</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /detail-wrap -->
+
+<%- include('../partials/footer') %>
+
+<style>
+  .error-page {
+    text-align: center;
+    padding: 100px 20px;
+  }
+  .error-page h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  .error-page p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 30px;
+  }
+  .pkg-hero {
+    position: relative;
+    height: 70vh;
+    overflow: hidden;
+  }
+  .hero-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+  }
+  .hero-content {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: white;
+    z-index: 2;
+  }
+  .type-badge {
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    backdrop-filter: blur(10px);
+  }
+  .hero-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    margin: 20px 0 10px;
+  }
+  .hero-sub {
+    font-size: 1.5rem;
+    opacity: 0.9;
+  }
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+  }
+  .hmeta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hi {
+    font-size: 1.5rem;
+  }
+  .hmeta small {
+    display: block;
+    opacity: 0.8;
+    font-size: 0.8rem;
+  }
+  .hmeta b {
+    font-size: 1.3rem;
+  }
+  .price-pill {
+    background: white;
+    color: #333;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1.3rem;
+  }
+  .detail-wrap {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+  .left-col {
+    min-width: 0;
+  }
+  .gallery-wrap {
+    margin-bottom: 40px;
+  }
+  .gallery-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .gallery-head h2 {
+    font-size: 1.5rem;
+    color: #333;
+  }
+  .gallery-stage {
+    position: relative;
+    margin-bottom: 15px;
+  }
+  .gallery-stage img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  .g-hint {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+  }
+  .g-caption {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    margin-top: 10px;
+  }
+  .stage-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.9);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+  }
+  .s-prev { left: 20px; }
+  .s-next { right: 20px; }
+  .gallery-thumbs {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+  }
+  .g-thumb {
+    flex-shrink: 0;
+    width: 100px;
+    height: 70px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    border: 2px solid transparent;
+  }
+  .g-thumb.active {
+    border-color: #667eea;
+  }
+  .g-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .g-num {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+  }
+  .verse-block {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .verse-block .ar {
+    font-size: 1.3rem;
+    font-style: italic;
+    margin-bottom: 10px;
+  }
+  .verse-block .tr {
+    opacity: 0.9;
+  }
+  .sc {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+  }
+  .sc-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  .about-text {
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 15px;
+  }
+  .hl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+  }
+  .hl-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .hl-icon {
+    color: #667eea;
+    font-size: 1.2rem;
+  }
+  .hl-text b {
+    display: block;
+    color: #333;
+    margin-bottom: 4px;
+  }
+  .hl-text span {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  .tl-item {
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .tl-item:last-child {
+    border-bottom: none;
+  }
+  .tl-num {
+    background: #667eea;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 60px;
+  }
+  .tl-num b {
+    display: block;
+    font-size: 1.2rem;
+  }
+  .tl-body h4 {
+    margin: 0 0 10px;
+    color: #333;
+  }
+  .tl-body p {
+    color: #666;
+    line-height: 1.6;
+  }
+  .inc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .inc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+  }
+  .inc-ok {
+    color: #28a745;
+    font-weight: 700;
+  }
+  .inc-no {
+    color: #dc3545;
+    font-weight: 700;
+  }
+  .booking-sticky {
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+  }
+  .booking-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .bk-hdr {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    text-align: center;
+  }
+  .bk-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+  .bk-price {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 5px 0;
+  }
+  .bk-per {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+  .bk-body {
+    padding: 25px;
+  }
+  .bk-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  .bf {
+    margin-bottom: 15px;
+  }
+  .bf label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #555;
+  }
+  .bf input,
+  .bf textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+  .bf textarea {
+    resize: vertical;
+  }
+  .bf-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+  .btn-book {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .btn-book:hover {
+    transform: translateY(-2px);
+  }
+  .book-ok {
+    display: none;
+    background: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    text-align: center;
+  }
+  @media (max-width: 900px) {
+    .detail-wrap {
+      grid-template-columns: 1fr;
+    }
+    .hero-content h1 {
+      font-size: 2.5rem;
+    }
+  }
+</style>
+
+<script>
+  // Gallery functionality
+  const mainImg = document.getElementById('mainImg');
+  const thumbs = document.querySelectorAll('.g-thumb');
+  const caption = document.querySelector('.g-caption');
+  const prevBtn = document.querySelector('.s-prev');
+  const nextBtn = document.querySelector('.s-next');
+  
+  thumbs.forEach((thumb, index) => {
+    thumb.addEventListener('click', () => {
+      thumbs.forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      mainImg.src = thumb.querySelector('img').src;
+      caption.textContent = thumb.dataset.caption || '<%= pkg.title.en %>';
+    });
+  });
+  
+  // Booking form
+  const btnBook = document.getElementById('btnBook');
+  const bookOk = document.getElementById('bookOk');
+  
+  btnBook.addEventListener('click', () => {
+    const name = document.getElementById('bfName').value;
+    const phone = document.getElementById('bfPhone').value;
+    const email = document.getElementById('bfEmail').value;
+    
+    if (!name || !phone || !email) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+    
+    // TODO: Send booking to backend
+    btnBook.style.display = 'none';
+    bookOk.style.display = 'block';
+  });
+</script>
+
+<% } %>
+
+</body>
+</html>

@@ -1,4 +1,3 @@
-```
 # Dependencies
 node_modules/
 
@@ -12,14 +11,19 @@ target/
 .env.local
 .env.*
 
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
 # IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# Logs
-*.log
 
 # Python related
 __pycache__/
@@ -31,14 +35,10 @@ env/
 venv/
 .venv/
 .ENV
+.ENV.*
 .venv.bak/
 pip-log.txt
 pip-delete-this-directory.txt
-
-# Temporary files
-*.tmp
-*.temp
-*~
 
 # OS generated files
 .DS_Store
@@ -57,4 +57,3 @@ htmlcov/
 
 # Local configuration
 config/local.json
-```
