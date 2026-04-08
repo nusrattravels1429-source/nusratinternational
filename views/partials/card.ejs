@@ -1,0 +1,22 @@
+<!-- Card Partial - Reusable package card -->
+<div class="pkg-card">
+  <div class="pkg-img-wrap">
+    <img src="<%= pkg.image %>" alt="<%= pkg.title.en %>">
+    <div class="pkg-price">$<%= pkg.price.toLocaleString() %></div>
+    <div class="pkg-duration"><%= pkg.duration %></div>
+  </div>
+  <div class="pkg-body">
+    <div class="pkg-top">
+      <div>
+        <h3><%= pkg.title.en %></h3>
+        <h4><%= pkg.title.bn %></h4>
+      </div>
+      <span class="rating">★ <%= pkg.rating || '4.5' %></span>
+    </div>
+    <p class="pkg-desc"><%= pkg.description.en %></p>
+    <p class="pkg-desc bn"><%= pkg.description.bn %></p>
+    <a href="/<%= type %>/<%= pkg.slug %>">
+      <button class="view-btn">View Details | বিস্তারিত দেখুন</button>
+    </a>
+  </div>
+</div>
