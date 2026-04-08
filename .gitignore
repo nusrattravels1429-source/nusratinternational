@@ -1,6 +1,10 @@
-```
 # Dependencies
 node_modules/
+
+# Build outputs
+dist/
+build/
+target/
 
 # Environment variables
 .env
@@ -12,19 +16,16 @@ node_modules/
 
 # Temporary files
 *.tmp
+*.temp
+*~
 
-# Editor files
+# IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# Build artifacts
-dist/
-build/
-target/
-
-# Python
+# Python related
 __pycache__/
 *.pyc
 *.pyo
@@ -35,4 +36,24 @@ venv/
 .venv/
 .ENV
 .ENV.*
-```
+.venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Coverage reports
+coverage/
+htmlcov/
+.coverage
+*.coverage
+
+# Local configuration
+config/local.json
