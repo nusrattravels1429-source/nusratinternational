@@ -76,13 +76,33 @@ router.get('/work', async (req, res) => {
   }
 });
 
+// Ticketing listing
+router.get('/ticketing', async (req, res) => {
+  try {
+    res.render('ticketing', { activePage: 'ticketing', cssFiles: ['common.css', 'traveling.css'] });
+  } catch (error) {
+    console.error('Error rendering ticketing page:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// Contact page
+router.get('/contact', async (req, res) => {
+  try {
+    res.render('contact', { activePage: 'contact', cssFiles: ['common.css', 'contact.css'] });
+  } catch (error) {
+    console.error('Error rendering contact page:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 // Travel detail
 router.get('/travel/:slug', async (req, res) => {
   try {
     const db = req.app.locals.db;
     const pkg = await db.collection('travel_packages').findOne({ slug: req.params.slug, isActive: true });
     if (!pkg) {
-      return res.status(404).render('404', { url: req.originalUrl });
+      return res.status(404).render('404', { url: req.originalUrl, pageTitle: '404 - Not Found', activePage: '', bodyClass: '', cssFiles: ['common.css'] });
     }
     res.render('travel-detail', { pkg, activePage: 'travel', cssFiles: ['common.css', 'sections.css', 'Package-detail-travlas.css'], bodyClass: 'theme-travel' });
   } catch (error) {
@@ -97,7 +117,7 @@ router.get('/hajj/:slug', async (req, res) => {
     const db = req.app.locals.db;
     const pkg = await db.collection('hajj_packages').findOne({ slug: req.params.slug, isActive: true });
     if (!pkg) {
-      return res.status(404).render('404', { url: req.originalUrl });
+      return res.status(404).render('404', { url: req.originalUrl, pageTitle: '404 - Not Found', activePage: '', bodyClass: '', cssFiles: ['common.css'] });
     }
     res.render('hajj-detail', { pkg, activePage: 'hajj', cssFiles: ['common.css', 'sections.css', 'Package-detail-travlas.css'], bodyClass: 'theme-hajj' });
   } catch (error) {
@@ -112,13 +132,24 @@ router.get('/work/:slug', async (req, res) => {
     const db = req.app.locals.db;
     const pkg = await db.collection('work_packages').findOne({ slug: req.params.slug, isActive: true });
     if (!pkg) {
-      return res.status(404).render('404', { url: req.originalUrl });
+      return res.status(404).render('404', { url: req.originalUrl, pageTitle: '404 - Not Found', activePage: '', bodyClass: '', cssFiles: ['common.css'] });
     }
     res.render('work-detail', { pkg, activePage: 'work', cssFiles: ['common.css', 'slider_container.css', 'sections.css', 'cards.css', 'contact.css', 'package-detail-work.css'], bodyClass: 'theme-work' });
   } catch (error) {
     console.error('Error rendering work detail:', error);
     res.status(500).send('Internal Server Error');
   }
+});
+
+// Catch-all 404 handler
+router.use((req, res) => {
+  res.status(404).render('404', { 
+    url: req.originalUrl, 
+    pageTitle: '404 - Not Found', 
+    activePage: '', 
+    bodyClass: '', 
+    cssFiles: ['common.css'] 
+  });
 });
 
 module.exports = router;

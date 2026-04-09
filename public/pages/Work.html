@@ -22,8 +22,7 @@
       <div class="nav-inner">
 
         <div class="logo">
-          <a href="index.html">
-            <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg"
+        <a href="/">
                 alt="Nusrat International Logo"
                 onerror="this.style.display='none'">
             <div class="logo-text">
@@ -37,11 +36,11 @@
         </button>
 
         <ul class="nav-links" id="nav-links">
-          <li><a href="index.html" >Home | হোম</a></li>
-          <li><a href="ticketing.html">Ticketing | ভ্রমণ</a></li>
-          <li><a href="Travel.html" >Travel | ভ্রমণ</a></li>
-          <li><a href="Hajj.html">Hajj | হাজ্জ</a></li>
-          <li><a href="Work.html" class="active">Work | কাজ</a></li>
+          <li><a href="/">Home | হোম</a></li>
+          <li><a href="/ticketing">Ticketing | ভ্রমণ</a></li>
+          <li><a href="/travel">Travel | ভ্রমণ</a></li>
+          <li><a href="/hajj">Hajj | হাজ্জ</a></li>
+          <li><a href="/work" class="active">Work | কাজ</a></li>
           <li><a href="Contact.html">Contact | যোগাযোগ</a></li>
           
           <!-- About with hover dropdown -->
@@ -114,165 +113,16 @@
 
 
 
-<!-- ================= PACKAGES GRID ================= -->
+<!-- ================= PACKAGES SLIDER ================= -->
 <main>
-  <div class="container" id="packagesGrid">
-    <!-- Dynamic content loaded here -->
-  </div>
-</main>
-      <div class="pkg-img-wrap">
-        <img src="https://picsum.photos/id/1035/500/350" alt="Qatar">
-        <div class="pkg-price green">$749</div>
-        <div class="pkg-duration">3 Years</div>
-        <div class="work-badge">⚙ Technical</div>
-      </div>
-      <div class="pkg-body">
-        <div class="pkg-top">
-          <div><h3>Qatar</h3><h4>কাতার</h4></div>
-          <span class="rating">★ 4.9</span>
-        </div>
-        <div class="work-info">
-          <span>📍 Doha</span>
-          <span>💰 QAR 1,800–3,500/mo</span>
-        </div>
-        <p class="pkg-desc">Technical and skilled trade positions in Qatar's infrastructure boom.</p>
-        <p class="pkg-desc bn">কাতারের অবকাঠামো উন্নয়নে দক্ষ কর্মীদের জন্য সুযোগ।</p>
-        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
+  <div class="cards-slider-wrap">
+    <button class="cards-prev" aria-label="Previous packages">‹</button>
+    <div class="cards-viewport">
+      <div class="cards-track" id="packagesGrid">
+        <!-- Dynamic content loaded here -->
       </div>
     </div>
-
-    <div class="pkg-card work-card" data-category="asia unskilled" data-price="599" data-rating="4.7">
-      <div class="pkg-img-wrap">
-        <img src="https://picsum.photos/id/1062/500/350" alt="Malaysia">
-        <div class="pkg-price green">$599</div>
-        <div class="pkg-duration">2 Years</div>
-        <div class="work-badge">🏭 Manufacturing</div>
-      </div>
-      <div class="pkg-body">
-        <div class="pkg-top">
-          <div><h3>Malaysia</h3><h4>মালয়েশিয়া</h4></div>
-          <span class="rating">★ 4.7</span>
-        </div>
-        <div class="work-info">
-          <span>📍 KL &amp; Penang</span>
-          <span>💰 MYR 1,500–2,500/mo</span>
-        </div>
-        <p class="pkg-desc">Factory, plantation, and construction work with competitive salary packages.</p>
-        <p class="pkg-desc bn">কারখানা, বাগান ও নির্মাণ কাজে প্রতিযোগিতামূলক বেতন।</p>
-        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
-      </div>
-    </div>
-
-    <div class="pkg-card work-card" data-category="asia skilled" data-price="799" data-rating="4.9">
-      <div class="pkg-img-wrap">
-        <img src="https://picsum.photos/id/1071/500/350" alt="Singapore">
-        <div class="pkg-price green">$799</div>
-        <div class="pkg-duration">3 Years</div>
-        <div class="work-badge">💻 IT &amp; Skilled</div>
-      </div>
-      <div class="pkg-body">
-        <div class="pkg-top">
-          <div><h3>Singapore</h3><h4>সিঙ্গাপুর</h4></div>
-          <span class="rating">★ 4.9</span>
-        </div>
-        <div class="work-info">
-          <span>📍 Singapore City</span>
-          <span>💰 SGD 2,000–4,500/mo</span>
-        </div>
-        <p class="pkg-desc">High-paying skilled and IT jobs in Singapore's booming economy.</p>
-        <p class="pkg-desc bn">সিঙ্গাপুরের অর্থনীতিতে উচ্চ বেতনের দক্ষ কর্মীর চাকরি।</p>
-        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
-      </div>
-    </div>
-
-    <div class="pkg-card work-card" data-category="asia unskilled" data-price="449" data-rating="4.5">
-      <div class="pkg-img-wrap">
-        <img src="https://picsum.photos/id/1040/500/350" alt="South Korea">
-        <div class="pkg-price green">$449</div>
-        <div class="pkg-duration">2 Years</div>
-        <div class="work-badge">🏭 EPS Program</div>
-      </div>
-      <div class="pkg-body">
-        <div class="pkg-top">
-          <div><h3>South Korea</h3><h4>দক্ষিণ কোরিয়া</h4></div>
-          <span class="rating">★ 4.5</span>
-        </div>
-        <div class="work-info">
-          <span>📍 Seoul &amp; Incheon</span>
-          <span>💰 KRW 2.5M–3.5M/mo</span>
-        </div>
-        <p class="pkg-desc">EPS Employment Permit System — factory and agriculture work.</p>
-        <p class="pkg-desc bn">ইপিএস প্রোগ্রামে কারখানা ও কৃষি খাতে কর্মসংস্থান।</p>
-        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
-      </div>
-    </div>
-
-    <div class="pkg-card work-card" data-category="europe skilled" data-price="1299" data-rating="4.6">
-      <div class="pkg-img-wrap">
-        <img src="https://picsum.photos/id/1047/500/350" alt="Germany">
-        <div class="pkg-price green">$1,299</div>
-        <div class="pkg-duration">5 Years</div>
-        <div class="work-badge">🔧 Engineering</div>
-      </div>
-      <div class="pkg-body">
-        <div class="pkg-top">
-          <div><h3>Germany</h3><h4>জার্মানি</h4></div>
-          <span class="rating">★ 4.6</span>
-        </div>
-        <div class="work-info">
-          <span>📍 Berlin &amp; Munich</span>
-          <span>💰 EUR 2,500–4,000/mo</span>
-        </div>
-        <p class="pkg-desc">Skilled worker visa for engineers, electricians and healthcare workers.</p>
-        <p class="pkg-desc bn">প্রকৌশলী, ইলেকট্রিশিয়ান ও স্বাস্থ্যকর্মীদের জন্য ভিসা।</p>
-        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
-      </div>
-    </div>
-
-    <div class="pkg-card work-card" data-category="europe unskilled" data-price="999" data-rating="4.5">
-      <div class="pkg-img-wrap">
-        <img src="https://picsum.photos/id/1036/500/350" alt="Poland">
-        <div class="pkg-price green">$999</div>
-        <div class="pkg-duration">2 Years</div>
-        <div class="work-badge">🌾 Agriculture</div>
-      </div>
-      <div class="pkg-body">
-        <div class="pkg-top">
-          <div><h3>Poland</h3><h4>পোল্যান্ড</h4></div>
-          <span class="rating">★ 4.5</span>
-        </div>
-        <div class="work-info">
-          <span>📍 Warsaw &amp; Kraków</span>
-          <span>💰 PLN 4,000–6,000/mo</span>
-        </div>
-        <p class="pkg-desc">Agriculture, food processing, and warehouse work opportunities.</p>
-        <p class="pkg-desc bn">কৃষি, খাদ্য প্রক্রিয়াকরণ ও গুদামঘরে কাজের সুযোগ।</p>
-        <button class="view-btn green" onclick="scrollToContact(event)">View Details | বিস্তারিত দেখুন</button>
-      </div>
-    </div>
-
-    <div class="pkg-card work-card" data-category="europe skilled" data-price="1499" data-rating="4.8">
-      <div class="pkg-img-wrap">
-        <img src="https://picsum.photos/id/1057/500/350" alt="UK">
-        <div class="pkg-price green">$1,499</div>
-        <div class="pkg-duration">5 Years</div>
-        <div class="work-badge">🏥 Healthcare</div>
-      </div>
-      <div class="pkg-body">
-        <div class="pkg-top">
-          <div><h3>United Kingdom</h3><h4>যুক্তরাজ্য</h4></div>
-          <span class="rating">★ 4.8</span>
-        </div>
-        <div class="work-info">
-          <span>📍 London &amp; Manchester</span>
-          <span>💰 GBP 2,000–4,500/mo</span>
-        </div>
-        <p class="pkg-desc">NHS healthcare, hospitality and construction skilled worker visas.</p>
-        <p class="pkg-desc bn">এনএইচএস স্বাস্থ্যসেবা, আতিথেয়তা ও নির্মাণ ভিসা।</p>
-        <button class="view-btn green">View Details | বিস্তারিত দেখুন</button>
-      </div>
-    </div>
-
+    <button class="cards-next" aria-label="Next packages">›</button>
   </div>
 </main>
 
@@ -343,7 +193,7 @@ async function loadWorkPackages() {
     }
 
     grid.innerHTML = packages.map(pkg => `
-      <div class="pkg-card work-card" data-category="${pkg.category}" data-price="${pkg.price}" data-rating="${pkg.rating}">
+      <div class="pkg-card work-card">
         <div class="pkg-img-wrap">
           <img src="${pkg.image}" alt="${pkg.title_en}">
           <div class="pkg-price green">$${pkg.price}</div>
@@ -352,7 +202,10 @@ async function loadWorkPackages() {
         </div>
         <div class="pkg-body">
           <div class="pkg-top">
-            <div><h3>${pkg.title_en}</h3><h4>${pkg.title_bn}</h4></div>
+            <div>
+              <h3>${pkg.title_en}</h3>
+              <h4>${pkg.title_bn || ''}</h4>
+            </div>
             <span class="rating">★ ${pkg.rating}</span>
           </div>
           <div class="work-info">
@@ -360,8 +213,10 @@ async function loadWorkPackages() {
             <span>💰 Competitive Salary</span>
           </div>
           <p class="pkg-desc">${pkg.desc_en}</p>
-          <p class="pkg-desc bn">${pkg.desc_bn}</p>
-          <button class="view-btn green" onclick="window.location.href='work-detail.html?slug=${pkg.slug}'">View Details | বিস্তারিত দেখুন</button>
+          <p class="pkg-desc bn">${pkg.desc_bn || ''}</p>
+          <a href="work-detail.html?slug=${pkg.slug}">
+            <button class="view-btn green">View Details | বিস্তারিত দেখুন</button>
+          </a>
         </div>
       </div>
     `).join('');
@@ -373,6 +228,37 @@ async function loadWorkPackages() {
 
 // Load packages when page loads
 document.addEventListener('DOMContentLoaded', loadWorkPackages);
+
+// Slider functionality
+let workCurrentIndex = 0;
+const workTrack = document.getElementById('packagesGrid');
+const workPrevBtn = document.querySelector('.cards-prev');
+const workNextBtn = document.querySelector('.cards-next');
+
+function updateWorkSlider() {
+  const cardWidth = 328; // 300px card + 28px gap
+  const maxIndex = Math.max(0, workTrack.children.length - Math.floor(workTrack.parentElement.offsetWidth / cardWidth));
+  workCurrentIndex = Math.max(0, Math.min(workCurrentIndex, maxIndex));
+  workTrack.style.transform = `translateX(-${workCurrentIndex * cardWidth}px)`;
+  
+  workPrevBtn.style.opacity = workCurrentIndex > 0 ? '1' : '0.5';
+  workNextBtn.style.opacity = workCurrentIndex < maxIndex ? '1' : '0.5';
+}
+
+workPrevBtn.addEventListener('click', () => {
+  if (workCurrentIndex > 0) {
+    workCurrentIndex--;
+    updateWorkSlider();
+  }
+});
+
+workNextBtn.addEventListener('click', () => {
+  workCurrentIndex++;
+  updateWorkSlider();
+});
+
+// Update slider on window resize
+window.addEventListener('resize', updateWorkSlider);
 </script>
 </body>
 </html>last task

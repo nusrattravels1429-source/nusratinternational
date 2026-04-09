@@ -1,0 +1,126 @@
+<%- include('partials/header', { pageTitle: 'Contact — Nusrat International', activePage: 'contact', cssFiles: cssFiles, bodyClass: '' }) %>
+
+<!-- PAGE HERO -->
+<section class="page-hero contact-hero">
+  <span class="section-tag">📞 GET IN TOUCH</span>
+  <h1>Contact Us<br><em>Today</em></h1>
+  <p>Have questions about our services? We're here to help you 24/7.<br>আমাদের সাথে যোগাযোগ করুন — আমরা সবসময় আপনার সেবায় প্রস্তুত।</p>
+</section>
+
+<!-- CONTACT SECTION -->
+<main class="container">
+  <section class="contact-section">
+    <div class="contact-grid">
+      <!-- Contact Info -->
+      <div class="contact-info">
+        <h2>Contact Information</h2>
+        
+        <div class="contact-item">
+          <h3>📞 Phone</h3>
+          <p><a href="tel:01713165116">017-1316-5116</a></p>
+          <p><a href="tel:01713165117">017-1316-5117</a></p>
+        </div>
+
+        <div class="contact-item">
+          <h3>💬 WhatsApp</h3>
+          <p><a href="https://wa.me/8801713165116" target="_blank">+880 171 3165116</a></p>
+        </div>
+
+        <div class="contact-item">
+          <h3>📧 Email</h3>
+          <p><a href="mailto:info@nusratinternational.com">info@nusratinternational.com</a></p>
+        </div>
+
+        <div class="contact-item">
+          <h3>📍 Address</h3>
+          <p>Banani Super Market,<br>Banani, Dhaka 1213<br>Bangladesh</p>
+        </div>
+
+        <div class="contact-item">
+          <h3>⏰ Business Hours</h3>
+          <p>Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday: 9:00 AM - 2:00 PM<br>Sunday: Closed</p>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="contact-form-wrap">
+        <h2>Send us a Message</h2>
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <label for="name">Your Name *</label>
+            <input type="text" id="name" name="name" required placeholder="Full Name">
+          </div>
+
+          <div class="form-group">
+            <label for="email">Your Email *</label>
+            <input type="email" id="email" name="email" required placeholder="your@email.com">
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Your Phone *</label>
+            <input type="tel" id="phone" name="phone" required placeholder="01700000000">
+          </div>
+
+          <div class="form-group">
+            <label for="service">Service Interest *</label>
+            <select id="service" name="service" required>
+              <option value="">Select a service</option>
+              <option value="travel">Travel Packages</option>
+              <option value="hajj">Hajj & Umrah</option>
+              <option value="work">Work Visa</option>
+              <option value="ticketing">Air Ticketing</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Your Message *</label>
+            <textarea id="message" name="message" required placeholder="Tell us how we can help..." rows="5"></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary">Send Message</button>
+          <p class="form-note" id="formMessage"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map Section -->
+  <section class="map-section">
+    <h2 style="text-align: center; margin-bottom: 2rem;">Find Us on the Map</h2>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.7194346099836!2d90.4049653103119!3d23.79300323072133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c70e90bb671d%3A0x7eab77d0896252c0!2sBanani%20Super%20Market!5e0!3m2!1sen!2sbd!4v1771968108612!5m2!1sen!2sbd"
+      width="100%" height="400"
+      style="border:0;border-radius:12px;display:block;"
+      allowfullscreen="" loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </section>
+</main>
+
+<%- include('partials/footer') %>
+
+<script src="/js/common.js"></script>
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const formMessage = document.getElementById('formMessage');
+  const submitBtn = this.querySelector('button[type="submit"]');
+  
+  formMessage.textContent = 'Sending...';
+  formMessage.style.color = '#0d9f6e';
+  submitBtn.disabled = true;
+  
+  setTimeout(() => {
+    formMessage.textContent = 'Thank you! We will contact you soon.';
+    formMessage.style.color = '#0d9f6e';
+    this.reset();
+    submitBtn.disabled = false;
+    
+    setTimeout(() => {
+      formMessage.textContent = '';
+    }, 5000);
+  }, 1000);
+});
+</script>
