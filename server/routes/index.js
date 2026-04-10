@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Package = require('../models/Package');
-const HomepageContent = require('../models/HomepageContent');
+const { ObjectId } = require('mongodb');
 
 // GET / - Homepage with all packages
 router.get('/', async (req, res) => {
@@ -76,7 +75,16 @@ router.get('/work', async (req, res) => {
 router.get('/travel/:slug', async (req, res) => {
   try {
     const db = req.app.locals.db;
-    const pkg = await db.collection('packages').findOne({ slug: req.params.slug, category: 'travel' });
+    const { slug } = req.params;
+    
+    // Try to find by slug first
+    let pkg = await db.collection('packages').findOne({ slug: slug, category: 'travel' });
+    
+    // If not found, try by ObjectId
+    if (!pkg && ObjectId.isValid(slug)) {
+      pkg = await db.collection('packages').findOne({ _id: new ObjectId(slug), category: 'travel' });
+    }
+    
     res.render('travel-detail', { pkg, activePage: 'travel' });
   } catch (error) {
     console.error('Error loading travel package:', error);
@@ -88,10 +96,22 @@ router.get('/travel/:slug', async (req, res) => {
 router.get('/hajj/:slug', async (req, res) => {
   try {
     const db = req.app.locals.db;
-    const pkg = await db.collection('packages').findOne({ 
-      slug: req.params.slug, 
+    const { slug } = req.params;
+    
+    // Try to find by slug first
+    let pkg = await db.collection('packages').findOne({ 
+      slug: slug, 
       category: { $in: ['hajj', 'umrah'] } 
     });
+    
+    // If not found, try by ObjectId
+    if (!pkg && ObjectId.isValid(slug)) {
+      pkg = await db.collection('packages').findOne({ 
+        _id: new ObjectId(slug), 
+        category: { $in: ['hajj', 'umrah'] } 
+      });
+    }
+    
     res.render('hajj-detail', { pkg, activePage: 'hajj' });
   } catch (error) {
     console.error('Error loading hajj package:', error);
@@ -103,7 +123,16 @@ router.get('/hajj/:slug', async (req, res) => {
 router.get('/work/:slug', async (req, res) => {
   try {
     const db = req.app.locals.db;
-    const pkg = await db.collection('packages').findOne({ slug: req.params.slug, category: 'work' });
+    const { slug } = req.params;
+    
+    // Try to find by slug first
+    let pkg = await db.collection('packages').findOne({ slug: slug, category: 'work' });
+    
+    // If not found, try by ObjectId
+    if (!pkg && ObjectId.isValid(slug)) {
+      pkg = await db.collection('packages').findOne({ _id: new ObjectId(slug), category: 'work' });
+    }
+    
     res.render('work-detail', { pkg, activePage: 'work' });
   } catch (error) {
     console.error('Error loading work package:', error);

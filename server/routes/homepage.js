@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const HomepageContent = require('../models/HomepageContent');
 
 // Get homepage content
 router.get('/', async (req, res) => {
   try {
-    let content = await HomepageContent.findOne();
+    const db = req.app.locals.db;
+    let content = await db.collection('homepage_content').findOne({});
     
     // If no content exists, create default empty structure
     if (!content) {
-      content = await HomepageContent.create({
+      const defaultContent = {
         heroSlider: [],
         featuredPackages: {
           travel: [],
@@ -25,12 +25,17 @@ router.get('/', async (req, res) => {
         },
         stats: [],
         testimonials: [],
-        newsAndUpdates: []
-      });
+        newsAndUpdates: [],
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      await db.collection('homepage_content').insertOne(defaultContent);
+      content = defaultContent;
     }
     
     res.json({ success: true, data: content });
   } catch (error) {
+    console.error('Error loading homepage content:', error);
     res.status(500).json({ success: false, message: 'Server Error', error: error.message });
   }
 });
@@ -38,20 +43,32 @@ router.get('/', async (req, res) => {
 // Update homepage content (for admin panel)
 router.put('/', async (req, res) => {
   try {
-    let content = await HomepageContent.findOne();
+    const db = req.app.locals.db;
+    const updateData = {
+      ...req.body,
+      updatedAt: new Date()
+    };
+    
+    let content = await db.collection('homepage_content').findOne({});
     
     if (content) {
-      content = await HomepageContent.findByIdAndUpdate(
-        content._id,
-        req.body,
-        { new: true, runValidators: true }
+      const result = await db.collection('homepage_content').findOneAndUpdate(
+        { _id: content._id },
+        { $set: updateData },
+        { returnDocument: 'after' }
       );
+      content = result.value;
     } else {
-      content = await HomepageContent.create(req.body);
+      const result = await db.collection('homepage_content').insertOne({
+        ...updateData,
+        createdAt: new Date()
+      });
+      content = { _id: result.insertedId, ...updateData };
     }
     
     res.json({ success: true, data: content });
   } catch (error) {
+    console.error('Error updating homepage content:', error);
     res.status(500).json({ success: false, message: 'Server Error', error: error.message });
   }
 });

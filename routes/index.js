@@ -96,11 +96,21 @@ router.get('/contact', async (req, res) => {
   }
 });
 
-// Travel detail
-router.get('/travel/:slug', async (req, res) => {
+// Travel detail - accepts both slug and ObjectId
+router.get('/travel/:param', async (req, res) => {
   try {
     const db = req.app.locals.db;
-    const pkg = await db.collection('travel_packages').findOne({ slug: req.params.slug, isActive: true });
+    const { param } = req.params;
+    const { ObjectId } = require('mongodb');
+
+    // Try to find by slug first
+    let pkg = await db.collection('travel_packages').findOne({ slug: param, isActive: true });
+    
+    // If not found, try to find by ObjectId
+    if (!pkg && ObjectId.isValid(param)) {
+      pkg = await db.collection('travel_packages').findOne({ _id: new ObjectId(param), isActive: true });
+    }
+    
     if (!pkg) {
       return res.status(404).render('404', { url: req.originalUrl, pageTitle: '404 - Not Found', activePage: '', bodyClass: '', cssFiles: ['common.css'] });
     }
@@ -111,11 +121,21 @@ router.get('/travel/:slug', async (req, res) => {
   }
 });
 
-// Hajj detail
-router.get('/hajj/:slug', async (req, res) => {
+// Hajj detail - accepts both slug and ObjectId
+router.get('/hajj/:param', async (req, res) => {
   try {
     const db = req.app.locals.db;
-    const pkg = await db.collection('hajj_packages').findOne({ slug: req.params.slug, isActive: true });
+    const { param } = req.params;
+    const { ObjectId } = require('mongodb');
+
+    // Try to find by slug first
+    let pkg = await db.collection('hajj_packages').findOne({ slug: param, isActive: true });
+    
+    // If not found, try to find by ObjectId
+    if (!pkg && ObjectId.isValid(param)) {
+      pkg = await db.collection('hajj_packages').findOne({ _id: new ObjectId(param), isActive: true });
+    }
+    
     if (!pkg) {
       return res.status(404).render('404', { url: req.originalUrl, pageTitle: '404 - Not Found', activePage: '', bodyClass: '', cssFiles: ['common.css'] });
     }
@@ -126,11 +146,21 @@ router.get('/hajj/:slug', async (req, res) => {
   }
 });
 
-// Work detail
-router.get('/work/:slug', async (req, res) => {
+// Work detail - accepts both slug and ObjectId
+router.get('/work/:param', async (req, res) => {
   try {
     const db = req.app.locals.db;
-    const pkg = await db.collection('work_packages').findOne({ slug: req.params.slug, isActive: true });
+    const { param } = req.params;
+    const { ObjectId } = require('mongodb');
+
+    // Try to find by slug first
+    let pkg = await db.collection('work_packages').findOne({ slug: param, isActive: true });
+    
+    // If not found, try to find by ObjectId
+    if (!pkg && ObjectId.isValid(param)) {
+      pkg = await db.collection('work_packages').findOne({ _id: new ObjectId(param), isActive: true });
+    }
+    
     if (!pkg) {
       return res.status(404).render('404', { url: req.originalUrl, pageTitle: '404 - Not Found', activePage: '', bodyClass: '', cssFiles: ['common.css'] });
     }
