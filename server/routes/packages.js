@@ -2,6 +2,18 @@ const express = require('express');
 const router = express.Router();
 const { ObjectId } = require('mongodb');
 
+// Helper function to generate slug from title
+function generateSlug(title) {
+  if (!title) return '';
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '') // Remove special characters
+    .replace(/\s+/g, '-')     // Replace spaces with hyphens
+    .replace(/-+/g, '-')      // Replace multiple hyphens with single
+    .replace(/^-|-$/g, '');   // Remove leading/trailing hyphens
+}
+
 // Helper function to transform package data for frontend
 function transformPackage(pkg) {
   if (!pkg) return null;
@@ -107,6 +119,7 @@ router.get('/travel', async (req, res) => {
 });
 
 // Get single travel package by slug or ID
+// If accessed via ObjectId, redirects to slug-based URL (301)
 router.get('/travel/:id', async (req, res) => {
   try {
     const db = req.app.locals.db;
@@ -114,18 +127,26 @@ router.get('/travel/:id', async (req, res) => {
     
     let pkg = null;
     
-    // Try to find by slug first
+    // Step 1: Try to find by slug first
     pkg = await db.collection('packages').findOne({ slug: id, category: 'travel', isActive: true });
     
-    // If not found, try by ObjectId
+    // Step 2: If not found by slug, check if param is valid ObjectId
     if (!pkg && ObjectId.isValid(id)) {
+      // Step 3: Find package by _id
       pkg = await db.collection('packages').findOne({ _id: new ObjectId(id), category: 'travel', isActive: true });
+      
+      // Step 4: If found via ObjectId, redirect to slug URL (301 permanent redirect)
+      if (pkg) {
+        return res.redirect(301, `/travel/${pkg.slug}`);
+      }
     }
     
+    // If still not found, return 404
     if (!pkg) {
       return res.status(404).json({ success: false, message: 'Package not found' });
     }
     
+    // Found by slug - return the package data
     res.json({ success: true, data: transformPackage(pkg) });
   } catch (error) {
     console.error('Error loading travel package:', error);
@@ -163,6 +184,7 @@ router.get('/hajj', async (req, res) => {
 });
 
 // Get single hajj package by slug or ID
+// If accessed via ObjectId, redirects to slug-based URL (301)
 router.get('/hajj/:id', async (req, res) => {
   try {
     const db = req.app.locals.db;
@@ -170,26 +192,34 @@ router.get('/hajj/:id', async (req, res) => {
     
     let pkg = null;
     
-    // Try to find by slug first
+    // Step 1: Try to find by slug first
     pkg = await db.collection('packages').findOne({ 
       slug: id, 
       category: { $in: ['hajj', 'umrah'] },
       isActive: true
     });
     
-    // If not found, try by ObjectId
+    // Step 2: If not found by slug, check if param is valid ObjectId
     if (!pkg && ObjectId.isValid(id)) {
+      // Step 3: Find package by _id
       pkg = await db.collection('packages').findOne({ 
         _id: new ObjectId(id), 
         category: { $in: ['hajj', 'umrah'] },
         isActive: true
       });
+      
+      // Step 4: If found via ObjectId, redirect to slug URL (301 permanent redirect)
+      if (pkg) {
+        return res.redirect(301, `/hajj/${pkg.slug}`);
+      }
     }
     
+    // If still not found, return 404
     if (!pkg) {
       return res.status(404).json({ success: false, message: 'Package not found' });
     }
     
+    // Found by slug - return the package data
     res.json({ success: true, data: transformPackage(pkg) });
   } catch (error) {
     console.error('Error loading hajj package:', error);
@@ -227,6 +257,7 @@ router.get('/work', async (req, res) => {
 });
 
 // Get single work package by slug or ID
+// If accessed via ObjectId, redirects to slug-based URL (301)
 router.get('/work/:id', async (req, res) => {
   try {
     const db = req.app.locals.db;
@@ -234,18 +265,26 @@ router.get('/work/:id', async (req, res) => {
     
     let pkg = null;
     
-    // Try to find by slug first
+    // Step 1: Try to find by slug first
     pkg = await db.collection('packages').findOne({ slug: id, category: 'work', isActive: true });
     
-    // If not found, try by ObjectId
+    // Step 2: If not found by slug, check if param is valid ObjectId
     if (!pkg && ObjectId.isValid(id)) {
+      // Step 3: Find package by _id
       pkg = await db.collection('packages').findOne({ _id: new ObjectId(id), category: 'work', isActive: true });
+      
+      // Step 4: If found via ObjectId, redirect to slug URL (301 permanent redirect)
+      if (pkg) {
+        return res.redirect(301, `/work/${pkg.slug}`);
+      }
     }
     
+    // If still not found, return 404
     if (!pkg) {
       return res.status(404).json({ success: false, message: 'Package not found' });
     }
     
+    // Found by slug - return the package data
     res.json({ success: true, data: transformPackage(pkg) });
   } catch (error) {
     console.error('Error loading work package:', error);
