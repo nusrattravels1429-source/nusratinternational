@@ -96,21 +96,27 @@ router.get('/contact', async (req, res) => {
   }
 });
 
-// Travel detail - accepts both slug and ObjectId
+// Travel detail - accepts both slug and ObjectId, redirects ObjectId to slug
 router.get('/travel/:param', async (req, res) => {
   try {
     const db = req.app.locals.db;
     const { param } = req.params;
     const { ObjectId } = require('mongodb');
 
-    // Try to find by slug first
+    // Step 1: Try to find by slug first
     let pkg = await db.collection('travel_packages').findOne({ slug: param, isActive: true });
-    
-    // If not found, try to find by ObjectId
+
+    // Step 2: If not found, check if param is valid ObjectId
     if (!pkg && ObjectId.isValid(param)) {
+      // Step 3: Find package by _id
       pkg = await db.collection('travel_packages').findOne({ _id: new ObjectId(param), isActive: true });
+
+      // Step 4: If found via ObjectId, redirect to slug URL (301 permanent redirect)
+      if (pkg) {
+        return res.redirect(301, `/travel/${pkg.slug}`);
+      }
     }
-    
+
     if (!pkg) {
       return res.status(404).render('404', { url: req.originalUrl, pageTitle: '404 - Not Found', activePage: '', bodyClass: '', cssFiles: ['common.css'] });
     }
@@ -121,21 +127,27 @@ router.get('/travel/:param', async (req, res) => {
   }
 });
 
-// Hajj detail - accepts both slug and ObjectId
+// Hajj detail - accepts both slug and ObjectId, redirects ObjectId to slug
 router.get('/hajj/:param', async (req, res) => {
   try {
     const db = req.app.locals.db;
     const { param } = req.params;
     const { ObjectId } = require('mongodb');
 
-    // Try to find by slug first
+    // Step 1: Try to find by slug first
     let pkg = await db.collection('hajj_packages').findOne({ slug: param, isActive: true });
-    
-    // If not found, try to find by ObjectId
+
+    // Step 2: If not found, check if param is valid ObjectId
     if (!pkg && ObjectId.isValid(param)) {
+      // Step 3: Find package by _id
       pkg = await db.collection('hajj_packages').findOne({ _id: new ObjectId(param), isActive: true });
+
+      // Step 4: If found via ObjectId, redirect to slug URL (301 permanent redirect)
+      if (pkg) {
+        return res.redirect(301, `/hajj/${pkg.slug}`);
+      }
     }
-    
+
     if (!pkg) {
       return res.status(404).render('404', { url: req.originalUrl, pageTitle: '404 - Not Found', activePage: '', bodyClass: '', cssFiles: ['common.css'] });
     }
@@ -146,21 +158,27 @@ router.get('/hajj/:param', async (req, res) => {
   }
 });
 
-// Work detail - accepts both slug and ObjectId
+// Work detail - accepts both slug and ObjectId, redirects ObjectId to slug
 router.get('/work/:param', async (req, res) => {
   try {
     const db = req.app.locals.db;
     const { param } = req.params;
     const { ObjectId } = require('mongodb');
 
-    // Try to find by slug first
+    // Step 1: Try to find by slug first
     let pkg = await db.collection('work_packages').findOne({ slug: param, isActive: true });
-    
-    // If not found, try to find by ObjectId
+
+    // Step 2: If not found, check if param is valid ObjectId
     if (!pkg && ObjectId.isValid(param)) {
+      // Step 3: Find package by _id
       pkg = await db.collection('work_packages').findOne({ _id: new ObjectId(param), isActive: true });
+
+      // Step 4: If found via ObjectId, redirect to slug URL (301 permanent redirect)
+      if (pkg) {
+        return res.redirect(301, `/work/${pkg.slug}`);
+      }
     }
-    
+
     if (!pkg) {
       return res.status(404).render('404', { url: req.originalUrl, pageTitle: '404 - Not Found', activePage: '', bodyClass: '', cssFiles: ['common.css'] });
     }
