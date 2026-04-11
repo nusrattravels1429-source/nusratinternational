@@ -114,7 +114,11 @@ app.get('/api/packages/:slug', async (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Nusrat Travels server running on port ${PORT}`);
-});
+// Start server (only in non-Vercel environments)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Nusrat Travels server running on port ${PORT}`);
+  });
+}
+
+module.exports = app;
