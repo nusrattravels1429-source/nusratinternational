@@ -1,16 +1,16 @@
 /**
  * Nusrat Travels - Node.js/Express Server
+ * Updated for strict Vercel error handling
  */
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
 const path = require('path');
-
-// Define PORT explicitly for Vercel compatibility
-const PORT = process.env.PORT || 3000;
+require('dotenv').config();
 
 // Initialize Express app
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -24,93 +24,97 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// MongoDB Connection
+// MongoDB Connection with Strict Error Handling
 let db = null;
 const connectDB = async () => {
+  const uri = process.env.MONGODB_URI;
+  
+  if (!uri) {
+    console.error('❌ FATAL: MONGODB_URI is missing in Environment Variables');
+    // In Vercel, we don't crash the whole process immediately, but we flag it
+    return; 
+  }
+
   try {
-    const uri = process.env.MONGODB_URI;
-    if (!uri) {
-      console.error('❌ ERROR: MONGODB_URI environment variable is NOT set in Vercel.');
-      return;
-    }
     console.log('🔍 Attempting to connect to MongoDB...');
-    const client = new MongoClient(uri);
+    const client = new MongoClient(uri, {
+      serverSelectionTimeoutMS: 5000, // Timeout after 5s
+      socketTimeoutMS: 45000,
+    });
+    
     await client.connect();
-    db = client.db('nusrat_travels'); // Ensure this matches your DB name in Atlas
+    db = client.db('nusrat_travels'); // Ensure this matches your DB name
     app.locals.db = db;
     console.log('✅ MongoDB Connected successfully to DB: nusrat_travels');
     
-    // Quick check for collections
+    // Test connection
     const collections = await db.listCollections().toArray();
-    console.log('📦 Available collections:', collections.map(c => c.name));
+    console.log(`📦 Found collections: ${collections.map(c => c.name).join(', ')}`);
     
   } catch (error) {
-    console.error('❌ MongoDB connection error:', error.message);
+    console.error('❌ FATAL MongoDB Connection Error:', error.message);
+    console.error('Full Error:', error);
+    // Re-throw to stop execution if critical
+    throw error; 
   }
 };
 
-// Connect to database
-connectDB();
+// Connect before setting up routes
+connectDB().catch(err => {
+  console.error('Server starting despite DB failure. Check logs above.');
+});
 
 // Import routes safely
 try {
   const routes = require('./routes/index');
   app.use('/', routes);
   console.log('✅ Routes loaded successfully');
-} catch (error) {
-  console.error('⚠️ Could not load routes (might be missing):', error.message);
-  // Fallback route if routes file is missing
+} catch (err) {
+  console.error('❌ Failed to load routes:', err.message);
+  // Create a fallback route if routes fail
   app.get('/', (req, res) => {
-    res.send('Server is running. Connect DB to see content.');
+    res.send('Error loading application routes. Check deployment logs.');
   });
 }
-
-// API Routes
 
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({
-    status: 'OK',
-    dbConnected: !!db,
-    message: 'Nusrat Travels API is running',
+    status: db ? 'OK' : 'DB_DISCONNECTED',
+    message: db ? 'Nusrat Travels API is running' : 'Database not connected',
     timestamp: new Date().toISOString()
   });
 });
 
-// Get all packages
+// API: Get Packages
 app.get('/api/packages', async (req, res) => {
+  if (!db) {
+    console.warn('⚠️ Request received but DB is not connected');
+    return res.status(503).json({ error: 'Database not connected', checkLogs: true });
+  }
   try {
-    const db = req.app.locals.db;
-    if (!db) {
-      console.warn('⚠️ API Request received but DB is not connected.');
-      return res.status(503).json({ error: 'Database not connected', checkLogs: true });
-    }
-
-    const { category, featured } = req.query;
-    const query = { isActive: true };
-    if (featured === 'true') query.featured = true;
-
+    const { category } = req.query;
     let packages = [];
-    const sort = { createdAt: -1 };
-
+    
     if (category === 'travel') {
-      packages = await db.collection('travel_packages').find(query).sort(sort).toArray();
+      packages = await db.collection('travel_packages').find({ isActive: true }).toArray();
     } else if (category === 'hajj') {
-      packages = await db.collection('hajj_packages').find(query).sort(sort).toArray();
+      packages = await db.collection('hajj_packages').find({ isActive: true }).toArray();
     } else if (category === 'work') {
-      packages = await db.collection('work_packages').find(query).sort(sort).toArray();
+      packages = await db.collection('work_packages').find({ isActive: true }).toArray();
     } else {
-      const travel = await db.collection('travel_packages').find(query).sort(sort).toArray();
-      const hajj = await db.collection('hajj_packages').find(query).sort(sort).toArray();
-      const work = await db.collection('work_packages').find(query).sort(sort).toArray();
-      packages = [...travel, ...hajj, ...work];
+      // Fetch all if no category
+      const t = await db.collection('travel_packages').find({ isActive: true }).toArray();
+      const h = await db.collection('hajj_packages').find({ isActive: true }).toArray();
+      const w = await db.collection('work_packages').find({ isActive: true }).toArray();
+      packages = [...t, ...h, ...w];
     }
-
+    
     console.log(`📤 Returned ${packages.length} packages for category: ${category || 'all'}`);
     res.json(packages);
   } catch (error) {
     console.error('Error fetching packages:', error);
-    res.status(500).json({ error: 'Internal server error', details: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
