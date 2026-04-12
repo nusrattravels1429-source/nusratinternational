@@ -53,6 +53,5 @@
     "app.js": {
       "maxDuration": 10
     }
-  },
-  "outputDirectory": "public"
+  }
 }
