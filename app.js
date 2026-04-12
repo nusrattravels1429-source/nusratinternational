@@ -2,7 +2,7 @@
  * Nusrat Travels - Node.js/Express Server
  * Travel agency system with MongoDB native driver
  */
-
+app.use(express.static('public'));
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 const cors = require('cors');
