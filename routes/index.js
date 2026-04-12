@@ -1,19 +1,19 @@
 const express = require('express');
 const router = express.Router();
 
-// Helper to check DB connection
-function checkDb(req, res) {
-  const db = req.app.locals.db;
-  if (!db) {
-    throw new Error('Database not connected. Check MONGODB_URI environment variable.');
+// Helper to get DB connection (lazy loading for serverless)
+async function getDb(req) {
+  const getDbFunc = req.app.locals.getDb;
+  if (!getDbFunc) {
+    throw new Error('Database getDb function not available. Check app initialization.');
   }
-  return db;
+  return await getDbFunc();
 }
 
 // Homepage route
 router.get('/', async (req, res) => {
   try {
-    const db = checkDb(req, res);
+    const db = await getDb(req);
     let travelPackages = [];
     let hajjPackages = [];
     let workPackages = [];
@@ -50,7 +50,7 @@ router.get('/', async (req, res) => {
 // Travel listing
 router.get('/travel', async (req, res) => {
   try {
-    const db = checkDb(req, res);
+    const db = await getDb(req);
     const packages = await db.collection('travel_packages').find({ isActive: true }).sort({ createdAt: -1 }).toArray();
     res.render('travel', { packages, activePage: 'travel', cssFiles: ['Travel.css', 'common.css', 'cards.css', 'contact.css'] });
   } catch (error) {
@@ -62,7 +62,7 @@ router.get('/travel', async (req, res) => {
 // Hajj listing
 router.get('/hajj', async (req, res) => {
   try {
-    const db = checkDb(req, res);
+    const db = await getDb(req);
     const packages = await db.collection('hajj_packages').find({ isActive: true }).sort({ createdAt: -1 }).toArray();
     res.render('hajj', { packages, activePage: 'hajj', cssFiles: ['Hajj.css', 'common.css', 'cards.css', 'contact.css'] });
   } catch (error) {
@@ -74,7 +74,7 @@ router.get('/hajj', async (req, res) => {
 // Work listing
 router.get('/work', async (req, res) => {
   try {
-    const db = checkDb(req, res);
+    const db = await getDb(req);
     const packages = await db.collection('work_packages').find({ isActive: true }).sort({ createdAt: -1 }).toArray();
     res.render('work', { packages, activePage: 'work', cssFiles: ['common.css', 'slider_container.css', 'sections.css', 'cards.css', 'work.css'] });
   } catch (error) {
@@ -106,7 +106,7 @@ router.get('/contact', async (req, res) => {
 // Travel detail - accepts both slug and ObjectId, redirects ObjectId to slug
 router.get('/travel/:param', async (req, res) => {
   try {
-    const db = checkDb(req, res);
+    const db = await getDb(req);
     const { param } = req.params;
     const { ObjectId } = require('mongodb');
 
@@ -137,7 +137,7 @@ router.get('/travel/:param', async (req, res) => {
 // Hajj detail - accepts both slug and ObjectId, redirects ObjectId to slug
 router.get('/hajj/:param', async (req, res) => {
   try {
-    const db = checkDb(req, res);
+    const db = await getDb(req);
     const { param } = req.params;
     const { ObjectId } = require('mongodb');
 
@@ -168,7 +168,7 @@ router.get('/hajj/:param', async (req, res) => {
 // Work detail - accepts both slug and ObjectId, redirects ObjectId to slug
 router.get('/work/:param', async (req, res) => {
   try {
-    const db = checkDb(req, res);
+    const db = await getDb(req);
     const { param } = req.params;
     const { ObjectId } = require('mongodb');
 

@@ -14,11 +14,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// Database connection
-let db = null;
-let dbConnectPromise = null;
+// Database connection - cached for serverless
+let cachedDbClient = null;
+let cachedDb = null;
 
-async function initDB() {
+async function getDb() {
+  if (cachedDb) {
+    return cachedDb;
+  }
+
   const uri = process.env.MONGODB_URI;
 
   // Check if variable is missing
@@ -32,14 +36,19 @@ async function initDB() {
   console.log('🔍 Attempting connection to MongoDB...');
 
   try {
-    const client = new MongoClient(uri, { serverSelectionTimeoutMS: 5000 });
-    await client.connect();
+    if (!cachedDbClient) {
+      const client = new MongoClient(uri, { serverSelectionTimeoutMS: 5000 });
+      await client.connect();
+      cachedDbClient = client;
+      console.log('✅ MongoDB client connected');
+    }
 
-    const testDb = client.db('nusrat_travels');
-    await testDb.command({ ping: 1 });
-
-    db = testDb;
-    app.locals.db = db;
+    const db = cachedDbClient.db('nusrat_travels');
+    
+    // Test connection
+    await db.command({ ping: 1 });
+    
+    cachedDb = db;
     console.log('✅ SUCCESS: Connected to MongoDB "nusrat_travels"');
 
     // Verify collections exist
@@ -54,17 +63,14 @@ async function initDB() {
   } catch (err) {
     console.error('💥 FATAL CONNECTION ERROR:', err.message);
     console.error('💥 Full Detail:', err);
+    cachedDbClient = null;
+    cachedDb = null;
     throw err;
   }
 }
 
-// Initialize DB connection (don't block module export)
-dbConnectPromise = initDB().then(() => {
-  console.log('🚀 Server Ready');
-}).catch((err) => {
-  console.error('💥 SERVER STARTUP ERROR:', err.message);
-  // Don't exit process in serverless - let individual requests handle errors
-});
+// Make getDb available to routes
+app.locals.getDb = getDb;
 
 // Routes
 try {
@@ -77,19 +83,15 @@ try {
 
 // Health check API
 app.get('/api/health', async (req, res) => {
-  if (db) {
+  try {
+    const db = await getDb();
     res.json({ status: 'OK', database: 'connected' });
-  } else {
-    try {
-      await dbConnectPromise;
-      res.json({ status: 'OK', database: 'connected' });
-    } catch (err) {
-      res.status(500).json({ 
-        status: 'ERROR', 
-        error: err.message,
-        uriConfigured: !!process.env.MONGODB_URI 
-      });
-    }
+  } catch (err) {
+    res.status(500).json({ 
+      status: 'ERROR', 
+      error: err.message,
+      uriConfigured: !!process.env.MONGODB_URI 
+    });
   }
 });
 
