@@ -108,6 +108,16 @@ router.get('/contact', async (req, res) => {
   }
 });
 
+// About page
+router.get('/about', async (req, res) => {
+  try {
+    res.render('about', { activePage: 'about', cssFiles: ['common.css', 'About_us.css'] });
+  } catch (error) {
+    console.error('Error rendering about page:', error);
+    res.status(500).send('Internal Server Error: ' + error.message);
+  }
+});
+
 // Travel detail - accepts both slug and ObjectId, redirects ObjectId to slug
 router.get('/travel/:param', async (req, res) => {
   try {
