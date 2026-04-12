@@ -816,7 +816,54 @@ footer {
   transition: color 0.2s;
   text-decoration: none;
 }
+/* Flag Item Styling */
+.flag-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px 20px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  white-space: nowrap;
+  min-width: 160px;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255,255,255,0.3);
+}
 
+/* Flag Image Styling */
+.flag-img {
+  width: 32px;
+  height: auto;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  display: block;
+}
+
+/* Text Styling */
+.flag-item span {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .flag-item {
+    padding: 8px 15px;
+    min-width: 140px;
+  }
+  .flag-img {
+    width: 24px;
+  }
+  .flag-item span {
+    font-size: 12px;
+  }
+}
 .ticket-contact-bar a:hover { color: #f0c040; }
 
 /* ===========================
