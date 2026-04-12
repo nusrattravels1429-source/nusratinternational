@@ -1,57 +1,15 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "builds": [
     {
       "src": "app.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "public/**",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/css/(.*)",
-      "headers": { 
-        "cache-control": "s-maxage=31536000,immutable" 
-      },
-      "dest": "/public/css/$1"
-    },
-    {
-      "src": "/js/(.*)",
-      "headers": { 
-        "cache-control": "s-maxage=31536000,immutable" 
-      },
-      "dest": "/public/js/$1"
-    },
-    {
-      "src": "/images/(.*)",
-      "headers": { 
-        "cache-control": "s-maxage=31536000,immutable" 
-      },
-      "dest": "/public/images/$1"
-    },
-    {
-      "src": "/pages/(.*)",
-      "dest": "/public/pages/$1"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "app.js"
-    },
-    {
       "src": "/(.*)",
       "dest": "app.js"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "functions": {
-    "app.js": {
-      "maxDuration": 10
-    }
-  }
+  ]
 }
