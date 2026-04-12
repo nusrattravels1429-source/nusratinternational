@@ -14,13 +14,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// --- CRITICAL DB CHECK ---
+// Database connection
 let db = null;
+let dbConnectPromise = null;
 
 async function initDB() {
   const uri = process.env.MONGODB_URI;
-  
-  // 1. Force crash if variable is missing
+
+  // Check if variable is missing
   if (!uri) {
     console.error('💥 FATAL: MONGODB_URI environment variable is NOT SET in Vercel.');
     console.error('💥 Go to Vercel Dashboard > Settings > Environment Variables and add MONGODB_URI');
@@ -33,39 +34,39 @@ async function initDB() {
   try {
     const client = new MongoClient(uri, { serverSelectionTimeoutMS: 5000 });
     await client.connect();
-    
-    // 2. Force crash if DB name is wrong
-    const testDb = client.db('nusrat_travels'); 
+
+    const testDb = client.db('nusrat_travels');
     await testDb.command({ ping: 1 });
-    
+
     db = testDb;
     app.locals.db = db;
     console.log('✅ SUCCESS: Connected to MongoDB "nusrat_travels"');
-    
+
     // Verify collections exist
     const cols = await db.listCollections().toArray();
     console.log('📂 Collections found:', cols.map(c => c.name).join(', '));
-    
+
     if (cols.length === 0) {
       console.warn('⚠️ WARNING: Database is empty! No collections found.');
     }
-    
+
+    return db;
   } catch (err) {
     console.error('💥 FATAL CONNECTION ERROR:', err.message);
     console.error('💥 Full Detail:', err);
-    throw err; // This stops the server so you see the error
+    throw err;
   }
 }
 
-// Run initialization BEFORE starting server
-initDB().then(() => {
+// Initialize DB connection (don't block module export)
+dbConnectPromise = initDB().then(() => {
   console.log('🚀 Server Ready');
 }).catch((err) => {
-  console.error('💥 SERVER CRASHED ON STARTUP:', err.message);
-  process.exit(1); // Force Vercel to mark deployment as failed so you see logs
+  console.error('💥 SERVER STARTUP ERROR:', err.message);
+  // Don't exit process in serverless - let individual requests handle errors
 });
 
-// Routes (Only load if we get this far)
+// Routes
 try {
   const routes = require('./routes/index');
   app.use('/', routes);
@@ -74,9 +75,22 @@ try {
   app.get('/', (req, res) => res.send('Route Error: ' + e.message));
 }
 
-// Fallback API
-app.get('/api/health', (req, res) => {
-  res.json({ status: db ? 'OK' : 'DB_DOWN', error: process.env.MONGODB_URI ? 'URI Exists' : 'URI Missing' });
+// Health check API
+app.get('/api/health', async (req, res) => {
+  if (db) {
+    res.json({ status: 'OK', database: 'connected' });
+  } else {
+    try {
+      await dbConnectPromise;
+      res.json({ status: 'OK', database: 'connected' });
+    } catch (err) {
+      res.status(500).json({ 
+        status: 'ERROR', 
+        error: err.message,
+        uriConfigured: !!process.env.MONGODB_URI 
+      });
+    }
+  }
 });
 
 module.exports = app;
