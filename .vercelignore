@@ -1,0 +1,17 @@
+node_modules
+.git
+.github
+*.md
+docs/
+backend/
+server/
+react-frontend/
+src/
+.vercelignore
+.DS_Store
+*.log
+seedDatabase.js
+test/
+coverage/
+.env
+.env.local

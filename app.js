@@ -3,7 +3,6 @@
  * Travel agency system with MongoDB native driver
  */
 
-require('dotenv').config();
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 const cors = require('cors');
@@ -11,7 +10,6 @@ const path = require('path');
 
 // Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -26,16 +24,21 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // MongoDB Connection
+let db = null;
 const connectDB = async () => {
   try {
-    const client = new MongoClient(process.env.MONGODB_URI);
+    const uri = process.env.MONGODB_URI;
+    if (!uri) {
+      console.error('MONGODB_URI environment variable is not set');
+      return;
+    }
+    const client = new MongoClient(uri);
     await client.connect();
-    const db = client.db('nusrat_travels');
+    db = client.db('nusrat_travels');
     app.locals.db = db;
     console.log('MongoDB Connected successfully');
   } catch (error) {
     console.error('MongoDB connection error:', error);
-    console.log('Server will continue without database connection. API endpoints will return empty data.');
   }
 };
 
