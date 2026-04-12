@@ -2,7 +2,8 @@
  * Nusrat Travels - Node.js/Express Server
  * Travel agency system with MongoDB native driver
  */
-app.use(express.static('public'));
+
+// Import dependencies first
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 const cors = require('cors');
@@ -10,6 +11,9 @@ const path = require('path');
 
 // Initialize Express app
 const app = express();
+
+// Define PORT (fallback for local/Vercel)
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -46,8 +50,12 @@ const connectDB = async () => {
 connectDB();
 
 // Import routes
-const routes = require('./routes/index');
-app.use('/', routes);
+try {
+  const routes = require('./routes/index');
+  app.use('/', routes);
+} catch (error) {
+  console.log('Routes module not found or failed to load, using default routes.');
+}
 
 // API Routes
 
@@ -117,13 +125,5 @@ app.get('/api/packages/:slug', async (req, res) => {
   }
 });
 
-// Start server (only in non-Vercel environments)
-if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
-  app.listen(PORT, () => {
-    console.log(`Nusrat Travels server running on port ${PORT}`);
-  });
-}
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-}
+// Export app for Vercel
 module.exports = app;
