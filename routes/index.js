@@ -1,10 +1,19 @@
 const express = require('express');
 const router = express.Router();
 
+// Helper to check DB connection
+function checkDb(req, res) {
+  const db = req.app.locals.db;
+  if (!db) {
+    throw new Error('Database not connected. Check MONGODB_URI environment variable.');
+  }
+  return db;
+}
+
 // Homepage route
 router.get('/', async (req, res) => {
   try {
-    const db = req.app.locals.db;
+    const db = checkDb(req, res);
     let travelPackages = [];
     let hajjPackages = [];
     let workPackages = [];
@@ -12,17 +21,15 @@ router.get('/', async (req, res) => {
     let homepageServices = null;
     let homepageCredentials = null;
 
-    if (db) {
-      // Get packages from different collections
-      travelPackages = await db.collection('travel_packages').find({ isActive: true }).sort({ createdAt: -1 }).limit(3).toArray();
-      hajjPackages = await db.collection('hajj_packages').find({ isActive: true }).sort({ createdAt: -1 }).limit(3).toArray();
-      workPackages = await db.collection('work_packages').find({ isActive: true }).sort({ createdAt: -1 }).limit(3).toArray();
+    // Get packages from different collections
+    travelPackages = await db.collection('travel_packages').find({ isActive: true }).sort({ createdAt: -1 }).limit(3).toArray();
+    hajjPackages = await db.collection('hajj_packages').find({ isActive: true }).sort({ createdAt: -1 }).limit(3).toArray();
+    workPackages = await db.collection('work_packages').find({ isActive: true }).sort({ createdAt: -1 }).limit(3).toArray();
 
-      // Get homepage content
-      homepageHero = await db.collection('contents').findOne({ key: 'homepage-hero', isActive: true });
-      homepageServices = await db.collection('contents').findOne({ key: 'homepage-services', isActive: true });
-      homepageCredentials = await db.collection('contents').findOne({ key: 'homepage-credentials', isActive: true });
-    }
+    // Get homepage content
+    homepageHero = await db.collection('contents').findOne({ key: 'homepage-hero', isActive: true });
+    homepageServices = await db.collection('contents').findOne({ key: 'homepage-services', isActive: true });
+    homepageCredentials = await db.collection('contents').findOne({ key: 'homepage-credentials', isActive: true });
 
     res.render('index', {
       travelPackages,
@@ -36,43 +43,43 @@ router.get('/', async (req, res) => {
     });
   } catch (error) {
     console.error('Error rendering homepage:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send('Internal Server Error: ' + error.message);
   }
 });
 
 // Travel listing
 router.get('/travel', async (req, res) => {
   try {
-    const db = req.app.locals.db;
+    const db = checkDb(req, res);
     const packages = await db.collection('travel_packages').find({ isActive: true }).sort({ createdAt: -1 }).toArray();
     res.render('travel', { packages, activePage: 'travel', cssFiles: ['Travel.css', 'common.css', 'cards.css', 'contact.css'] });
   } catch (error) {
     console.error('Error rendering travel page:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send('Internal Server Error: ' + error.message);
   }
 });
 
 // Hajj listing
 router.get('/hajj', async (req, res) => {
   try {
-    const db = req.app.locals.db;
+    const db = checkDb(req, res);
     const packages = await db.collection('hajj_packages').find({ isActive: true }).sort({ createdAt: -1 }).toArray();
     res.render('hajj', { packages, activePage: 'hajj', cssFiles: ['Hajj.css', 'common.css', 'cards.css', 'contact.css'] });
   } catch (error) {
     console.error('Error rendering hajj page:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send('Internal Server Error: ' + error.message);
   }
 });
 
 // Work listing
 router.get('/work', async (req, res) => {
   try {
-    const db = req.app.locals.db;
+    const db = checkDb(req, res);
     const packages = await db.collection('work_packages').find({ isActive: true }).sort({ createdAt: -1 }).toArray();
     res.render('work', { packages, activePage: 'work', cssFiles: ['common.css', 'slider_container.css', 'sections.css', 'cards.css', 'work.css'] });
   } catch (error) {
     console.error('Error rendering work page:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send('Internal Server Error: ' + error.message);
   }
 });
 
@@ -82,7 +89,7 @@ router.get('/ticketing', async (req, res) => {
     res.render('ticketing', { activePage: 'ticketing', cssFiles: ['common.css', 'traveling.css'] });
   } catch (error) {
     console.error('Error rendering ticketing page:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send('Internal Server Error: ' + error.message);
   }
 });
 
@@ -92,14 +99,14 @@ router.get('/contact', async (req, res) => {
     res.render('contact', { activePage: 'contact', cssFiles: ['common.css', 'contact.css'] });
   } catch (error) {
     console.error('Error rendering contact page:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send('Internal Server Error: ' + error.message);
   }
 });
 
 // Travel detail - accepts both slug and ObjectId, redirects ObjectId to slug
 router.get('/travel/:param', async (req, res) => {
   try {
-    const db = req.app.locals.db;
+    const db = checkDb(req, res);
     const { param } = req.params;
     const { ObjectId } = require('mongodb');
 
@@ -123,14 +130,14 @@ router.get('/travel/:param', async (req, res) => {
     res.render('travel-detail', { pkg, activePage: 'travel', cssFiles: ['common.css', 'sections.css', 'Package-detail-travlas.css'], bodyClass: 'theme-travel' });
   } catch (error) {
     console.error('Error rendering travel detail:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send('Internal Server Error: ' + error.message);
   }
 });
 
 // Hajj detail - accepts both slug and ObjectId, redirects ObjectId to slug
 router.get('/hajj/:param', async (req, res) => {
   try {
-    const db = req.app.locals.db;
+    const db = checkDb(req, res);
     const { param } = req.params;
     const { ObjectId } = require('mongodb');
 
@@ -154,14 +161,14 @@ router.get('/hajj/:param', async (req, res) => {
     res.render('hajj-detail', { pkg, activePage: 'hajj', cssFiles: ['common.css', 'sections.css', 'Package-detail-travlas.css'], bodyClass: 'theme-hajj' });
   } catch (error) {
     console.error('Error rendering hajj detail:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send('Internal Server Error: ' + error.message);
   }
 });
 
 // Work detail - accepts both slug and ObjectId, redirects ObjectId to slug
 router.get('/work/:param', async (req, res) => {
   try {
-    const db = req.app.locals.db;
+    const db = checkDb(req, res);
     const { param } = req.params;
     const { ObjectId } = require('mongodb');
 
@@ -185,18 +192,18 @@ router.get('/work/:param', async (req, res) => {
     res.render('work-detail', { pkg, activePage: 'work', cssFiles: ['common.css', 'slider_container.css', 'sections.css', 'cards.css', 'contact.css', 'package-detail-work.css'], bodyClass: 'theme-work' });
   } catch (error) {
     console.error('Error rendering work detail:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send('Internal Server Error: ' + error.message);
   }
 });
 
 // Catch-all 404 handler
 router.use((req, res) => {
-  res.status(404).render('404', { 
-    url: req.originalUrl, 
-    pageTitle: '404 - Not Found', 
-    activePage: '', 
-    bodyClass: '', 
-    cssFiles: ['common.css'] 
+  res.status(404).render('404', {
+    url: req.originalUrl,
+    pageTitle: '404 - Not Found',
+    activePage: '',
+    bodyClass: '',
+    cssFiles: ['common.css']
   });
 });
 
