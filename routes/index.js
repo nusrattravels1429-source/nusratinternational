@@ -7,7 +7,12 @@ async function getDb(req) {
   if (!getDbFunc) {
     throw new Error('Database getDb function not available. Check app initialization.');
   }
-  return await getDbFunc();
+  try {
+    return await getDbFunc();
+  } catch (err) {
+    console.error('❌ Route failed to get DB connection:', err.message);
+    throw err;
+  }
 }
 
 // Homepage route
