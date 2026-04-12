@@ -1,26 +1,23 @@
 /**
  * Nusrat Travels - Node.js/Express Server
- * Travel agency system with MongoDB native driver
  */
-
-// Import dependencies first
 const express = require('express');
-const { MongoClient, ObjectId } = require('mongodb');
+const { MongoClient } = require('mongodb');
 const cors = require('cors');
 const path = require('path');
 
+// Define PORT explicitly for Vercel compatibility
+const PORT = process.env.PORT || 3000;
+
 // Initialize Express app
 const app = express();
-
-// Define PORT (fallback for local/Vercel)
-const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files (CSS, JS, images)
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set view engine
@@ -33,28 +30,39 @@ const connectDB = async () => {
   try {
     const uri = process.env.MONGODB_URI;
     if (!uri) {
-      console.error('MONGODB_URI environment variable is not set');
+      console.error('❌ ERROR: MONGODB_URI environment variable is NOT set in Vercel.');
       return;
     }
+    console.log('🔍 Attempting to connect to MongoDB...');
     const client = new MongoClient(uri);
     await client.connect();
-    db = client.db('nusrat_travels');
+    db = client.db('nusrat_travels'); // Ensure this matches your DB name in Atlas
     app.locals.db = db;
-    console.log('MongoDB Connected successfully');
+    console.log('✅ MongoDB Connected successfully to DB: nusrat_travels');
+    
+    // Quick check for collections
+    const collections = await db.listCollections().toArray();
+    console.log('📦 Available collections:', collections.map(c => c.name));
+    
   } catch (error) {
-    console.error('MongoDB connection error:', error);
+    console.error('❌ MongoDB connection error:', error.message);
   }
 };
 
 // Connect to database
 connectDB();
 
-// Import routes
+// Import routes safely
 try {
   const routes = require('./routes/index');
   app.use('/', routes);
+  console.log('✅ Routes loaded successfully');
 } catch (error) {
-  console.log('Routes module not found or failed to load, using default routes.');
+  console.error('⚠️ Could not load routes (might be missing):', error.message);
+  // Fallback route if routes file is missing
+  app.get('/', (req, res) => {
+    res.send('Server is running. Connect DB to see content.');
+  });
 }
 
 // API Routes
@@ -63,6 +71,7 @@ try {
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
+    dbConnected: !!db,
     message: 'Nusrat Travels API is running',
     timestamp: new Date().toISOString()
   });
@@ -73,7 +82,8 @@ app.get('/api/packages', async (req, res) => {
   try {
     const db = req.app.locals.db;
     if (!db) {
-      return res.json([]);
+      console.warn('⚠️ API Request received but DB is not connected.');
+      return res.status(503).json({ error: 'Database not connected', checkLogs: true });
     }
 
     const { category, featured } = req.query;
@@ -96,34 +106,13 @@ app.get('/api/packages', async (req, res) => {
       packages = [...travel, ...hajj, ...work];
     }
 
+    console.log(`📤 Returned ${packages.length} packages for category: ${category || 'all'}`);
     res.json(packages);
   } catch (error) {
     console.error('Error fetching packages:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 });
 
-// Get package by slug
-app.get('/api/packages/:slug', async (req, res) => {
-  try {
-    const db = req.app.locals.db;
-    if (!db) {
-      return res.status(404).json({ error: 'Package not found' });
-    }
-
-    let pkg = await db.collection('travel_packages').findOne({ slug: req.params.slug, isActive: true });
-    if (!pkg) pkg = await db.collection('hajj_packages').findOne({ slug: req.params.slug, isActive: true });
-    if (!pkg) pkg = await db.collection('work_packages').findOne({ slug: req.params.slug, isActive: true });
-
-    if (!pkg) {
-      return res.status(404).json({ error: 'Package not found' });
-    }
-    res.json(pkg);
-  } catch (error) {
-    console.error('Error fetching package:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Export app for Vercel
+// Export for Vercel
 module.exports = app;
