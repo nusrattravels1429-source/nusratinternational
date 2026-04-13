@@ -1,143 +1,167 @@
+/* ===========================
+   gallery.css
+   Social Media Style Gallery
+   =========================== */
 
-    /* Navbar always solid */
-    #navbar {
-      background: rgba(13,17,23,0.97) !important;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-    }
-    #navbar .nav-links a,
-    #navbar .dropdown-trigger { color: rgba(255,255,255,0.9) !important; }
-    #navbar .logo span         { color: white !important; }
-    #navbar .hamburger span    { background: white !important; }
-
-    body {
-      padding-top: 80px;
-      background: #f5f7fa;
-      margin: 0;
-      font-family: 'DM Sans', sans-serif;
-    }
-
-    /* Page Title */
-    .page-title {
-      text-align: center;
-      padding: 56px 20px 40px;
-    }
-    .page-title .ptag {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: #1a56db;
-      margin-bottom: 12px;
-    }
-    .page-title h1 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(28px, 5vw, 52px);
-      font-weight: 900;
-      color: #0d1117;
-      line-height: 1.15;
-      margin: 0 0 10px;
-    }
-    .page-title h1 em { font-style: italic; color: #1a56db; }
-    .page-title p {
-      font-size: 15px;
-      color: #6b7280;
-      max-width: 500px;
-      margin: 0 auto;
-      line-height: 1.8;
-    }
-
-    /* ── Gallery Timeline ─────────────────────────────────────────
-       LARAVEL / DB NOTE:
-       Replace the static .timeline-item blocks below with:
-
-         @foreach($milestones as $milestone)
-           <div class="timeline-item">
-             <div class="timeline-image">
-               <img src="{{ $milestone->image }}" alt="{{ $milestone->title }}" data-src="{{ $milestone->image }}">
-             </div>
-             <div class="timeline-content">
-               <h3>{{ $milestone->year }}</h3>
-               <p>{{ $milestone->description }}</p>
-             </div>
-           </div>
-         @endforeach
-    ─────────────────────────────────────────────────────────── *//* Timeline Gallery */
-
-.gallery{
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
+/* Hero Section for Gallery */
+.gallery-hero {
+  text-align: center;
+  padding: 100px 20px 70px;
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
   position: relative;
+  overflow: hidden;
 }
 
-.timeline-item{
-  margin-bottom: 40px;
+.gallery-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(26,86,219,0.03) 0%, transparent 70%);
+  animation: pulse 15s ease-in-out infinite;
 }
 
-.timeline-image{
-  margin-bottom: 15px;
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
 }
 
-.timeline-image img{
+.gallery-hero .ptag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #1a56db;
+  margin-bottom: 16px;
+  padding: 8px 20px;
+  background: rgba(26,86,219,0.1);
+  border-radius: 50px;
+  position: relative;
+  z-index: 1;
+}
+
+.gallery-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 6vw, 56px);
+  font-weight: 900;
+  color: #0d1117;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.gallery-hero h1 em {
+  font-style: italic;
+  color: #1a56db;
+}
+
+.gallery-hero p {
+  font-size: 16px;
+  color: #6b7280;
+  max-width: 650px;
+  margin: 0 auto;
+  line-height: 1.9;
+  position: relative;
+  z-index: 1;
+}
+
+/* Gallery Wrap */
+.gallery-wrap {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 60px 20px 100px;
+}
+
+/* Gallery Grid - Single Column for Social Feed Look */
+.gallery-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Gallery Item - Post Style */
+.gallery-item {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 1px solid #f1f5f9;
+  transition: all 0.3s ease;
+}
+
+.gallery-item:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+}
+
+/* Image Container */
+.gallery-item img {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 8px;
+  aspect-ratio: 4/5;
+  object-fit: cover;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
 
-.timeline-image img:hover{
+.gallery-item:hover img {
   transform: scale(1.02);
 }
 
-.timeline-content{
-  text-align: center;
+/* Caption - Like Social Media Post */
+.gallery-caption {
+  padding: 20px;
+  background: white;
+  border-top: 1px solid #f1f5f9;
 }
 
-.timeline-content h3{
-  font-size: 24px;
-  font-weight: 700;
-  color: #1a56db;
-  margin-bottom: 10px;
+.gallery-caption::before {
+  content: '📸';
+  font-size: 18px;
+  margin-right: 10px;
 }
 
-.timeline-content p{
-  font-size: 16px;
-  color: #6b7280;
+.gallery-caption-text {
+  font-size: 15px;
+  color: #374151;
   line-height: 1.6;
-  max-width: 600px;
-  margin: 0 auto;
+  margin: 8px 0 0 0;
 }
 
-/* Mobile */
-@media (max-width:768px){
-  .gallery{
-    padding: 15px;
-  }
+/* Action Bar (Like, Comment, Share icons) */
+.gallery-actions {
+  display: flex;
+  gap: 20px;
+  padding: 12px 20px;
+  border-top: 1px solid #f8fafc;
+}
 
-  .timeline-item{
-    margin-bottom: 30px;
-  }
+.action-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  padding: 5px;
+}
 
-  .timeline-content h3{
-    font-size: 20px;
-  }
-
-  .timeline-content p{
-    font-size: 14px;
-  }
+.action-btn:hover {
+  transform: scale(1.2);
 }
 
 /* Lightbox */
-.lightbox{
+.lightbox {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.95);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -147,57 +171,108 @@
   transition: all 0.3s ease;
 }
 
-.lightbox.open{
+.lightbox.open {
   opacity: 1;
   visibility: visible;
 }
 
-.lightbox img{
+.lightbox img {
   max-width: 90%;
   max-height: 90%;
   object-fit: contain;
+  border-radius: 8px;
 }
 
-.lb-close{
+.lb-close {
   position: absolute;
   top: 20px;
   right: 20px;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
   color: white;
   border: none;
-  font-size: 24px;
+  font-size: 32px;
   cursor: pointer;
-  padding: 10px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
 }
 
-.lb-close:hover{
-  background: rgba(255,255,255,0.4);
+.lb-close:hover {
+  background: rgba(255,255,255,0.2);
+  transform: rotate(90deg);
 }
 
-.lb-arrow{
+.lb-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
   color: white;
   border: none;
-  font-size: 24px;
+  font-size: 28px;
   cursor: pointer;
-  padding: 15px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
 }
 
-.lb-arrow:hover{
-  background: rgba(255,255,255,0.4);
+.lb-arrow:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateY(-50%) scale(1.1);
 }
 
-.lb-prev{
+.lb-prev {
   left: 20px;
 }
 
-.lb-next{
+.lb-next {
   right: 20px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .gallery-hero {
+    padding: 70px 20px 50px;
+  }
+
+  .gallery-wrap {
+    padding: 40px 15px 80px;
+  }
+
+  .gallery-grid {
+    gap: 30px;
+  }
+
+  .gallery-item img {
+    aspect-ratio: 1/1;
+  }
+
+  .gallery-caption {
+    padding: 16px;
+  }
+
+  .lb-close,
+  .lb-arrow {
+    width: 45px;
+    height: 45px;
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-hero h1 {
+    font-size: 28px;
+  }
+
+  .lightbox img {
+    max-width: 95%;
+  }
 }
