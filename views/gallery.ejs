@@ -1,52 +1,104 @@
 <%- include('partials/header', { pageTitle: 'Gallery — Nusrat International', activePage: 'about', bodyClass: '' }) %>
 
-<div class="page-title">
+<!-- PAGE HERO -->
+<section class="page-hero gallery-hero">
   <span class="ptag">📸 MEMORIES & MOMENTS</span>
   <h1>Our <em>Gallery</em></h1>
   <p>Capturing moments from journeys, pilgrimages, and celebrations with our valued clients.</p>
-</div>
+</section>
 
 <!-- GALLERY GRID -->
-<div class="gallery-wrap">
-  <div class="gallery-grid">
-    <% if (typeof galleryItems !== 'undefined' && galleryItems.length > 0) { %>
-      <% galleryItems.forEach(item => { %>
+<main class="container">
+  <div class="gallery-wrap">
+    <div class="gallery-grid">
+      <% if (typeof galleryItems !== 'undefined' && galleryItems.length > 0) { %>
+        <% galleryItems.forEach(item => { %>
+          <div class="gallery-item">
+            <img src="<%= item.image %>" alt="<%= item.title || 'Gallery Image' %>" loading="lazy">
+            <% if (item.caption) { %>
+              <div class="gallery-caption">
+                <span class="gallery-caption-text"><%= item.caption %></span>
+              </div>
+              <div class="gallery-actions">
+                <button class="action-btn" title="Like">❤️</button>
+                <button class="action-btn" title="Comment">💬</button>
+                <button class="action-btn" title="Share">🔗</button>
+              </div>
+            <% } %>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <!-- Default gallery items -->
         <div class="gallery-item">
-          <img src="<%= item.image %>" alt="<%= item.title || 'Gallery Image' %>">
-          <% if (item.caption) { %>
-            <div class="gallery-caption"><%= item.caption %></div>
-          <% } %>
+          <img src="https://picsum.photos/600/400?1" alt="Hajj Group 2025" loading="lazy">
+          <div class="gallery-caption">
+            <span class="gallery-caption-text">Hajj Group 2025 - A blessed journey with our devoted pilgrims</span>
+          </div>
+          <div class="gallery-actions">
+            <button class="action-btn" title="Like">❤️</button>
+            <button class="action-btn" title="Comment">💬</button>
+            <button class="action-btn" title="Share">🔗</button>
+          </div>
         </div>
-      <% }) %>
-    <% } else { %>
-      <!-- Default gallery items -->
-      <div class="gallery-item">
-        <img src="https://picsum.photos/600/400?1" alt="Hajj Group 2025">
-        <div class="gallery-caption">Hajj Group 2025</div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://picsum.photos/600/400?2" alt="Umrah Pilgrims">
-        <div class="gallery-caption">Umrah Pilgrims</div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://picsum.photos/600/400?3" alt="Travel Team">
-        <div class="gallery-caption">Our Travel Team</div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://picsum.photos/600/400?4" alt="Happy Clients">
-        <div class="gallery-caption">Happy Clients</div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://picsum.photos/600/400?5" alt="Office Opening">
-        <div class="gallery-caption">Office Opening Ceremony</div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://picsum.photos/600/400?6" alt="Award Ceremony">
-        <div class="gallery-caption">Award Ceremony 2024</div>
-      </div>
-    <% } %>
+        <div class="gallery-item">
+          <img src="https://picsum.photos/600/400?2" alt="Umrah Pilgrims" loading="lazy">
+          <div class="gallery-caption">
+            <span class="gallery-caption-text">Umrah Pilgrims - Spiritual moments at the Holy Kaaba</span>
+          </div>
+          <div class="gallery-actions">
+            <button class="action-btn" title="Like">❤️</button>
+            <button class="action-btn" title="Comment">💬</button>
+            <button class="action-btn" title="Share">🔗</button>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://picsum.photos/600/400?3" alt="Travel Team" loading="lazy">
+          <div class="gallery-caption">
+            <span class="gallery-caption-text">Our Travel Team - Dedicated professionals ready to serve you</span>
+          </div>
+          <div class="gallery-actions">
+            <button class="action-btn" title="Like">❤️</button>
+            <button class="action-btn" title="Comment">💬</button>
+            <button class="action-btn" title="Share">🔗</button>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://picsum.photos/600/400?4" alt="Happy Clients" loading="lazy">
+          <div class="gallery-caption">
+            <span class="gallery-caption-text">Happy Clients - Making travel dreams come true</span>
+          </div>
+          <div class="gallery-actions">
+            <button class="action-btn" title="Like">❤️</button>
+            <button class="action-btn" title="Comment">💬</button>
+            <button class="action-btn" title="Share">🔗</button>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://picsum.photos/600/400?5" alt="Office Opening" loading="lazy">
+          <div class="gallery-caption">
+            <span class="gallery-caption-text">Office Opening Ceremony - Expanding our services to serve you better</span>
+          </div>
+          <div class="gallery-actions">
+            <button class="action-btn" title="Like">❤️</button>
+            <button class="action-btn" title="Comment">💬</button>
+            <button class="action-btn" title="Share">🔗</button>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://picsum.photos/600/400?6" alt="Award Ceremony" loading="lazy">
+          <div class="gallery-caption">
+            <span class="gallery-caption-text">Award Ceremony 2024 - Recognized for excellence in service</span>
+          </div>
+          <div class="gallery-actions">
+            <button class="action-btn" title="Like">❤️</button>
+            <button class="action-btn" title="Comment">💬</button>
+            <button class="action-btn" title="Share">🔗</button>
+          </div>
+        </div>
+      <% } %>
+    </div>
   </div>
-</div>
+</main>
 
 <script>
 // Lightbox functionality for gallery
