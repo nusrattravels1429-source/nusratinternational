@@ -1,0 +1,56 @@
+<%- include('../partials/header', {
+  pageTitle: 'Gallery — Nusrat International',
+  cssFiles: ['common.css', 'gallery.css'],
+  activePage: 'about',
+  bodyClass: ''
+}) %>
+
+<div class="page-title">
+  <span class="ptag">📸 MEMORIES & MOMENTS</span>
+  <h1>Our <em>Gallery</em></h1>
+  <p>Capturing moments from journeys, pilgrimages, and celebrations with our valued clients.</p>
+</div>
+
+<!-- GALLERY GRID -->
+<div class="gallery-wrap">
+  <div class="gallery-grid">
+    <% if (typeof galleryItems !== 'undefined' && galleryItems.length > 0) { %>
+      <% galleryItems.forEach(item => { %>
+        <div class="gallery-item">
+          <img src="<%= item.image %>" alt="<%= item.title || 'Gallery Image' %>">
+          <% if (item.caption) { %>
+            <div class="gallery-caption"><%= item.caption %></div>
+          <% } %>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <!-- Default gallery items if no data passed -->
+      <div class="gallery-item">
+        <img src="https://picsum.photos/600/400?1" alt="Hajj Group 2025">
+        <div class="gallery-caption">Hajj Group 2025</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://picsum.photos/600/400?2" alt="Umrah Pilgrims">
+        <div class="gallery-caption">Umrah Pilgrims</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://picsum.photos/600/400?3" alt="Travel Team">
+        <div class="gallery-caption">Our Travel Team</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://picsum.photos/600/400?4" alt="Happy Clients">
+        <div class="gallery-caption">Happy Clients</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://picsum.photos/600/400?5" alt="Office Opening">
+        <div class="gallery-caption">Office Opening Ceremony</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://picsum.photos/600/400?6" alt="Award Ceremony">
+        <div class="gallery-caption">Award Ceremony 2024</div>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

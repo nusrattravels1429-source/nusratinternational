@@ -1,0 +1,49 @@
+<%- include('../partials/header', {
+  pageTitle: 'Our Team — Nusrat International',
+  cssFiles: ['common.css', 'employees.css'],
+  activePage: 'about',
+  bodyClass: ''
+}) %>
+
+<div class="page-title">
+  <span class="ptag">👥 OUR PEOPLE</span>
+  <h1>Meet Our <em>Team</em></h1>
+  <p>The dedicated professionals behind every journey, placement, and pilgrimage.</p>
+</div>
+
+<!-- EMPLOYEES -->
+<div class="employees">
+  <% if (typeof employees !== 'undefined' && employees.length > 0) { %>
+    <% employees.forEach(emp => { %>
+      <div class="employee-card">
+        <img src="<%= emp.image %>" alt="<%= emp.name %>">
+        <h3><%= emp.name %></h3>
+        <p><%= emp.position %></p>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <!-- Default employees if no data passed -->
+    <div class="employee-card">
+      <img src="https://picsum.photos/300/300?1" alt="Md. Nusrat Ullah">
+      <h3>Md. Nusrat Ullah</h3>
+      <p>Managing Director</p>
+    </div>
+    <div class="employee-card">
+      <img src="https://picsum.photos/300/300?2" alt="Karim Hossain">
+      <h3>Karim Hossain</h3>
+      <p>Travel Manager</p>
+    </div>
+    <div class="employee-card">
+      <img src="https://picsum.photos/300/300?3" alt="Sultana Parvin">
+      <h3>Sultana Parvin</h3>
+      <p>Ticketing Officer</p>
+    </div>
+    <div class="employee-card">
+      <img src="https://picsum.photos/300/300?4" alt="Farhan Ahmed">
+      <h3>Farhan Ahmed</h3>
+      <p>Travel Consultant</p>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

@@ -118,6 +118,53 @@ router.get('/about', async (req, res) => {
   }
 });
 
+// Gallery page
+router.get('/gallery', async (req, res) => {
+  try {
+    // Optional: Fetch gallery items from database if you have a collection
+    // const db = await getDb(req);
+    // const galleryItems = await db.collection('gallery').find({ isActive: true }).sort({ createdAt: -1 }).toArray();
+    res.render('gallery', {
+      activePage: 'about',
+      cssFiles: ['common.css', 'gallery.css']
+      // galleryItems: galleryItems // uncomment if using DB
+    });
+  } catch (error) {
+    console.error('Error rendering gallery page:', error);
+    res.status(500).send('Internal Server Error: ' + error.message);
+  }
+});
+
+// Employees/Our Team page
+router.get('/employees', async (req, res) => {
+  try {
+    // Optional: Fetch employees from database if you have a collection
+    // const db = await getDb(req);
+    // const employees = await db.collection('employees').find({ isActive: true }).sort({ order: 1 }).toArray();
+    res.render('employees', {
+      activePage: 'about',
+      cssFiles: ['common.css', 'employees.css']
+      // employees: employees // uncomment if using DB
+    });
+  } catch (error) {
+    console.error('Error rendering employees page:', error);
+    res.status(500).send('Internal Server Error: ' + error.message);
+  }
+});
+
+// Certifications page (also accessible via /about#certifications anchor)
+router.get('/certifications', async (req, res) => {
+  try {
+    res.render('certifications', {
+      activePage: 'about',
+      cssFiles: ['common.css', 'certifications.css']
+    });
+  } catch (error) {
+    console.error('Error rendering certifications page:', error);
+    res.status(500).send('Internal Server Error: ' + error.message);
+  }
+});
+
 // Travel detail - accepts both slug and ObjectId, redirects ObjectId to slug
 router.get('/travel/:param', async (req, res) => {
   try {
