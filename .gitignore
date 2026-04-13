@@ -1,33 +1,25 @@
-```
 # Dependencies
 node_modules/
 
-# Build artifacts
-dist/
-build/
-public/css/*.css.map
-
-# Logs and temp files
-*.log
+# Editor/IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
 *.tmp
 
-# Environment
+# Logs
+*.log
+
+# Environment files
 .env
 .env.local
 *.env.*
 
-# Editors
-.vscode/
-.idea/
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Coverage reports
-coverage/
-htmlcov/
-*.coverage
+# Build artifacts
+dist/
+build/
+target/
 
 # Python specific
 __pycache__/
@@ -35,38 +27,8 @@ __pycache__/
 *.pyo
 *.pyd
 .Python
-env/
-venv/
-.venv/
-pip-log.txt
-pip-selfcheck.json
-.tox/
-.coverage
-.nox/
-.mypy_cache/
-.pytest_cache/
-.hypothesis/
-
-# Node.js specific
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-node_modules/
-dist/
-build/
-coverage/
-*.min.js
-*.min.css
-
-# Compiled CSS/JS source maps
-*.map
-
-# Temporary files
-*.tmp
-*.temp
-*.bak
-*.swp
-*.swo
+*.so
+*.egg-info/
 
 # Compression files
 *.zip
@@ -91,4 +53,19 @@ coverage/
 *.tar.bz2
 *.tar.xz
 *.tar.zst
-```
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Coverage reports
+coverage/
+htmlcov/
+.coverage
+
+# Cache directories
+.mypy_cache/
+.pytest_cache/
+.gradle/
+.npm/
+.yarn/
