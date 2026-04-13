@@ -1,67 +1,61 @@
-<%- include('../partials/header', {
-  pageTitle: 'Approvals & Certifications | Nusrat International',
-  cssFiles: ['common.css', 'certifications.css'],
-  activePage: 'about',
-  bodyClass: ''
-}) %>
+<%- include('partials/header', { pageTitle: 'Approvals & Certifications | Nusrat International', activePage: 'about', bodyClass: '' }) %>
 
-<!-- TITLE -->
-<div class="cert-page-title">
-  <span class="cert-tag">📜 OFFICIAL LICENSES</span>
+<!-- PAGE HERO -->
+<section class="page-hero cert-hero">
+  <span class="section-tag">📜 OFFICIAL LICENSES</span>
   <h1>Approvals &amp; Certifications</h1>
   <p>Every license we hold is a commitment to the highest standards of integrity and professionalism.</p>
-</div>
+</section>
 
 <!-- CERT GRID -->
-<div class="cert-wrap">
-  <div class="cert-grid">
+<main class="container">
+  <div class="cert-wrap">
+    <div class="cert-grid">
 
-    <div class="cert-item">
-      <div class="cert-img-wrap">
-        <img src="https://imgs.search.brave.com/lRPPDKENw9rearEYwDJPoGF7f_NXqE5uoX8fc5YEpAE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/Zm1hc3NvY2lhdGVz/YmQuY29tL2ltYWdl/cy90cmFkZV9saWNl/bnNlL3NhbXBsZV90/cmFkZV9saWNlbnNl/X0JhbmdsYWRlc2gu/anBn" alt="IATA">
+      <div class="cert-item">
+        <div class="cert-img-wrap">
+          <img src="https://imgs.search.brave.com/lRPPDKENw9rearEYwDJPoGF7f_NXqE5uoX8fc5YEpAE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/Zm1hc3NvY2lhdGVz/YmQuY29tL2ltYWdl/cy90cmFkZV9saWNl/bnNlL3NhbXBsZV90/cmFkZV9saWNlbnNl/X0JhbmdsYWRlc2gu/anBn" alt="IATA Accredited">
+        </div>
+        <div class="cert-name">IATA Accredited</div>
       </div>
-      <div class="cert-name">IATA Accredited</div>
-    </div>
 
-    <div class="cert-item">
-      <div class="cert-img-wrap">
-        <img src="https://www.baira.org.bd/assets/public/images/profile.jpg" alt="BAIRA">
+      <div class="cert-item">
+        <div class="cert-img-wrap">
+          <img src="https://www.baira.org.bd/assets/public/images/profile.jpg" alt="BAIRA Member">
+        </div>
+        <div class="cert-name">BAIRA Member</div>
       </div>
-      <div class="cert-name">BAIRA Member</div>
-    </div>
 
-    <div class="cert-item">
-      <div class="cert-img-wrap">
-        <img src="https://www.tbsnews.net/sites/default/files/styles/big_2/public/images/2022/01/13/atab.jpg" alt="ATAB">
+      <div class="cert-item">
+        <div class="cert-img-wrap">
+          <img src="https://www.tbsnews.net/sites/default/files/styles/big_2/public/images/2022/01/13/atab.jpg" alt="ATAB Member">
+        </div>
+        <div class="cert-name">ATAB Member</div>
       </div>
-      <div class="cert-name">ATAB Member</div>
-    </div>
 
-    <div class="cert-item">
-      <div class="cert-img-wrap cert-text-card">
-        <span class="cert-code">RL-1429</span>
-        <span class="cert-sub">Govt. Approved</span>
+      <div class="cert-item">
+        <div class="cert-img-wrap">
+          <img src="https://bmet.gov.bd/assets/images/logo/bmet_logo.png" alt="BMET Registered">
+        </div>
+        <div class="cert-name">BMET Registered</div>
       </div>
-      <div class="cert-name">Recruiting License</div>
-    </div>
 
-    <div class="cert-item">
-      <div class="cert-img-wrap cert-text-card">
-        <span class="cert-code cert-code-large">BMET</span>
-        <span class="cert-sub">Registered Agency</span>
+      <div class="cert-item">
+        <div class="cert-img-wrap">
+          <img src="https://hajj.moqa.gov.sa/ar/PublishingImages/Hajj-Logo.png" alt="Hajj Ministry Approved">
+        </div>
+        <div class="cert-name">Hajj Ministry Approved</div>
       </div>
-      <div class="cert-name">BMET Registered</div>
-    </div>
 
-    <div class="cert-item">
-      <div class="cert-img-wrap cert-text-card gold-card">
-        <span class="cert-code cert-code-medium">Hajj<br>Ministry</span>
-        <span class="cert-sub">Approved Agency</span>
+      <div class="cert-item">
+        <div class="cert-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Recruiting_Agency_Logo_Bangladesh.svg/1200px-Recruiting_Agency_Logo_Bangladesh.svg.png" alt="Recruiting License">
+        </div>
+        <div class="cert-name">Govt. Recruiting License</div>
       </div>
-      <div class="cert-name">Hajj Ministry Approved</div>
-    </div>
 
+    </div>
   </div>
-</div>
+</main>
 
-<%- include('../partials/footer') %>
+<%- include('partials/footer') %>

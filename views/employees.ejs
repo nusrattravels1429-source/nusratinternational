@@ -1,9 +1,4 @@
-<%- include('../partials/header', {
-  pageTitle: 'Our Team — Nusrat International',
-  cssFiles: ['common.css', 'employees.css'],
-  activePage: 'about',
-  bodyClass: ''
-}) %>
+<%- include('partials/header', { pageTitle: 'Our Team — Nusrat International', activePage: 'about', bodyClass: '' }) %>
 
 <div class="page-title">
   <span class="ptag">👥 OUR PEOPLE</span>
@@ -22,7 +17,7 @@
       </div>
     <% }) %>
   <% } else { %>
-    <!-- Default employees if no data passed -->
+    <!-- Default employees -->
     <div class="employee-card">
       <img src="https://picsum.photos/300/300?1" alt="Md. Nusrat Ullah">
       <h3>Md. Nusrat Ullah</h3>
@@ -46,4 +41,4 @@
   <% } %>
 </div>
 
-<%- include('../partials/footer') %>
+<%- include('partials/footer') %>

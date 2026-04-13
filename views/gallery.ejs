@@ -1,9 +1,4 @@
-<%- include('../partials/header', {
-  pageTitle: 'Gallery — Nusrat International',
-  cssFiles: ['common.css', 'gallery.css'],
-  activePage: 'about',
-  bodyClass: ''
-}) %>
+<%- include('partials/header', { pageTitle: 'Gallery — Nusrat International', activePage: 'about', bodyClass: '' }) %>
 
 <div class="page-title">
   <span class="ptag">📸 MEMORIES & MOMENTS</span>
@@ -24,7 +19,7 @@
         </div>
       <% }) %>
     <% } else { %>
-      <!-- Default gallery items if no data passed -->
+      <!-- Default gallery items -->
       <div class="gallery-item">
         <img src="https://picsum.photos/600/400?1" alt="Hajj Group 2025">
         <div class="gallery-caption">Hajj Group 2025</div>
@@ -53,4 +48,70 @@
   </div>
 </div>
 
-<%- include('../partials/footer') %>
+<script>
+// Lightbox functionality for gallery
+document.addEventListener('DOMContentLoaded', function() {
+  const galleryImages = document.querySelectorAll('.gallery-item img');
+
+  // Create lightbox elements
+  const lightbox = document.createElement('div');
+  lightbox.className = 'lightbox';
+  lightbox.innerHTML = `
+    <button class="lb-close">&times;</button>
+    <button class="lb-arrow lb-prev">&#10094;</button>
+    <img src="" alt="Lightbox Image">
+    <button class="lb-arrow lb-next">&#10095;</button>
+  `;
+  document.body.appendChild(lightbox);
+
+  let currentIndex = 0;
+  const images = Array.from(galleryImages).map(img => img.src);
+
+  // Open lightbox
+  galleryImages.forEach((img, index) => {
+    img.addEventListener('click', function() {
+      currentIndex = index;
+      openLightbox(this.src);
+    });
+  });
+
+  function openLightbox(src) {
+    lightbox.querySelector('img').src = src;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function showPrev() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    lightbox.querySelector('img').src = images[currentIndex];
+  }
+
+  function showNext() {
+    currentIndex = (currentIndex + 1) % images.length;
+    lightbox.querySelector('img').src = images[currentIndex];
+  }
+
+  // Event listeners
+  lightbox.querySelector('.lb-close').addEventListener('click', closeLightbox);
+  lightbox.querySelector('.lb-prev').addEventListener('click', showPrev);
+  lightbox.querySelector('.lb-next').addEventListener('click', showNext);
+
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showPrev();
+    if (e.key === 'ArrowRight') showNext();
+  });
+});
+</script>
+
+<%- include('partials/footer') %>

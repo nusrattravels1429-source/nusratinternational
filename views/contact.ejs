@@ -1,8 +1,8 @@
-<%- include('partials/header', { pageTitle: 'Contact — Nusrat International', activePage: 'contact', cssFiles: ['common.css', 'contact.css'], bodyClass: '' }) %>
+<%- include('partials/header', { pageTitle: 'Contact Us', activePage: 'contact', bodyClass: '' }) %>
 
 <!-- PAGE HERO -->
 <section class="page-hero contact-hero">
-  <span class="section-side-tag" style="writing-mode: horizontal-tb; transform: none; display: block; margin-bottom: 12px;">📞 GET IN TOUCH</span>
+  <span class="section-tag">📞 GET IN TOUCH</span>
   <h1>Contact Us<br><em>Today</em></h1>
   <p>Have questions about our services? We're here to help you 24/7.<br>আমাদের সাথে যোগাযোগ করুন — আমরা সবসময় আপনার সেবায় প্রস্তুত।</p>
 </section>
@@ -16,44 +16,29 @@
         <h2>Contact Information</h2>
 
         <div class="contact-item">
-          <span class="ci-icon">📞</span>
-          <div>
-            <h3>Phone</h3>
-            <p><a href="tel:01713165116">017-1316-5116</a></p>
-            <p><a href="tel:01713165117">017-1316-5117</a></p>
-          </div>
+          <h3>📞 Phone</h3>
+          <p><a href="tel:01713165116">017-1316-5116</a></p>
+          <p><a href="tel:01713165117">017-1316-5117</a></p>
         </div>
 
         <div class="contact-item">
-          <span class="ci-icon">💬</span>
-          <div>
-            <h3>WhatsApp</h3>
-            <p><a href="https://wa.me/8801713165116" target="_blank" rel="noopener">+880 171 3165116</a></p>
-          </div>
+          <h3>💬 WhatsApp</h3>
+          <p><a href="https://wa.me/8801713165116" target="_blank" rel="noopener">+880 171 3165116</a></p>
         </div>
 
         <div class="contact-item">
-          <span class="ci-icon">📧</span>
-          <div>
-            <h3>Email</h3>
-            <p><a href="mailto:info@nusratinternational.com">info@nusratinternational.com</a></p>
-          </div>
+          <h3>📧 Email</h3>
+          <p><a href="mailto:info@nusratinternational.com">info@nusratinternational.com</a></p>
         </div>
 
         <div class="contact-item">
-          <span class="ci-icon">📍</span>
-          <div>
-            <h3>Address</h3>
-            <p>Banani Super Market,<br>Banani, Dhaka 1213<br>Bangladesh</p>
-          </div>
+          <h3>📍 Address</h3>
+          <p>Banani Super Market,<br>Banani, Dhaka 1213<br>Bangladesh</p>
         </div>
 
         <div class="contact-item">
-          <span class="ci-icon">🕐</span>
-          <div>
-            <h3>Business Hours</h3>
-            <p>Saturday - Thursday: 9:00 AM - 9:00 PM<br>Friday: Closed</p>
-          </div>
+          <h3>⏰ Business Hours</h3>
+          <p>Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday: 9:00 AM - 2:00 PM<br>Sunday: Closed</p>
         </div>
       </div>
 
@@ -93,8 +78,8 @@
             <textarea id="message" name="message" required placeholder="Tell us how we can help..." rows="5"></textarea>
           </div>
 
-          <button type="submit" class="btn-submit">Send Message</button>
-          <p class="form-success" id="formMessage"></p>
+          <button type="submit" class="btn-primary">Send Message</button>
+          <p class="form-note" id="formMessage"></p>
         </form>
       </div>
     </div>
@@ -113,9 +98,6 @@
   </section>
 </main>
 
-<%- include('partials/footer') %>
-
-<script src="/js/common.js"></script>
 <script>
 document.getElementById('contactForm').addEventListener('submit', function(e) {
   e.preventDefault();
@@ -124,20 +106,20 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
   const submitBtn = this.querySelector('button[type="submit"]');
 
   formMessage.textContent = 'Sending...';
-  formMessage.style.display = 'block';
   formMessage.style.color = '#0d9f6e';
   submitBtn.disabled = true;
 
   setTimeout(() => {
-    formMessage.textContent = '✅ Thank you! We will contact you soon.';
+    formMessage.textContent = 'Thank you! We will contact you soon.';
     formMessage.style.color = '#0d9f6e';
     this.reset();
     submitBtn.disabled = false;
 
     setTimeout(() => {
       formMessage.textContent = '';
-      formMessage.style.display = 'none';
     }, 5000);
   }, 1000);
 });
 </script>
+
+<%- include('partials/footer') %>
