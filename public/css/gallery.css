@@ -133,26 +133,7 @@
   margin: 8px 0 0 0;
 }
 
-/* Action Bar (Like, Comment, Share icons) */
-.gallery-actions {
-  display: flex;
-  gap: 20px;
-  padding: 12px 20px;
-  border-top: 1px solid #f8fafc;
-}
-
-.action-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  padding: 5px;
-}
-
-.action-btn:hover {
-  transform: scale(1.2);
-}
+/* Action Bar (Like, Comment, Share icons) - REMOVED as per request */
 
 /* Lightbox */
 .lightbox {

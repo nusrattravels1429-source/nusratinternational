@@ -6,20 +6,23 @@
 /* Hero Section for Team */
 .team-hero {
   text-align: center;
-  padding: 100px 20px 70px;
-  background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+  padding: 140px 20px 80px;
+  background: linear-gradient(135deg, rgba(13,17,23,0.85) 0%, rgba(26,86,219,0.75) 100%), 
+              url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&q=80') center/cover no-repeat fixed;
   position: relative;
   overflow: hidden;
+  color: white;
 }
 
 .team-hero::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(26,86,219,0.03) 0%, transparent 70%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 30% 50%, rgba(26,86,219,0.3) 0%, transparent 50%),
+              radial-gradient(circle at 70% 50%, rgba(201,162,39,0.2) 0%, transparent 50%);
   animation: pulse 15s ease-in-out infinite;
 }
 
@@ -28,45 +31,59 @@
   50% { transform: scale(1.1); opacity: 0.8; }
 }
 
+.hero-bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(13,17,23,0.7) 0%, rgba(13,17,23,0.4) 100%);
+  z-index: 1;
+}
+
+.hero-content-wrap {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 .team-hero .section-tag {
   display: inline-block;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 4px;
   text-transform: uppercase;
-  color: #1a56db;
+  color: #c9a227;
   margin-bottom: 16px;
   padding: 8px 20px;
-  background: rgba(26,86,219,0.1);
+  background: rgba(201,162,39,0.15);
+  border: 1px solid rgba(201,162,39,0.3);
   border-radius: 50px;
-  position: relative;
-  z-index: 1;
+  backdrop-filter: blur(10px);
 }
 
 .team-hero h1 {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(32px, 6vw, 56px);
+  font-size: clamp(36px, 6vw, 64px);
   font-weight: 900;
-  color: #0d1117;
+  color: white;
   line-height: 1.15;
   margin-bottom: 16px;
-  position: relative;
-  z-index: 1;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
 .team-hero h1 em {
   font-style: italic;
-  color: #1a56db;
+  color: #c9a227;
 }
 
 .team-hero p {
-  font-size: 16px;
-  color: #6b7280;
+  font-size: 17px;
+  color: rgba(255,255,255,0.9);
   max-width: 650px;
   margin: 0 auto;
-  line-height: 1.9;
-  position: relative;
-  z-index: 1;
+  line-height: 1.8;
 }
 
 /* Team Wrap */
@@ -74,6 +91,7 @@
   max-width: 1300px;
   margin: 0 auto;
   padding: 80px 20px 100px;
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
 }
 
 /* Employee Grid */
@@ -180,13 +198,16 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  font-size: 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a56db;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .social-link:hover {
   background: #1a56db;
+  color: white;
   transform: translateY(-3px) scale(1.1);
   box-shadow: 0 8px 20px rgba(26,86,219,0.3);
 }
@@ -218,7 +239,15 @@
 /* Mobile */
 @media (max-width: 768px) {
   .team-hero {
-    padding: 70px 20px 50px;
+    padding: 100px 20px 60px;
+  }
+
+  .team-hero h1 {
+    font-size: 32px;
+  }
+
+  .team-hero p {
+    font-size: 15px;
   }
 
   .employees {
@@ -236,11 +265,15 @@
 }
 
 @media (max-width: 480px) {
-  .employees {
-    grid-template-columns: 1fr;
+  .team-hero {
+    padding: 80px 15px 50px;
   }
 
   .team-hero h1 {
     font-size: 28px;
+  }
+
+  .employees {
+    grid-template-columns: 1fr;
   }
 }
