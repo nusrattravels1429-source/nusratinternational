@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Team - Admin Panel</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #f5f6fa; }
+    
+    .admin-layout { display: flex; min-height: 100vh; }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 20px;
+    }
+    .sidebar-header h2 { margin-top: 10px; font-size: 18px; }
+    .sidebar-menu { list-style: none; }
+    .sidebar-menu li { margin-bottom: 5px; }
+    .sidebar-menu a {
+      display: block;
+      padding: 12px 15px;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background: rgba(255,255,255,0.2);
+    }
+    .sidebar-menu .logout { margin-top: 30px; background: rgba(255,0,0,0.3); }
+    
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 260px;
+      padding: 30px;
+    }
+    .header {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .header h1 { color: #333; font-size: 28px; }
+    
+    .content-section {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+    }
+    
+    .btn {
+      padding: 12px 25px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s;
+      display: inline-block;
+      border: none;
+      cursor: pointer;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .btn-danger { background: #e74c3c; color: white; }
+    .btn-sm { padding: 8px 15px; font-size: 14px; }
+    
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .team-item {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      background: white;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .team-item img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+    
+    .team-item-info {
+      padding: 15px;
+    }
+    
+    .team-item-info h3 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    
+    .team-item-info p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 3px;
+    }
+    
+    .team-item-actions {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 5px;
+    }
+    
+    .team-item-actions button {
+      padding: 5px 10px;
+      border-radius: 3px;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    
+    .founder-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+    .form-group input[type="text"],
+    .form-group input[type="file"],
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .form-group textarea { min-height: 100px; resize: vertical; }
+    
+    .image-preview { margin-top: 10px; }
+    .image-preview img { max-width: 200px; max-height: 150px; border-radius: 5px; margin-right: 10px; }
+    
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; }
+    .tab-btn {
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      color: #666;
+      border-radius: 5px;
+    }
+    .tab-btn.active { background: #667eea; color: white; }
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>Admin Panel</h2>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/dashboard">📊 Dashboard</a></li>
+        <li><strong style="color: rgba(255,255,255,0.6); font-size: 12px; padding: 10px 15px; display: block;">CONTENT</strong></li>
+        <li><a href="/admin/content/manage/homepage">🏠 Landing Page</a></li>
+        <li><a href="/admin/content/manage/ticketing">🎫 Ticketing Page</a></li>
+        <li><a href="/admin/content/manage/about">ℹ️ About Page</a></li>
+        <li><strong style="color: rgba(255,255,255,0.6); font-size: 12px; padding: 10px 15px; display: block;">PACKAGES</strong></li>
+        <li><a href="/admin/cards?type=all">🎴 All Cards</a></li>
+        <li><a href="/admin/cards?type=travel">✈️ Travel Packages</a></li>
+        <li><a href="/admin/cards?type=hajj">🕋 Hajj Packages</a></li>
+        <li><a href="/admin/cards?type=work">💼 Work Packages</a></li>
+        <li><strong style="color: rgba(255,255,255,0.6); font-size: 12px; padding: 10px 15px; display: block;">MANAGE</strong></li>
+        <li><a href="/admin/gallery">🖼️ Gallery</a></li>
+        <li><a href="/admin/certifications">📜 Certifications</a></li>
+        <li><a href="/admin/team" class="active">👥 Team Members</a></li>
+        <li><a href="/admin/navigation">🧭 Navigation</a></li>
+        <li><a href="/admin/footer">⚙️ Footer Settings</a></li>
+        <li><a href="/admin/logout" class="logout">🚪 Logout</a></li>
+      </ul>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="header">
+        <h1>Team Management</h1>
+        <a href="/admin/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+      </div>
+      
+      <div class="content-section">
+        <div class="tabs">
+          <button class="tab-btn active" onclick="switchTab('members')">Team Members</button>
+          <button class="tab-btn" onclick="switchTab('founder')">Founder Details</button>
+        </div>
+        
+        <!-- Team Members Tab -->
+        <div id="membersTab" class="tab-content active">
+          <h2 style="margin-bottom: 20px;">Team Members</h2>
+          <button class="btn btn-primary" onclick="showAddForm()">+ Add New Member</button>
+          
+          <div class="team-grid">
+            <% if (members && members.length > 0) { %>
+              <% members.forEach(function(member) { %>
+                <div class="team-item">
+                  <% if (member.isFounder) { %>
+                    <span class="founder-badge">👑 Founder</span>
+                  <% } %>
+                  <div class="team-item-actions">
+                    <button class="btn btn-sm btn-primary" onclick="editMember('<%= member._id %>')">Edit</button>
+                    <% if (!member.isFounder) { %>
+                      <button class="btn btn-sm btn-danger" onclick="deleteMember('<%= member._id %>')">Delete</button>
+                    <% } %>
+                  </div>
+                  <img src="<%= member.photo %>" alt="<%= member.name?.en || '' %>" />
+                  <div class="team-item-info">
+                    <h3><%= member.name?.en || 'Untitled' %></h3>
+                    <p><%= member.designation?.en || '' %></p>
+                    <% if (member.bio?.en) { %>
+                      <p style="font-size: 12px; color: #999;"><%= member.bio.en.substring(0, 80) %><%= member.bio.en.length > 80 ? '...' : '' %></p>
+                    <% } %>
+                  </div>
+                </div>
+              <% }); %>
+            <% } else { %>
+              <p>No team members found.</p>
+            <% } %>
+          </div>
+        </div>
+        
+        <!-- Founder Tab -->
+        <div id="founderTab" class="tab-content">
+          <h2 style="margin-bottom: 20px;">Founder Information</h2>
+          <button class="btn btn-primary" onclick="editFounder()">Edit Founder Details</button>
+          
+          <% if (founder) { %>
+            <div class="team-item" style="margin-top: 20px; max-width: 400px;">
+              <span class="founder-badge">👑 Founder</span>
+              <img src="<%= founder.photo %>" alt="<%= founder.name?.en || '' %>" />
+              <div class="team-item-info">
+                <h3><%= founder.name?.en || 'Untitled' %></h3>
+                <p><%= founder.designation?.en || '' %></p>
+                <% if (founder.bio?.en) { %>
+                  <p style="font-size: 12px; color: #666; margin-top: 10px;"><%= founder.bio.en %></p>
+                <% } %>
+                <% if (founder.quote?.en) { %>
+                  <p style="font-size: 12px; color: #999; margin-top: 10px; font-style: italic;">"<%= founder.quote.en %>"</p>
+                <% } %>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+      
+      <!-- Add/Edit Form Modal -->
+      <div id="memberForm" class="content-section" style="display: none;">
+        <h2 id="formTitle" style="margin-bottom: 20px;">Add New Team Member</h2>
+        <form id="form" method="POST" enctype="multipart/form-data">
+          <input type="hidden" id="memberId" name="id" value="">
+          <input type="hidden" id="isFounder" name="isFounder" value="false">
+          
+          <div class="form-group">
+            <label>Name (English)</label>
+            <input type="text" id="nameEn" name="nameEn" required>
+          </div>
+          
+          <div class="form-group">
+            <label>Name (Bangla)</label>
+            <input type="text" id="nameBn" name="nameBn">
+          </div>
+          
+          <div class="form-group">
+            <label>Designation (English)</label>
+            <input type="text" id="designationEn" name="designationEn" required>
+          </div>
+          
+          <div class="form-group">
+            <label>Designation (Bangla)</label>
+            <input type="text" id="designationBn" name="designationBn">
+          </div>
+          
+          <div class="form-group">
+            <label>Bio (English)</label>
+            <textarea id="bioEn" name="bioEn"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Bio (Bangla)</label>
+            <textarea id="bioBn" name="bioBn"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Quote (English)</label>
+            <textarea id="quoteEn" name="quoteEn"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Quote (Bangla)</label>
+            <textarea id="quoteBn" name="quoteBn"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Photo</label>
+            <input type="file" id="photo" name="photo" accept="image/*" required>
+            <div id="existingPhotoPreview" class="image-preview"></div>
+          </div>
+          
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save Team Member</button>
+            <button type="button" class="btn btn-secondary" onclick="hideForm()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      if (tab === 'members') {
+        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('membersTab').classList.add('active');
+      } else {
+        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('founderTab').classList.add('active');
+      }
+    }
+    
+    function showAddForm() {
+      document.getElementById('form').reset();
+      document.getElementById('memberId').value = '';
+      document.getElementById('isFounder').value = 'false';
+      document.getElementById('formTitle').textContent = 'Add New Team Member';
+      document.getElementById('memberForm').style.display = 'block';
+      document.getElementById('existingPhotoPreview').innerHTML = '';
+      document.getElementById('photo').required = true;
+    }
+    
+    function hideForm() {
+      document.getElementById('memberForm').style.display = 'none';
+    }
+    
+    function editMember(id) {
+      fetch('/api/team?key=' + id)
+        .then(res => res.json())
+        .then(data => {
+          if (data.items && data.items[0]) {
+            const member = data.items[0];
+            document.getElementById('memberId').value = member._id;
+            document.getElementById('isFounder').value = member.isFounder || 'false';
+            document.getElementById('nameEn').value = member.name?.en || '';
+            document.getElementById('nameBn').value = member.name?.bn || '';
+            document.getElementById('designationEn').value = member.designation?.en || '';
+            document.getElementById('designationBn').value = member.designation?.bn || '';
+            document.getElementById('bioEn').value = member.bio?.en || '';
+            document.getElementById('bioBn').value = member.bio?.bn || '';
+            document.getElementById('quoteEn').value = member.quote?.en || '';
+            document.getElementById('quoteBn').value = member.quote?.bn || '';
+            
+            // Show existing photo
+            let html = '<img src="' + member.photo + '" alt="Current photo" />';
+            document.getElementById('existingPhotoPreview').innerHTML = html;
+            document.getElementById('photo').required = false;
+            
+            document.getElementById('formTitle').textContent = 'Edit Team Member';
+            document.getElementById('memberForm').style.display = 'block';
+          }
+        });
+    }
+    
+    function editFounder() {
+      fetch('/api/team?founder=true')
+        .then(res => res.json())
+        .then(data => {
+          if (data.items && data.items[0]) {
+            const founder = data.items[0];
+            document.getElementById('memberId').value = founder._id;
+            document.getElementById('isFounder').value = 'true';
+            document.getElementById('nameEn').value = founder.name?.en || '';
+            document.getElementById('nameBn').value = founder.name?.bn || '';
+            document.getElementById('designationEn').value = founder.designation?.en || '';
+            document.getElementById('designationBn').value = founder.designation?.bn || '';
+            document.getElementById('bioEn').value = founder.bio?.en || '';
+            document.getElementById('bioBn').value = founder.bio?.bn || '';
+            document.getElementById('quoteEn').value = founder.quote?.en || '';
+            document.getElementById('quoteBn').value = founder.quote?.bn || '';
+            
+            // Show existing photo
+            let html = '<img src="' + founder.photo + '" alt="Current photo" />';
+            document.getElementById('existingPhotoPreview').innerHTML = html;
+            document.getElementById('photo').required = false;
+            
+            document.getElementById('formTitle').textContent = 'Edit Founder Details';
+            document.getElementById('memberForm').style.display = 'block';
+          }
+        });
+    }
+    
+    function deleteMember(id) {
+      if (confirm('Are you sure you want to delete this team member?')) {
+        fetch('/admin/team/delete/' + id, { method: 'POST' })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              location.reload();
+            } else {
+              alert('Error deleting team member');
+            }
+          });
+      }
+    }
+    
+    document.getElementById('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const memberId = document.getElementById('memberId').value;
+      const url = memberId 
+        ? '/admin/team/update/' + memberId 
+        : '/admin/team/create';
+      
+      fetch(url, {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => {
+        if (res.ok) {
+          location.reload();
+        } else {
+          alert('Error saving team member');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
