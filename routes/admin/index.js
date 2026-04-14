@@ -4,104 +4,102 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Import controllers
-const authController = require('../../src/controllers/authController');
-const cardController = require('../../src/controllers/cardController');
-const contentController = require('../../src/controllers/contentController');
-const galleryController = require('../../src/controllers/galleryController');
-const certificationController = require('../../src/controllers/certificationController');
-const teamController = require('../../src/controllers/teamController');
-const navigationController = require('../../src/controllers/navigationController');
-const footerController = require('../../src/controllers/footerController');
+// --- Controllers ---
+const authController = require('../../controllers/authController');
+const contentController = require('../../controllers/contentController');
+const cardController = require('../../controllers/cardController');
+const galleryController = require('../../controllers/galleryController');
+const teamController = require('../../controllers/teamController');
+const certificationController = require('../../controllers/certificationController');
+const navigationController = require('../../controllers/navigationController');
+const footerController = require('../../controllers/footerController');
 
-// Import middleware
-const { protectAdmin, isLoggedIn } = require('../../src/middleware/auth');
-const { upload, handleMulterError, uploadDir } = require('../../src/middleware/upload');
+// --- Auth Middleware ---
+const { verifyToken } = require('../../middleware/authMiddleware');
 
-// Configure multer for admin routes
-const adminUpload = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      // Use the shared upload directory from middleware
-      const destDir = path.join(uploadDir, 'admin');
-      
-      // Ensure directory exists
-      try {
-        if (!fs.existsSync(destDir)) {
-          fs.mkdirSync(destDir, { recursive: true });
-        }
-      } catch (err) {
-        console.warn('Could not create admin upload directory:', err.message);
-      }
-      
-      cb(null, destDir);
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + '-' + file.originalname);
+// --- Multer Configuration (File Upload) ---
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = 'uploads/';
+    // Ensure directory exists
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
     }
-  }),
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|gif|webp/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    if (extname) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed'));
-    }
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
 
-// ============ AUTH ROUTES ============
-router.get('/login', isLoggedIn, authController.getLogin);
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = /jpeg|jpg|png|gif|webp/;
+  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = allowedTypes.test(file.mimetype);
+
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb(new Error('Only image files are allowed!'));
+  }
+};
+
+// Define upload middleware HERE so it's not undefined
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: fileFilter
+});
+
+// --- Routes ---
+
+// Auth
+router.get('/login', authController.getLogin);
 router.post('/login', authController.postLogin);
 router.get('/logout', authController.logout);
+router.get('/dashboard', verifyToken, authController.getDashboard);
 
-// ============ DASHBOARD ============
-router.get('/dashboard', protectAdmin, authController.getDashboard);
+// Content Management (Homepage, Ticketing, About)
+router.get('/content', verifyToken, contentController.manageContent);
+router.post('/content/homepage', verifyToken, upload.single('heroImage'), contentController.updateHomepage);
+router.post('/content/ticketing', verifyToken, upload.single('bgImage'), contentController.updateTicketing);
+router.post('/content/about', verifyToken, upload.single('founderImage'), contentController.updateAbout);
 
-// ============ CARDS MANAGEMENT ============
-router.get('/cards', protectAdmin, cardController.getCards);
-router.get('/cards/create', protectAdmin, cardController.getCreateCard);
-router.post('/cards/create', protectAdmin, adminUpload.array('images', 10), cardController.createCard);
-router.get('/cards/edit/:id', protectAdmin, cardController.getEditCard);
-router.post('/cards/update/:id', protectAdmin, adminUpload.array('images', 10), cardController.updateCard);
-router.post('/cards/delete/:id', protectAdmin, cardController.deleteCard);
-router.post('/cards/toggle-status/:id', protectAdmin, cardController.toggleStatus);
+// Cards Management (Work, Travel, Hajj)
+router.get('/cards', verifyToken, cardController.manageCards);
+router.post('/cards', verifyToken, upload.array('images', 5), cardController.createCard);
+router.post('/cards/:id', verifyToken, upload.array('images', 5), cardController.updateCard);
+router.get('/cards/delete/:id', verifyToken, cardController.deleteCard);
+router.patch('/cards/:id/status', verifyToken, cardController.toggleStatus);
 
-// ============ CONTENT MANAGEMENT ============
-router.get('/content/manage/:section', protectAdmin, contentController.getManageContent);
-router.post('/content/create', protectAdmin, adminUpload.array('images', 10), contentController.createContent);
-router.post('/content/update/:id', protectAdmin, adminUpload.array('images', 10), contentController.updateContent);
-router.post('/content/delete/:id', protectAdmin, contentController.deleteContent);
+// Gallery Management
+router.get('/gallery', verifyToken, galleryController.manageGallery);
+router.post('/gallery', verifyToken, upload.single('image'), galleryController.createGalleryItem);
+router.post('/gallery/:id', verifyToken, upload.single('image'), galleryController.updateGalleryItem);
+router.get('/gallery/delete/:id', verifyToken, galleryController.deleteGalleryItem);
 
-// ============ GALLERY MANAGEMENT ============
-router.get('/gallery', protectAdmin, galleryController.getGallery);
-router.post('/gallery/create', protectAdmin, adminUpload.single('image'), galleryController.createGallery);
-router.post('/gallery/update/:id', protectAdmin, adminUpload.single('image'), galleryController.updateGallery);
-router.post('/gallery/delete/:id', protectAdmin, galleryController.deleteGallery);
+// Team Management
+router.get('/team', verifyToken, teamController.manageTeam);
+router.post('/team/founder', verifyToken, upload.single('image'), teamController.updateFounder);
+router.post('/team/member', verifyToken, upload.single('image'), teamController.createMember);
+router.post('/team/member/:id', verifyToken, upload.single('image'), teamController.updateMember);
+router.get('/team/delete/:id', verifyToken, teamController.deleteMember);
 
-// ============ CERTIFICATIONS MANAGEMENT ============
-router.get('/certifications', protectAdmin, certificationController.getCertifications);
-router.post('/certifications/create', protectAdmin, adminUpload.single('certificateImage'), certificationController.createCertification);
-router.post('/certifications/update/:id', protectAdmin, adminUpload.single('certificateImage'), certificationController.updateCertification);
-router.post('/certifications/delete/:id', protectAdmin, certificationController.deleteCertification);
+// Certification Management
+router.get('/certifications', verifyToken, certificationController.manageCertifications);
+router.post('/certifications', verifyToken, upload.fields([{ name: 'logo', maxCount: 1 }, { name: 'certificate', maxCount: 1 }]), certificationController.createCertification);
+router.post('/certifications/:id', verifyToken, upload.fields([{ name: 'logo', maxCount: 1 }, { name: 'certificate', maxCount: 1 }]), certificationController.updateCertification);
+router.get('/certifications/delete/:id', verifyToken, certificationController.deleteCertification);
 
-// ============ TEAM MANAGEMENT ============
-router.get('/team', protectAdmin, teamController.getTeam);
-router.post('/team/create', protectAdmin, adminUpload.single('photo'), teamController.createTeam);
-router.post('/team/update/:id', protectAdmin, adminUpload.single('photo'), teamController.updateTeam);
-router.post('/team/delete/:id', protectAdmin, teamController.deleteTeam);
+// Navigation Management
+router.get('/navigation', verifyToken, navigationController.manageNavigation);
+router.post('/navigation', verifyToken, navigationController.createLink);
+router.post('/navigation/:id', verifyToken, navigationController.updateLink);
+router.get('/navigation/delete/:id', verifyToken, navigationController.deleteLink);
 
-// ============ NAVIGATION MANAGEMENT ============
-router.get('/navigation', protectAdmin, navigationController.getNavigation);
-router.post('/navigation/create', protectAdmin, navigationController.createNavigation);
-router.post('/navigation/update/:id', protectAdmin, navigationController.updateNavigation);
-router.post('/navigation/delete/:id', protectAdmin, navigationController.deleteNavigation);
-
-// ============ FOOTER MANAGEMENT ============
-router.get('/footer', protectAdmin, footerController.getFooter);
-router.post('/footer/create', protectAdmin, footerController.createFooter);
-router.post('/footer/update/:id', protectAdmin, footerController.updateFooter);
+// Footer Management
+router.get('/footer', verifyToken, footerController.manageFooter);
+router.post('/footer', verifyToken, upload.single('logo'), footerController.updateFooter);
 
 module.exports = router;
