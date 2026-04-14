@@ -94,7 +94,9 @@ app.locals.getDb = getDb;
 // Routes
 try {
   const routes = require('./routes/index');
+  const adminRoutes = require('./routes/admin/index');
   app.use('/', routes);
+  app.use('/admin', adminRoutes);
 } catch (e) {
   console.error('Route load error:', e.message);
   app.get('/', (req, res) => res.send('Route Error: ' + e.message));

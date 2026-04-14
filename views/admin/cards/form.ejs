@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= action === 'create' ? 'Create' : 'Edit' %> Card - Admin Panel</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #f5f6fa; }
+    
+    .admin-layout { display: flex; min-height: 100vh; }
+    
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 20px;
+    }
+    .sidebar-header img { width: 60px; height: 60px; object-fit: contain; }
+    .sidebar-header h2 { margin-top: 10px; font-size: 18px; }
+    .sidebar-menu { list-style: none; }
+    .sidebar-menu li { margin-bottom: 5px; }
+    .sidebar-menu a {
+      display: block;
+      padding: 12px 15px;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background: rgba(255,255,255,0.2);
+    }
+    .sidebar-menu .logout { margin-top: 30px; background: rgba(255,0,0,0.3); }
+    
+    .main-content {
+      flex: 1;
+      margin-left: 260px;
+      padding: 30px;
+    }
+    .header {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .header h1 { color: #333; font-size: 28px; }
+    
+    .form-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .form-section {
+      margin-bottom: 30px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid #eee;
+    }
+    .form-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .section-title {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: 500;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 5px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .help-text {
+      font-size: 12px;
+      color: #888;
+      margin-top: 5px;
+    }
+    
+    .btn {
+      padding: 12px 30px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.2s;
+      display: inline-block;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+      color: white;
+    }
+    .btn-secondary { 
+      background: #f0f0f0; 
+      color: #333;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+    }
+    
+    .image-preview {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .image-preview-item {
+      position: relative;
+      width: 100px;
+      height: 100px;
+    }
+    .image-preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .image-preview-item button {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #dc3545;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Logo" onerror="this.style.display='none'" />
+        <h2>Admin Panel</h2>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/dashboard">📊 Dashboard</a></li>
+        <li><a href="/admin/cards?type=all" class="active">🎴 Manage Cards</a></li>
+        <li><a href="/admin/cards?type=travel">✈️ Travel Packages</a></li>
+        <li><a href="/admin/cards?type=hajj">🕋 Hajj Packages</a></li>
+        <li><a href="/admin/cards?type=work">💼 Work Packages</a></li>
+        <li><a href="#">🖼️ Gallery</a></li>
+        <li><a href="#">📜 Certifications</a></li>
+        <li><a href="#">👥 Team Members</a></li>
+        <li><a href="#">⚙️ Site Settings</a></li>
+        <li><a href="/admin/logout" class="logout">🚪 Logout</a></li>
+      </ul>
+    </aside>
+    
+    <main class="main-content">
+      <div class="header">
+        <h1><%= action === 'create' ? 'Create New Card' : 'Edit Card' %></h1>
+        <a href="/admin/cards" class="btn btn-secondary">Back to Cards</a>
+      </div>
+      
+      <form class="form-container" method="POST" enctype="multipart/form-data" 
+            action="<%= action === 'create' ? '/admin/cards/create' : '/admin/cards/update/' + card._id %>">
+        
+        <!-- Basic Information -->
+        <div class="form-section">
+          <h3 class="section-title">Basic Information</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="type">Package Type *</label>
+              <select id="type" name="type" required>
+                <option value="travel" <%= card?.type === 'travel' ? 'selected' : '' %>>Travel</option>
+                <option value="hajj" <%= card?.type === 'hajj' ? 'selected' : '' %>>Hajj</option>
+                <option value="work" <%= card?.type === 'work' ? 'selected' : '' %>>Work</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label>Status</label>
+              <div class="checkbox-group">
+                <input type="checkbox" id="isActive" name="isActive" <%= card?.isActive ? 'checked' : '' %>>
+                <label for="isActive" style="margin: 0;">Active</label>
+              </div>
+              <% if (action === 'edit') { %>
+                <div class="checkbox-group" style="margin-top: 10px;">
+                  <input type="checkbox" id="isPaused" name="isPaused" <%= card?.isPaused ? 'checked' : '' %>>
+                  <label for="isPaused" style="margin: 0;">Paused (temporarily hide)</label>
+                </div>
+              <% } %>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="titleEn">Title (English) *</label>
+              <input type="text" id="titleEn" name="titleEn" required 
+                     value="<%= card?.title?.en || '' %>">
+            </div>
+            
+            <div class="form-group">
+              <label for="titleBn">Title (Bengali) *</label>
+              <input type="text" id="titleBn" name="titleBn" required 
+                     value="<%= card?.title?.bn || '' %>">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="descriptionEn">Description (English)</label>
+              <textarea id="descriptionEn" name="descriptionEn" rows="4"><%= card?.description?.en || '' %></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="descriptionBn">Description (Bengali)</label>
+              <textarea id="descriptionBn" name="descriptionBn" rows="4"><%= card?.description?.bn || '' %></textarea>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Location & Pricing -->
+        <div class="form-section">
+          <h3 class="section-title">Location & Pricing</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="locationEn">Location (English)</label>
+              <input type="text" id="locationEn" name="locationEn" 
+                     value="<%= card?.location?.en || '' %>">
+            </div>
+            
+            <div class="form-group">
+              <label for="locationBn">Location (Bengali)</label>
+              <input type="text" id="locationBn" name="locationBn" 
+                     value="<%= card?.location?.bn || '' %>">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="priceAmount">Price Amount</label>
+              <input type="number" id="priceAmount" name="priceAmount" step="0.01" 
+                     value="<%= card?.pricing?.amount || '' %>">
+            </div>
+            
+            <div class="form-group">
+              <label for="priceCurrency">Currency</label>
+              <input type="text" id="priceCurrency" name="priceCurrency" 
+                     value="<%= card?.pricing?.currency || 'BDT' %>">
+            </div>
+            
+            <div class="form-group">
+              <label for="duration">Duration</label>
+              <input type="text" id="duration" name="duration" 
+                     value="<%= card?.duration || '' %>" placeholder="e.g., 7 days">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Features -->
+        <div class="form-section">
+          <h3 class="section-title">Features</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="featuresEn">Features (English)</label>
+              <textarea id="featuresEn" name="featuresEn" rows="5" 
+                        placeholder="One feature per line"><%= card?.features?.map(f => f.en).join('\n') || '' %></textarea>
+              <div class="help-text">Enter one feature per line</div>
+            </div>
+            
+            <div class="form-group">
+              <label for="featuresBn">Features (Bengali)</label>
+              <textarea id="featuresBn" name="featuresBn" rows="5" 
+                        placeholder="এক লাইনে একটি করে ফিচার লিখুন"><%= card?.features?.map(f => f.bn).join('\n') || '' %></textarea>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Images -->
+        <div class="form-section">
+          <h3 class="section-title">Images</h3>
+          
+          <div class="form-group">
+            <label for="images">Upload Images</label>
+            <input type="file" id="images" name="images" multiple accept="image/*">
+            <div class="help-text">You can upload multiple images (JPEG, PNG, GIF, WebP). Max 5MB per image.</div>
+          </div>
+          
+          <% if (action === 'edit' && card?.images && card.images.length > 0) { %>
+            <div class="form-group">
+              <label>Existing Images</label>
+              <div class="image-preview" id="existingImagesPreview">
+                <% card.images.forEach((img, index) => { %>
+                  <div class="image-preview-item">
+                    <img src="<%= img.url %>" alt="Image <%= index %>">
+                    <button type="button" onclick="removeImage(this, '<%= img.url %>')">×</button>
+                  </div>
+                <% }) %>
+              </div>
+              <input type="hidden" id="existingImages" name="existingImages" value='<%= JSON.stringify(card.images) %>'>
+            </div>
+          <% } %>
+        </div>
+        
+        <!-- Actions -->
+        <div class="form-section">
+          <button type="submit" class="btn btn-primary">
+            <%= action === 'create' ? 'Create Card' : 'Update Card' %>
+          </button>
+          <a href="/admin/cards" class="btn btn-secondary" style="margin-left: 10px;">Cancel</a>
+        </div>
+      </form>
+    </main>
+  </div>
+  
+  <script>
+    const existingImages = <%= JSON.stringify(card?.images || []) %>;
+    
+    function removeImage(button, url) {
+      if (!confirm('Remove this image?')) return;
+      
+      // Remove from preview
+      button.parentElement.remove();
+      
+      // Remove from array
+      const index = existingImages.findIndex(img => img.url === url);
+      if (index > -1) {
+        existingImages.splice(index, 1);
+      }
+      
+      // Update hidden input
+      document.getElementById('existingImages').value = JSON.stringify(existingImages);
+    }
+  </script>
+</body>
+</html>
