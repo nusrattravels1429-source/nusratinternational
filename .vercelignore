@@ -6,7 +6,6 @@ docs/
 backend/
 server/
 react-frontend/
-src/
 .DS_Store
 *.log
 seedDatabase.js
