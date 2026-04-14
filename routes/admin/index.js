@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 // Import controllers
 const authController = require('../../src/controllers/authController');
@@ -9,13 +10,25 @@ const cardController = require('../../src/controllers/cardController');
 
 // Import middleware
 const { protectAdmin, isLoggedIn } = require('../../src/middleware/auth');
-const { upload, handleMulterError } = require('../../src/middleware/upload');
+const { upload, handleMulterError, uploadDir } = require('../../src/middleware/upload');
 
 // Configure multer for admin routes
 const adminUpload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, path.join(__dirname, '../../public/uploads/admin'));
+      // Use the shared upload directory from middleware
+      const destDir = path.join(uploadDir, 'admin');
+      
+      // Ensure directory exists
+      try {
+        if (!fs.existsSync(destDir)) {
+          fs.mkdirSync(destDir, { recursive: true });
+        }
+      } catch (err) {
+        console.warn('Could not create admin upload directory:', err.message);
+      }
+      
+      cb(null, destDir);
     },
     filename: (req, file, cb) => {
       cb(null, Date.now() + '-' + file.originalname);

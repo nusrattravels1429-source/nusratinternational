@@ -13,6 +13,14 @@ try {
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
+  // Also create subdirectories for organized uploads
+  const subDirs = ['admin', 'packages', 'gallery', 'certifications', 'team', 'content'];
+  subDirs.forEach(dir => {
+    const subDir = path.join(uploadDir, dir);
+    if (!fs.existsSync(subDir)) {
+      fs.mkdirSync(subDir, { recursive: true });
+    }
+  });
 } catch (err) {
   console.warn('Could not create upload directory:', err.message);
   // In serverless, we'll handle this gracefully
