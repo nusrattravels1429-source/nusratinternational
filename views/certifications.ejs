@@ -1,5 +1,96 @@
 <%- include('partials/header', { pageTitle: 'Approvals & Certifications | Nusrat International', activePage: 'about', bodyClass: '' }) %>
 
+<style>
+  .cert-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+  
+  .cert-title-main {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #c9a227;
+  }
+  
+  .cert-image-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+  
+  .cert-image-wrapper img {
+    max-width: 100%;
+    height: auto;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .cert-image-wrapper img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Lightbox Modal */
+  .cert-lightbox {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .cert-lightbox.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .cert-lightbox-content {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    border-radius: 8px;
+    animation: zoomIn 0.3s ease;
+  }
+  
+  .cert-lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .cert-lightbox-close:hover {
+    color: #c9a227;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes zoomIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+</style>
+
 <!-- PAGE HERO -->
 <section class="page-hero cert-hero">
   <span class="section-tag">📜 OFFICIAL LICENSES</span>
@@ -7,91 +98,42 @@
   <p>Every license we hold is a commitment to the highest standards of integrity and professionalism.</p>
 </section>
 
-<!-- CERT GRID -->
-<main class="container">
-  <div class="cert-wrap">
-    <div class="cert-grid">
-
-      <div class="cert-item">
-        <div class="cert-badge">
-          <span class="cert-icon">✈️</span>
-        </div>
-        <div class="cert-img-wrap">
-          <img src="https://imgs.search.brave.com/lRPPDKENw9rearEYwDJPoGF7f_NXqE5uoX8fc5YEpAE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/Zm1hc3NvY2lhdGVz/YmQuY29tL2ltYWdl/cy90cmFkZV9saWNl/bnNlL3NhbXBsZV90/cmFkZV9saWNlbnNl/X0JhbmdsYWRlc2gu/anBn" alt="IATA Accredited">
-        </div>
-        <div class="cert-info">
-          <h3 class="cert-title">IATA Accredited</h3>
-          <p class="cert-desc">International Air Transport Association certified travel agency</p>
-        </div>
-      </div>
-
-      <div class="cert-item">
-        <div class="cert-badge">
-          <span class="cert-icon">🏆</span>
-        </div>
-        <div class="cert-img-wrap">
-          <img src="https://www.baira.org.bd/assets/public/images/profile.jpg" alt="BAIRA Member">
-        </div>
-        <div class="cert-info">
-          <h3 class="cert-title">BAIRA Member</h3>
-          <p class="cert-desc">Bangladesh Association of International Recruiting Agencies</p>
-        </div>
-      </div>
-
-      <div class="cert-item">
-        <div class="cert-badge">
-          <span class="cert-icon">🌍</span>
-        </div>
-        <div class="cert-img-wrap">
-          <img src="https://www.tbsnews.net/sites/default/files/styles/big_2/public/images/2022/01/13/atab.jpg" alt="ATAB Member">
-        </div>
-        <div class="cert-info">
-          <h3 class="cert-title">ATAB Member</h3>
-          <p class="cert-desc">Association of Travel Agents of Bangladesh</p>
-        </div>
-      </div>
-
-      <div class="cert-item">
-        <div class="cert-badge">
-          <span class="cert-icon">🏛️</span>
-        </div>
-        <div class="cert-img-wrap">
-          <img src="https://bmet.gov.bd/assets/images/logo/bmet_logo.png" alt="BMET Registered">
-        </div>
-        <div class="cert-info">
-          <h3 class="cert-title">BMET Registered</h3>
-          <p class="cert-desc">Bureau of Manpower, Employment and Training approved</p>
-        </div>
-      </div>
-
-      <div class="cert-item">
-        <div class="cert-badge">
-          <span class="cert-icon">🕋</span>
-        </div>
-        <div class="cert-img-wrap">
-          <img src="https://hajj.moqa.gov.sa/ar/PublishingImages/Hajj-Logo.png" alt="Hajj Ministry Approved">
-        </div>
-        <div class="cert-info">
-          <h3 class="cert-title">Hajj Ministry Approved</h3>
-          <p class="cert-desc">Authorized by Saudi Ministry of Hajj and Umrah</p>
-        </div>
-      </div>
-
-      <div class="cert-item">
-        <div class="cert-badge">
-          <span class="cert-icon">📋</span>
-        </div>
-        <div class="cert-img-wrap">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Recruiting_Agency_Logo_Bangladesh.svg/1200px-Recruiting_Agency_Logo_Bangladesh.svg.png" alt="Recruiting License">
-        </div>
-        <div class="cert-info">
-          <h3 class="cert-title">Govt. Recruiting License</h3>
-          <p class="cert-desc">Licensed by Government of Bangladesh for overseas employment</p>
-        </div>
-      </div>
-
-    </div>
+<!-- MAIN CERTIFICATION DISPLAY -->
+<main class="cert-page-container">
+  <h2 class="cert-title-main">Our Certifications</h2>
+  
+  <div class="cert-image-wrapper">
+    <img src="https://imgs.search.brave.com/lRPPDKENw9rearEYwDJPoGF7f_NXqE5uoX8fc5YEpAE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/Zm1hc3NvY2lhdGVz/YmQuY29tL2ltYWdl/cy90cmFkZV9saWNl/bnNlL3NhbXBsZV90/cmFkZV9saWNlbnNl/X0JhbmdsYWRlc2gu/anBn" alt="IATA Accredited Certificate" id="mainCertImage" onclick="openLightbox(this.src)">
   </div>
 </main>
+
+<!-- Lightbox Modal -->
+<div class="cert-lightbox" id="certLightbox" onclick="closeLightbox()">
+  <span class="cert-lightbox-close">&times;</span>
+  <img class="cert-lightbox-content" id="lightboxImage">
+</div>
+
+<script>
+  function openLightbox(imageSrc) {
+    const lightbox = document.getElementById('certLightbox');
+    const lightboxImg = document.getElementById('lightboxImage');
+    lightboxImg.src = imageSrc;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeLightbox() {
+    const lightbox = document.getElementById('certLightbox');
+    lightbox.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+  
+  // Close on Escape key
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      closeLightbox();
+    }
+  });
+</script>
 
 <%- include('partials/footer') %>
