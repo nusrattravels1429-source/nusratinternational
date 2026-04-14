@@ -371,3 +371,9 @@ exports.apiDeleteNavigation = async (req, res) => {
     res.status(500).json({ success: false, error: 'Error deleting navigation link' });
   }
 };
+
+// Aliases for admin routes
+exports.manageNavigation = exports.getNavigation;
+exports.createLink = exports.createNavigation;
+exports.updateLink = exports.updateNavigation;
+exports.deleteLink = exports.deleteNavigation;

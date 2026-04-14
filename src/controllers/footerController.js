@@ -178,3 +178,6 @@ exports.apiUpdateFooter = async (req, res) => {
     res.status(500).json({ success: false, error: 'Error updating footer' });
   }
 };
+
+// Aliases for admin routes
+exports.manageFooter = exports.getFooter;

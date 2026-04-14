@@ -325,3 +325,10 @@ exports.apiDeleteTeam = async (req, res) => {
     res.status(500).json({ success: false, error: 'Error deleting team member' });
   }
 };
+
+// Aliases for admin routes
+exports.manageTeam = exports.getTeam;
+exports.updateFounder = exports.createTeam;
+exports.createMember = exports.createTeam;
+exports.updateMember = exports.updateTeam;
+exports.deleteMember = exports.deleteTeam;

@@ -297,3 +297,6 @@ exports.apiDeleteCertification = async (req, res) => {
     res.status(500).json({ success: false, error: 'Error deleting certification' });
   }
 };
+
+// Aliases for admin routes
+exports.manageCertifications = exports.getCertifications;

@@ -120,3 +120,9 @@ exports.apiGetGallery = async (req, res) => {
     res.status(500).json({ success: false, error: 'Error loading gallery' });
   }
 };
+
+// Aliases for admin routes
+exports.manageGallery = exports.getGallery;
+exports.createGalleryItem = exports.createGallery;
+exports.updateGalleryItem = exports.updateGallery;
+exports.deleteGalleryItem = exports.deleteGallery;
