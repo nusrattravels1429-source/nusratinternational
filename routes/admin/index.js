@@ -4,12 +4,12 @@ const multer = require('multer');
 const path = require('path');
 
 // Import controllers
-const authController = require('../src/controllers/authController');
-const cardController = require('../src/controllers/cardController');
+const authController = require('../../src/controllers/authController');
+const cardController = require('../../src/controllers/cardController');
 
 // Import middleware
-const { protectAdmin, isLoggedIn } = require('../src/middleware/auth');
-const { upload, handleMulterError } = require('../src/middleware/upload');
+const { protectAdmin, isLoggedIn } = require('../../src/middleware/auth');
+const { upload, handleMulterError } = require('../../src/middleware/upload');
 
 // Configure multer for admin routes
 const adminUpload = multer({
