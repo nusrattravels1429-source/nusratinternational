@@ -26,6 +26,7 @@
     "bcryptjs": "^3.0.3",
     "body-parser": "^1.20.2",
     "connect-mongo": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "csurf": "^1.11.0",
     "dotenv": "^16.3.1",
