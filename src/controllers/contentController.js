@@ -222,3 +222,9 @@ exports.apiGetContent = async (req, res) => {
     res.status(500).json({ success: false, error: 'Error loading content' });
   }
 };
+
+// Aliases for admin routes
+exports.manageContent = exports.getManageContent;
+exports.updateHomepage = exports.createContent;
+exports.updateTicketing = exports.createContent;
+exports.updateAbout = exports.createContent;

@@ -245,3 +245,6 @@ exports.toggleStatus = async (req, res) => {
     res.status(500).json({ success: false, error: 'Error toggling status' });
   }
 };
+
+// Aliases for admin routes
+exports.manageCards = exports.getCards;
