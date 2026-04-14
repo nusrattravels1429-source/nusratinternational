@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Cards - Admin Panel</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #f5f6fa; }
+    
+    .admin-layout { display: flex; min-height: 100vh; }
+    
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 20px;
+    }
+    .sidebar-header img { width: 60px; height: 60px; object-fit: contain; }
+    .sidebar-header h2 { margin-top: 10px; font-size: 18px; }
+    .sidebar-menu { list-style: none; }
+    .sidebar-menu li { margin-bottom: 5px; }
+    .sidebar-menu a {
+      display: block;
+      padding: 12px 15px;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background: rgba(255,255,255,0.2);
+    }
+    .sidebar-menu .logout { margin-top: 30px; background: rgba(255,0,0,0.3); }
+    
+    .main-content {
+      flex: 1;
+      margin-left: 260px;
+      padding: 30px;
+    }
+    .header {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .header h1 { color: #333; font-size: 28px; }
+    
+    .filters {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .filter-group { display: flex; align-items: center; gap: 10px; }
+    .filter-group label { font-weight: 500; color: #555; }
+    .filter-group select {
+      padding: 8px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    
+    .cards-table {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 15px 20px; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f8f9fa; font-weight: 600; color: #555; }
+    tr:hover { background: #f8f9fa; }
+    
+    .status-badge {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .status-active { background: #d4edda; color: #155724; }
+    .status-paused { background: #fff3cd; color: #856404; }
+    .status-inactive { background: #f8d7da; color: #721c24; }
+    
+    .type-badge {
+      padding: 5px 12px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .type-travel { background: #e3f2fd; color: #1976d2; }
+    .type-hajj { background: #f3e5f5; color: #7b1fa2; }
+    .type-work { background: #e8f5e9; color: #388e3c; }
+    
+    .actions { display: flex; gap: 10px; }
+    .btn {
+      padding: 6px 12px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.8; }
+    .btn-edit { background: #667eea; color: white; }
+    .btn-delete { background: #dc3545; color: white; }
+    .btn-toggle { background: #ffc107; color: #333; }
+    .btn-add { 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+      color: white;
+      padding: 12px 25px;
+    }
+    
+    .table-header {
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .card-image {
+      width: 60px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Logo" onerror="this.style.display='none'" />
+        <h2>Admin Panel</h2>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/dashboard">📊 Dashboard</a></li>
+        <li><a href="/admin/cards?type=all" class="active">🎴 Manage Cards</a></li>
+        <li><a href="/admin/cards?type=travel">✈️ Travel Packages</a></li>
+        <li><a href="/admin/cards?type=hajj">🕋 Hajj Packages</a></li>
+        <li><a href="/admin/cards?type=work">💼 Work Packages</a></li>
+        <li><a href="#">🖼️ Gallery</a></li>
+        <li><a href="#">📜 Certifications</a></li>
+        <li><a href="#">👥 Team Members</a></li>
+        <li><a href="#">⚙️ Site Settings</a></li>
+        <li><a href="/admin/logout" class="logout">🚪 Logout</a></li>
+      </ul>
+    </aside>
+    
+    <main class="main-content">
+      <div class="header">
+        <h1>Manage Cards</h1>
+        <a href="/admin/cards/create" class="btn btn-add">+ Add New Card</a>
+      </div>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Type:</label>
+          <select onchange="window.location.href='/admin/cards?type='+this.value+'&status=<%= currentStatus %>'">
+            <option value="all" <%= currentType === 'all' ? 'selected' : '' %>>All Types</option>
+            <option value="travel" <%= currentType === 'travel' ? 'selected' : '' %>>Travel</option>
+            <option value="hajj" <%= currentType === 'hajj' ? 'selected' : '' %>>Hajj</option>
+            <option value="work" <%= currentType === 'work' ? 'selected' : '' %>>Work</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Status:</label>
+          <select onchange="window.location.href='/admin/cards?type=<%= currentType %>&status='+this.value">
+            <option value="all" <%= currentStatus === 'all' ? 'selected' : '' %>>All Status</option>
+            <option value="active" <%= currentStatus === 'active' ? 'selected' : '' %>>Active</option>
+            <option value="paused" <%= currentStatus === 'paused' ? 'selected' : '' %>>Paused</option>
+            <option value="inactive" <%= currentStatus === 'inactive' ? 'selected' : '' %>>Inactive</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="cards-table">
+        <div class="table-header">
+          <h3>All Cards (<%= cards.length %>)</h3>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Title (EN)</th>
+              <th>Type</th>
+              <th>Location</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (cards.length === 0) { %>
+              <tr>
+                <td colspan="7" style="text-align: center; padding: 40px;">No cards found. <a href="/admin/cards/create">Create your first card</a></td>
+              </tr>
+            <% } else { %>
+              <% cards.forEach(card => { %>
+                <tr>
+                  <td>
+                    <% if (card.images && card.images.length > 0) { %>
+                      <img src="<%= card.images[0].url %>" alt="Card image" class="card-image" onerror="this.style.display='none'" />
+                    <% } else { %>
+                      <div style="width: 60px; height: 40px; background: #eee; border-radius: 5px;"></div>
+                    <% } %>
+                  </td>
+                  <td><strong><%= card.title.en %></strong><br><small style="color: #888;"><%= card.title.bn %></small></td>
+                  <td><span class="type-badge type-<%= card.type %>"><%= card.type.toUpperCase() %></span></td>
+                  <td><%= card.location?.en || 'N/A' %></td>
+                  <td><%= card.pricing?.amount ? card.pricing.amount + ' ' + card.pricing.currency : 'N/A' %></td>
+                  <td>
+                    <% if (!card.isActive) { %>
+                      <span class="status-badge status-inactive">Inactive</span>
+                    <% } else if (card.isPaused) { %>
+                      <span class="status-badge status-paused">Paused</span>
+                    <% } else { %>
+                      <span class="status-badge status-active">Active</span>
+                    <% } %>
+                  </td>
+                  <td class="actions">
+                    <a href="/admin/cards/edit/<%= card._id %>" class="btn btn-edit">Edit</a>
+                    <button onclick="toggleStatus('<%= card._id %>')" class="btn btn-toggle">
+                      <%= card.isPaused ? 'Resume' : 'Pause' %>
+                    </button>
+                    <button onclick="deleteCard('<%= card._id %>')" class="btn btn-delete">Delete</button>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    async function toggleStatus(id) {
+      if (!confirm('Are you sure you want to toggle this card status?')) return;
+      
+      try {
+        const response = await fetch('/admin/cards/toggle-status/' + id, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const result = await response.json();
+        if (result.success) {
+          location.reload();
+        } else {
+          alert('Error toggling status');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error toggling status');
+      }
+    }
+    
+    async function deleteCard(id) {
+      if (!confirm('Are you sure you want to delete this card? This cannot be undone.')) return;
+      
+      try {
+        const response = await fetch('/admin/cards/delete/' + id, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const result = await response.json();
+        if (result.success) {
+          location.reload();
+        } else {
+          alert('Error deleting card');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error deleting card');
+      }
+    }
+  </script>
+</body>
+</html>
