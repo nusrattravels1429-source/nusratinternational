@@ -61,7 +61,7 @@ router.get('/logout', authController.logout);
 router.get('/dashboard', protectAdmin, authController.getDashboard);
 
 // Content Management (Homepage, Ticketing, About)
-router.get('/content', protectAdmin, contentController.manageContent);
+router.get('/content/:section', protectAdmin, contentController.manageContent);
 router.post('/content/homepage', protectAdmin, upload.single('heroImage'), contentController.updateHomepage);
 router.post('/content/ticketing', protectAdmin, upload.single('bgImage'), contentController.updateTicketing);
 router.post('/content/about', protectAdmin, upload.single('founderImage'), contentController.updateAbout);

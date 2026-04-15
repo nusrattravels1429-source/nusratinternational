@@ -28,7 +28,7 @@ exports.getNavigation = async (req, res) => {
       link.children = children;
     }
     
-    res.render('admin/navigation/list', {
+    res.render('admin/navigation/manage', {
       admin: req.admin,
       navLinks,
       currentStatus: status
@@ -49,7 +49,7 @@ exports.getCreateNavigation = async (req, res) => {
       .sort({ order: 1 })
       .toArray();
     
-    res.render('admin/navigation/form', {
+    res.render('admin/navigation/manage', {
       admin: req.admin,
       link: null,
       action: 'create',
@@ -118,7 +118,7 @@ exports.getEditNavigation = async (req, res) => {
       _id: { $ne: new ObjectId(req.params.id) }
     }).sort({ order: 1 }).toArray();
     
-    res.render('admin/navigation/form', {
+    res.render('admin/navigation/manage', {
       admin: req.admin,
       link,
       action: 'edit',
