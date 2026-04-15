@@ -24,9 +24,9 @@ exports.getTeam = async (req, res) => {
       .sort({ isFounder: -1, order: 1, createdAt: -1 })
       .toArray();
     
-    res.render('admin/team/list', {
+    res.render('admin/team/manage', {
       admin: req.admin,
-      teamMembers,
+      members: teamMembers,
       currentType: type,
       currentStatus: status
     });
@@ -38,7 +38,7 @@ exports.getTeam = async (req, res) => {
 
 // GET /admin/team/create - Show create form
 exports.getCreateTeam = (req, res) => {
-  res.render('admin/team/form', {
+  res.render('admin/team/manage', {
     admin: req.admin,
     member: null,
     action: 'create'
@@ -103,7 +103,7 @@ exports.getEditTeam = async (req, res) => {
       return res.status(404).send('Team member not found');
     }
     
-    res.render('admin/team/form', {
+    res.render('admin/team/manage', {
       admin: req.admin,
       member,
       action: 'edit'

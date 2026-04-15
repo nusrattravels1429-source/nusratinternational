@@ -18,9 +18,9 @@ exports.getCertifications = async (req, res) => {
       .sort({ order: 1, isFeatured: -1, createdAt: -1 })
       .toArray();
     
-    res.render('admin/certifications/list', {
+    res.render('admin/certifications/manage', {
       admin: req.admin,
-      certifications,
+      items: certifications,
       currentStatus: status
     });
   } catch (error) {
@@ -31,7 +31,7 @@ exports.getCertifications = async (req, res) => {
 
 // GET /admin/certifications/create - Show create form
 exports.getCreateCertification = (req, res) => {
-  res.render('admin/certifications/form', {
+  res.render('admin/certifications/manage', {
     admin: req.admin,
     certification: null,
     action: 'create'
@@ -96,7 +96,7 @@ exports.getEditCertification = async (req, res) => {
       return res.status(404).send('Certification not found');
     }
     
-    res.render('admin/certifications/form', {
+    res.render('admin/certifications/manage', {
       admin: req.admin,
       certification,
       action: 'edit'

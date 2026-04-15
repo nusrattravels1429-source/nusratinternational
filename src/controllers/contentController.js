@@ -225,6 +225,6 @@ exports.apiGetContent = async (req, res) => {
 
 // Aliases for admin routes
 exports.manageContent = exports.getManageContent;
-exports.updateHomepage = exports.createContent;
-exports.updateTicketing = exports.createContent;
-exports.updateAbout = exports.createContent;
+exports.updateHomepage = exports.updateContent;
+exports.updateTicketing = exports.updateContent;
+exports.updateAbout = exports.updateContent;
