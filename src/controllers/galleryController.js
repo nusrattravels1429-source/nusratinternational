@@ -121,6 +121,74 @@ exports.apiGetGallery = async (req, res) => {
   }
 };
 
+// API: POST /api/gallery - Create gallery item
+exports.apiCreateGallery = async (req, res) => {
+  try {
+    const db = await req.app.locals.getDb();
+    const { title, imageUrl } = req.body;
+    
+    const galleryItem = {
+      title: { en: title?.en || '', bn: title?.bn || '' },
+      imageUrl: imageUrl || '',
+      isActive: true,
+      createdAt: new Date()
+    };
+    
+    const result = await db.collection('galleryitems').insertOne(galleryItem);
+    
+    res.json({ success: true, item: result.ops[0] });
+  } catch (error) {
+    console.error('API create gallery error:', error);
+    res.status(500).json({ success: false, error: 'Error creating gallery item' });
+  }
+};
+
+// API: PUT /api/gallery/:id - Update gallery item
+exports.apiUpdateGallery = async (req, res) => {
+  try {
+    const db = await req.app.locals.getDb();
+    const { ObjectId } = require('mongodb');
+    const { title, imageUrl, isActive } = req.body;
+    
+    const updateData = {};
+    
+    if (title) updateData.title = title;
+    if (imageUrl !== undefined) updateData.imageUrl = imageUrl;
+    if (isActive !== undefined) updateData.isActive = isActive;
+    
+    await db.collection('galleryitems').updateOne(
+      { _id: new ObjectId(req.params.id) },
+      { $set: updateData }
+    );
+    
+    const updated = await db.collection('galleryitems').findOne({ 
+      _id: new ObjectId(req.params.id) 
+    });
+    
+    res.json({ success: true, item: updated });
+  } catch (error) {
+    console.error('API update gallery error:', error);
+    res.status(500).json({ success: false, error: 'Error updating gallery item' });
+  }
+};
+
+// API: DELETE /api/gallery/:id - Delete gallery item
+exports.apiDeleteGallery = async (req, res) => {
+  try {
+    const db = await req.app.locals.getDb();
+    const { ObjectId } = require('mongodb');
+    
+    await db.collection('galleryitems').deleteOne({ 
+      _id: new ObjectId(req.params.id) 
+    });
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('API delete gallery error:', error);
+    res.status(500).json({ success: false, error: 'Error deleting gallery item' });
+  }
+};
+
 // Aliases for admin routes
 exports.manageGallery = exports.getGallery;
 exports.createGalleryItem = exports.createGallery;
