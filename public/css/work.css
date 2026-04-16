@@ -151,9 +151,4 @@ main { flex: 1; }
   .container{grid-template-columns:1fr}
   .why-grid{grid-template-columns:1fr}
   .filter-right{width:100%}
-  .sort-select{flex:1}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> b590dba (Added nested file)
