@@ -59,12 +59,12 @@ async function getDb() {
 
       const client = new MongoClient(uri, clientOptions);
       await client.connect();
-      
+
       cachedDbClient = client;
       console.log('✅ MongoDB client connected successfully');
 
       const db = client.db('nusrat_travels');
-      
+
       // Verify connection works
       await db.command({ ping: 1 });
       console.log('✅ Database ping successful');
@@ -75,7 +75,7 @@ async function getDb() {
 
       cachedDb = db;
       connectionPromise = null; // Clear the promise after successful connection
-      
+
       return db;
     } catch (err) {
       console.error('❌ MongoDB connection failed:', err.message);
@@ -98,9 +98,9 @@ try {
   const routes = require('./routes/index');
   const adminRoutes = require('./routes/admin/index');
   const apiRoutes = require('./routes/api/index');
-  app.use('/', routes);
   app.use('/admin', adminRoutes);
   app.use('/api', apiRoutes);
+  app.use('/', routes);
 } catch (e) {
   console.error('Route load error:', e.message);
   app.get('/', (req, res) => res.send('Route Error: ' + e.message));
@@ -111,8 +111,8 @@ app.get('/api/health', async (req, res) => {
   try {
     const db = await getDb();
     const collections = await db.listCollections().toArray();
-    res.json({ 
-      status: 'OK', 
+    res.json({
+      status: 'OK',
       database: 'connected',
       dbName: 'nusrat_travels',
       collections: collections.map(c => c.name),
@@ -120,8 +120,8 @@ app.get('/api/health', async (req, res) => {
     });
   } catch (err) {
     console.error('❌ Health check failed:', err.message);
-    res.status(500).json({ 
-      status: 'ERROR', 
+    res.status(500).json({
+      status: 'ERROR',
       error: err.message,
       errorCode: err.code,
       uriConfigured: !!process.env.MONGODB_URI,
@@ -134,6 +134,17 @@ app.get('/api/health', async (req, res) => {
       ]
     });
   }
+});
+
+// Final Catch-all 404 handler (must be last)
+app.use((req, res) => {
+  res.status(404).render('404', {
+    url: req.originalUrl,
+    pageTitle: '404 - Not Found',
+    activePage: '',
+    bodyClass: '',
+    cssFiles: ['common.css']
+  });
 });
 
 module.exports = app;

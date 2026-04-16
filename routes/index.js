@@ -258,15 +258,7 @@ router.get('/work/:param', async (req, res) => {
   }
 });
 
-// Catch-all 404 handler
-router.use((req, res) => {
-  res.status(404).render('404', {
-    url: req.originalUrl,
-    pageTitle: '404 - Not Found',
-    activePage: '',
-    bodyClass: '',
-    cssFiles: ['common.css']
-  });
-});
+// Note: Catch-all 404 handler removed from here and moved to app.js 
+// to ensure it doesn't block other routers like /admin or /api.
 
 module.exports = router;
