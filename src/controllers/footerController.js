@@ -181,3 +181,4 @@ exports.apiUpdateFooter = async (req, res) => {
 
 // Aliases for admin routes
 exports.manageFooter = exports.getFooter;
+exports.createFooter = exports.updateFooter;
