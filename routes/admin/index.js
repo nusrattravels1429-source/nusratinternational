@@ -27,16 +27,22 @@ router.get('/logout', authController.logout);
 router.get('/dashboard', protectAdmin, authController.getDashboard);
 
 // Content Management (Homepage, Ticketing, About)
-router.get('/content/:section', protectAdmin, contentController.manageContent);
-router.post('/content/homepage', protectAdmin, upload.single('heroImage'), contentController.updateHomepage);
-router.post('/content/ticketing', protectAdmin, upload.single('bgImage'), contentController.updateTicketing);
-router.post('/content/about', protectAdmin, upload.single('founderImage'), contentController.updateAbout);
+router.get('/content/manage/:section', protectAdmin, contentController.manageContent);
+router.post('/content/create', protectAdmin, upload.array('images', 5), contentController.createContent);
+router.post('/content/update/:id', protectAdmin, upload.array('images', 5), contentController.updateContent);
+router.post('/content/delete/:id', protectAdmin, contentController.deleteContent);
 
 // Cards Management (Work, Travel, Hajj)
 router.get('/cards', protectAdmin, cardController.manageCards);
+<<<<<<< HEAD
 router.get('/cards/create', protectAdmin, cardController.showCreateCard);
 router.post('/cards/create', protectAdmin, upload.array('images', 5), cardController.createCard);
 router.get('/cards/edit/:id', protectAdmin, cardController.showEditCard);
+=======
+router.get('/cards/create', protectAdmin, cardController.getCreateCard);
+router.post('/cards/create', protectAdmin, upload.array('images', 5), cardController.createCard);
+router.get('/cards/edit/:id', protectAdmin, cardController.getEditCard);
+>>>>>>> 304cfab (Fix: Routing's)
 router.post('/cards/update/:id', protectAdmin, upload.array('images', 5), cardController.updateCard);
 router.post('/cards/delete/:id', protectAdmin, cardController.deleteCard);
 router.post('/cards/toggle-status/:id', protectAdmin, cardController.toggleStatus);
@@ -68,7 +74,11 @@ router.post('/navigation/delete/:id', protectAdmin, navigationController.deleteL
 
 // Footer Management
 router.get('/footer', protectAdmin, footerController.manageFooter);
+<<<<<<< HEAD
 router.post('/footer/create', protectAdmin, upload.single('logo'), footerController.createFooter);
 router.post('/footer/update/:id', protectAdmin, upload.single('logo'), footerController.updateFooter);
+=======
+router.post('/footer/update', protectAdmin, upload.single('logo'), footerController.updateFooter);
+>>>>>>> 304cfab (Fix: Routing's)
 
 module.exports = router;
