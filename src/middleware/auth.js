@@ -18,6 +18,7 @@ exports.protectAdmin = async (req, res, next) => {
   }
 
   try {
+    const { ObjectId } = require('mongodb');
     const decoded = jwt.verify(token, JWT_SECRET);
     
     // Get DB connection
@@ -29,7 +30,7 @@ exports.protectAdmin = async (req, res, next) => {
 
     // Find admin in database
     const admin = await db.collection('admins').findOne({ 
-      _id: decoded.id,
+      _id: new ObjectId(decoded.id),
       isActive: true 
     });
 
