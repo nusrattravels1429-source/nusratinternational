@@ -3,268 +3,120 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Footer Settings - Admin Panel</title>
+  <title>Footer Settings - Admin</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'DM Sans', sans-serif; background: #f5f6fa; }
-    
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f2f5; color: #333; }
     .admin-layout { display: flex; min-height: 100vh; }
     
     /* Sidebar */
-    .sidebar {
-      width: 260px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 20px;
-      position: fixed;
-      height: 100vh;
-      overflow-y: auto;
-    }
-    .sidebar-header {
-      text-align: center;
-      padding-bottom: 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-      margin-bottom: 20px;
-    }
-    .sidebar-header h2 { margin-top: 10px; font-size: 18px; }
-    .sidebar-menu { list-style: none; }
-    .sidebar-menu li { margin-bottom: 5px; }
-    .sidebar-menu a {
-      display: block;
-      padding: 12px 15px;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-    .sidebar-menu a:hover, .sidebar-menu a.active {
-      background: rgba(255,255,255,0.2);
-    }
-    .sidebar-menu .logout { margin-top: 30px; background: rgba(255,0,0,0.3); }
-    
+    .sidebar { width: 250px; background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: white; padding: 0; position: fixed; height: 100vh; overflow-y: auto; z-index: 100; }
+    .sidebar-header { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
+    .sidebar-logo { font-size: 36px; margin-bottom: 8px; }
+    .sidebar-header h2 { font-size: 16px; font-weight: 700; color: #e2e8f0; }
+    .admin-name { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+    .sidebar-menu { list-style: none; padding: 12px 0; }
+    .sidebar-menu .menu-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 16px 20px 6px; }
+    .sidebar-menu .menu-separator { height: 1px; background: rgba(255,255,255,0.1); margin: 12px 20px; }
+    .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13.5px; transition: all 0.2s; border-left: 3px solid transparent; }
+    .sidebar-menu a:hover { background: rgba(255,255,255,0.08); color: white; border-left-color: #667eea; }
+    .sidebar-menu a.active { background: rgba(102,126,234,0.2); color: white; border-left-color: #667eea; font-weight: 600; }
+    .logout-link:hover { background: rgba(239,68,68,0.2) !important; color: #fca5a5 !important; }
     /* Main Content */
-    .main-content {
-      flex: 1;
-      margin-left: 260px;
-      padding: 30px;
-    }
-    .header {
-      background: white;
-      padding: 20px 30px;
-      border-radius: 10px;
-      margin-bottom: 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-    .header h1 { color: #333; font-size: 28px; }
-    
-    .content-section {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      margin-bottom: 30px;
-    }
-    
-    .btn {
-      padding: 12px 25px;
-      border-radius: 5px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: transform 0.2s;
-      display: inline-block;
-      border: none;
-      cursor: pointer;
-    }
-    .btn:hover { transform: translateY(-2px); }
+    .main-content { flex: 1; margin-left: 250px; padding: 28px; }
+    .page-header { background: white; padding: 20px 28px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .page-header h1 { font-size: 22px; font-weight: 700; color: #1a1a2e; }
+    .breadcrumb { font-size: 13px; color: #94a3b8; }
+    .panel { background: white; border-radius: 12px; padding: 28px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .panel-title { font-size: 16px; font-weight: 700; color: #667eea; margin: 24px 0 12px; padding-bottom: 10px; border-bottom: 2px solid #f0f2f5; }
+    .panel-title:first-child { margin-top: 0; }
+    .btn { padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; transition: all 0.2s; }
     .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-    .btn-secondary { background: #95a5a6; color: white; }
-    
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
-    .form-group input[type="text"],
-    .form-group input[type="email"],
-    .form-group input[type="tel"],
-    .form-group input[type="url"],
-    .form-group textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-    .form-group textarea { min-height: 100px; resize: vertical; }
-    
-    .section-title {
-      font-size: 18px;
-      color: #667eea;
-      margin: 30px 0 15px 0;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #e0e0e0;
-    }
-    
-    .info-box {
-      background: #f0f4ff;
-      padding: 15px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-      border-left: 4px solid #667eea;
-    }
-    
-    .info-box p {
-      color: #666;
-      font-size: 14px;
-      line-height: 1.6;
-    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-secondary { background: #f1f5f9; color: #475569; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+    .form-control { width: 100%; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 14px; font-family: inherit; background: #fafafa; transition: border-color 0.2s; }
+    .form-control:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.12); background: white; }
+    textarea.form-control { min-height: 90px; resize: vertical; }
   </style>
 </head>
 <body>
   <div class="admin-layout">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h2>Admin Panel</h2>
-      </div>
-      <ul class="sidebar-menu">
-        <li><a href="/admin/dashboard">📊 Dashboard</a></li>
-        <li><strong style="color: rgba(255,255,255,0.6); font-size: 12px; padding: 10px 15px; display: block;">CONTENT</strong></li>
-        <li><a href="/admin/content/manage/homepage">🏠 Landing Page</a></li>
-        <li><a href="/admin/content/manage/ticketing">🎫 Ticketing Page</a></li>
-        <li><a href="/admin/content/manage/about">ℹ️ About Page</a></li>
-        <li><strong style="color: rgba(255,255,255,0.6); font-size: 12px; padding: 10px 15px; display: block;">PACKAGES</strong></li>
-        <li><a href="/admin/cards?type=all">🎴 All Cards</a></li>
-        <li><a href="/admin/cards?type=travel">✈️ Travel Packages</a></li>
-        <li><a href="/admin/cards?type=hajj">🕋 Hajj Packages</a></li>
-        <li><a href="/admin/cards?type=work">💼 Work Packages</a></li>
-        <li><strong style="color: rgba(255,255,255,0.6); font-size: 12px; padding: 10px 15px; display: block;">MANAGE</strong></li>
-        <li><a href="/admin/gallery">🖼️ Gallery</a></li>
-        <li><a href="/admin/certifications">📜 Certifications</a></li>
-        <li><a href="/admin/team">👥 Team Members</a></li>
-        <li><a href="/admin/navigation">🧭 Navigation</a></li>
-        <li><a href="/admin/footer" class="active">⚙️ Footer Settings</a></li>
-        <li><a href="/admin/logout" class="logout">🚪 Logout</a></li>
-      </ul>
-    </aside>
-    
-    <!-- Main Content -->
+    <%- include('../partials/sidebar', { admin, activePage: 'footer' }) %>
     <main class="main-content">
-      <div class="header">
-        <h1>Footer Settings</h1>
-        <a href="/admin/dashboard" class="btn btn-secondary">Back to Dashboard</a>
-      </div>
-      
-      <div class="content-section">
-        <div class="info-box">
-          <p>📝 Update your website footer information including contact details, social links, and copyright text. These settings will appear on all pages of your website.</p>
+      <div class="page-header">
+        <div>
+          <h1>⚙️ Footer Settings</h1>
+          <p class="breadcrumb">Admin → Footer</p>
         </div>
-        
-        <form id="footerForm" method="POST">
-          <input type="hidden" id="settingsId" name="id" value="<%= settings ? settings._id : '' %>">
-          
-          <h3 class="section-title">📍 Contact Information</h3>
-          
-          <div class="form-group">
-            <label>Company Name (English)</label>
-            <input type="text" id="companyNameEn" name="companyNameEn" value="<%= settings?.companyName?.en || '' %>" required>
+        <a href="/admin/dashboard" class="btn btn-secondary">← Dashboard</a>
+      </div>
+
+      <div class="panel">
+        <form action="/admin/footer/update" method="POST" enctype="multipart/form-data">
+          <div class="panel-title">📍 Contact Information</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Company Name (English)</label>
+              <input type="text" name="companyNameEn" value="<%= settings?.companyName?.en || '' %>" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Company Name (বাংলা)</label>
+              <input type="text" name="companyNameBn" value="<%= settings?.companyName?.bn || '' %>" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Address (English)</label>
+              <textarea name="addressEn" class="form-control"><%= settings?.address?.en || '' %></textarea>
+            </div>
+            <div class="form-group">
+              <label>Address (বাংলা)</label>
+              <textarea name="addressBn" class="form-control"><%= settings?.address?.bn || '' %></textarea>
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="text" name="phone" value="<%= settings?.phone || '' %>" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" name="email" value="<%= settings?.email || '' %>" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>WhatsApp Link</label>
+              <input type="text" name="whatsapp" value="<%= settings?.whatsapp || '' %>" class="form-control" placeholder="https://wa.me/880...">
+            </div>
           </div>
-          
-          <div class="form-group">
-            <label>Company Name (Bangla)</label>
-            <input type="text" id="companyNameBn" name="companyNameBn" value="<%= settings?.companyName?.bn || '' %>">
+
+          <div class="panel-title">🔗 Social Media Links</div>
+          <div class="form-grid">
+            <div class="form-group"><label>Facebook URL</label><input type="text" name="facebook" value="<%= settings?.socialLinks?.facebook || '' %>" class="form-control"></div>
+            <div class="form-group"><label>YouTube URL</label><input type="text" name="youtube" value="<%= settings?.socialLinks?.youtube || '' %>" class="form-control"></div>
+            <div class="form-group"><label>Instagram URL</label><input type="text" name="instagram" value="<%= settings?.socialLinks?.instagram || '' %>" class="form-control"></div>
+            <div class="form-group"><label>LinkedIn URL</label><input type="text" name="linkedin" value="<%= settings?.socialLinks?.linkedin || '' %>" class="form-control"></div>
           </div>
-          
-          <div class="form-group">
-            <label>Address (English)</label>
-            <textarea id="addressEn" name="addressEn"><%= settings?.address?.en || '' %></textarea>
+
+          <div class="panel-title">📄 Additional</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>About Text (English)</label>
+              <textarea name="aboutTextEn" class="form-control"><%= settings?.aboutText?.en || '' %></textarea>
+            </div>
+            <div class="form-group">
+              <label>About Text (বাংলা)</label>
+              <textarea name="aboutTextBn" class="form-control"><%= settings?.aboutText?.bn || '' %></textarea>
+            </div>
+            <div class="form-group" style="grid-column:1/-1;">
+              <label>Copyright Text</label>
+              <input type="text" name="copyrightText" value="<%= settings?.copyrightText || '' %>" class="form-control" placeholder="© 2024 Nusrat International. All rights reserved.">
+            </div>
           </div>
-          
-          <div class="form-group">
-            <label>Address (Bangla)</label>
-            <textarea id="addressBn" name="addressBn"><%= settings?.address?.bn || '' %></textarea>
-          </div>
-          
-          <div class="form-group">
-            <label>Phone Number</label>
-            <input type="tel" id="phone" name="phone" value="<%= settings?.phone || '' %>">
-          </div>
-          
-          <div class="form-group">
-            <label>Email Address</label>
-            <input type="email" id="email" name="email" value="<%= settings?.email || '' %>">
-          </div>
-          
-          <h3 class="section-title">🔗 Social Media Links</h3>
-          
-          <div class="form-group">
-            <label>Facebook URL</label>
-            <input type="url" id="facebook" name="facebook" value="<%= settings?.socialLinks?.facebook || '' %>">
-          </div>
-          
-          <div class="form-group">
-            <label>Twitter URL</label>
-            <input type="url" id="twitter" name="twitter" value="<%= settings?.socialLinks?.twitter || '' %>">
-          </div>
-          
-          <div class="form-group">
-            <label>Instagram URL</label>
-            <input type="url" id="instagram" name="instagram" value="<%= settings?.socialLinks?.instagram || '' %>">
-          </div>
-          
-          <div class="form-group">
-            <label>LinkedIn URL</label>
-            <input type="url" id="linkedin" name="linkedin" value="<%= settings?.socialLinks?.linkedin || '' %>">
-          </div>
-          
-          <h3 class="section-title">📄 Additional Information</h3>
-          
-          <div class="form-group">
-            <label>About Text (English)</label>
-            <textarea id="aboutTextEn" name="aboutTextEn"><%= settings?.aboutText?.en || '' %></textarea>
-          </div>
-          
-          <div class="form-group">
-            <label>About Text (Bangla)</label>
-            <textarea id="aboutTextBn" name="aboutTextBn"><%= settings?.aboutText?.bn || '' %></textarea>
-          </div>
-          
-          <div class="form-group">
-            <label>Copyright Text</label>
-            <input type="text" id="copyrightText" name="copyrightText" value="<%= settings?.copyrightText || '' %>" placeholder="© 2024 Company Name. All rights reserved.">
-          </div>
-          
-          <div class="form-group">
-            <button type="submit" class="btn btn-primary">Save Footer Settings</button>
-          </div>
+
+          <button type="submit" class="btn btn-primary">💾 Save Footer Settings</button>
         </form>
       </div>
     </main>
   </div>
   
-  <script>
-    document.getElementById('footerForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const formData = new FormData(this);
-      const settingsId = document.getElementById('settingsId').value;
-      const url = settingsId 
-        ? '/admin/footer/update/' + settingsId 
-        : '/admin/footer/create';
-      
-      fetch(url, {
-        method: 'POST',
-        body: formData
-      })
-      .then(res => {
-        if (res.ok) {
-          alert('Footer settings saved successfully!');
-          location.reload();
-        } else {
-          alert('Error saving footer settings');
-        }
-      });
-    });
-  </script>
 </body>
 </html>
