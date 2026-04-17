@@ -57,6 +57,9 @@ exports.createCard = async (req, res) => {
     // Handle image uploads
     const images = [];
     if (req.files && req.files.length > 0) {
+      if (req.files.length > 4) {
+        return res.status(400).send('Maximum 4 images allowed per card');
+      }
       req.files.forEach((file, index) => {
         images.push({
           url: '/uploads/' + file.filename,
@@ -157,6 +160,9 @@ exports.updateCard = async (req, res) => {
     
     // Add new uploaded images
     if (req.files && req.files.length > 0) {
+      if (images.length + req.files.length > 4) {
+        return res.status(400).send('Maximum 4 images allowed per card. Please remove some existing images first.');
+      }
       const startOrder = images.length;
       req.files.forEach((file, index) => {
         images.push({

@@ -32,12 +32,9 @@ router.post('/content/update', protectAdmin, upload.fields([
   { name: 'heroImage', maxCount: 1 },
   { name: 'bgImage', maxCount: 1 }
 ]), contentController.updateContent);
-router.post('/content/update-slides', protectAdmin, upload.fields([
-  { name: 'slideImage_0', maxCount: 1 },
-  { name: 'slideImage_1', maxCount: 1 },
-  { name: 'slideImage_2', maxCount: 1 },
-  { name: 'slideImage_3', maxCount: 1 }
-]), contentController.updateSlides);
+router.post('/content/hero-slide/create', protectAdmin, upload.single('image'), contentController.createHeroSlide);
+router.post('/content/hero-slide/update/:id', protectAdmin, upload.single('image'), contentController.updateHeroSlide);
+router.post('/content/hero-slide/reorder', protectAdmin, express.json(), contentController.reorderHeroSlides);
 router.post('/content/delete/:id', protectAdmin, contentController.deleteContent);
 
 // =============================================================================

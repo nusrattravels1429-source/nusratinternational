@@ -76,58 +76,92 @@ exports.updateContent = async (req, res) => {
   }
 };
 
-// POST /admin/content/update-slides - Special handler for homepage slider
-exports.updateSlides = async (req, res) => {
+// POST /admin/content/hero-slide/create
+exports.createHeroSlide = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
+    const { titleEn, titleBn, subtitleEn, subtitleBn, ctaText, ctaLink, order } = req.body;
 
-    // Parse slides from form (multiple slides)
-    const slides = [];
-    const titles_en = [].concat(req.body.slideTitle_en || []);
-    const titles_bn = [].concat(req.body.slideTitle_bn || []);
-    const subtitles_en = [].concat(req.body.slideSubtitle_en || []);
-    const subtitles_bn = [].concat(req.body.slideSubtitle_bn || []);
-    const cta_texts = [].concat(req.body.slideCta || []);
-    const cta_links = [].concat(req.body.slideCtaLink || []);
-    const existingImages = [].concat(req.body.slideExistingImage || []);
-
-    // Handle uploaded files (indexed by fieldname like 'slideImage_0')
-    const uploadedImages = {};
-    if (req.files) {
-      Object.entries(req.files).forEach(([fieldName, files]) => {
-        const match = fieldName.match(/slideImage_(\d+)/);
-        if (match && files[0]) {
-          const f = files[0];
-          uploadedImages[parseInt(match[1])] = f.path || ('/uploads/' + f.filename);
-        }
-      });
+    let imageUrl = '';
+    if (req.file) {
+      imageUrl = req.file.path || ('/uploads/' + req.file.filename);
     }
 
-    const maxSlides = 4;
-    for (let i = 0; i < Math.min(titles_en.length, maxSlides); i++) {
-      if (titles_en[i]) {
-        slides.push({
-          title: { en: titles_en[i] || '', bn: titles_bn[i] || '' },
-          subtitle: { en: subtitles_en[i] || '', bn: subtitles_bn[i] || '' },
-          cta_text: cta_texts[i] || '',
-          cta_link: cta_links[i] || '/',
-          image_url: uploadedImages[i] || existingImages[i] || '',
-          order: i,
-          isActive: true
-        });
-      }
+    const doc = {
+      section: 'homepage',
+      key: 'hero-' + Date.now(),
+      title: { en: titleEn || '', bn: titleBn || '' },
+      subtitle: { en: subtitleEn || '', bn: subtitleBn || '' },
+      cta_text: ctaText || '',
+      cta_link: ctaLink || '/',
+      images: [{ url: imageUrl }],
+      metadata: { order: order ? parseInt(order) : 0 },
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    await db.collection('sitecontents').insertOne(doc);
+    res.redirect('/admin/content/manage/homepage');
+  } catch (error) {
+    console.error('Create hero slide error:', error);
+    res.status(500).send('Error creating slide: ' + error.message);
+  }
+};
+
+// POST /admin/content/hero-slide/update/:id
+exports.updateHeroSlide = async (req, res) => {
+  try {
+    const db = await req.app.locals.getDb();
+    const { titleEn, titleBn, subtitleEn, subtitleBn, ctaText, ctaLink, order, existingImage } = req.body;
+
+    let imageUrl = existingImage || '';
+    if (req.file) {
+      imageUrl = req.file.path || ('/uploads/' + req.file.filename);
     }
+
+    const updateDoc = {
+      title: { en: titleEn || '', bn: titleBn || '' },
+      subtitle: { en: subtitleEn || '', bn: subtitleBn || '' },
+      cta_text: ctaText || '',
+      cta_link: ctaLink || '/',
+      images: [{ url: imageUrl }],
+      metadata: { order: order ? parseInt(order) : 0 },
+      updatedAt: new Date()
+    };
 
     await db.collection('sitecontents').updateOne(
-      { section: 'homepage', key: 'hero-slider' },
-      { $set: { section: 'homepage', key: 'hero-slider', slides, updatedAt: new Date() } },
-      { upsert: true }
+      { _id: new ObjectId(req.params.id) },
+      { $set: updateDoc }
     );
 
     res.redirect('/admin/content/manage/homepage');
   } catch (error) {
-    console.error('Update slides error:', error);
-    res.status(500).send('Error updating slides: ' + error.message);
+    console.error('Update hero slide error:', error);
+    res.status(500).send('Error updating slide: ' + error.message);
+  }
+};
+
+// POST /admin/content/hero-slide/reorder
+exports.reorderHeroSlides = async (req, res) => {
+  try {
+    const db = await req.app.locals.getDb();
+    const { orders } = req.body; // array of { id, order }
+
+    if (Array.isArray(orders)) {
+      for (const item of orders) {
+        if (item.id) {
+          await db.collection('sitecontents').updateOne(
+            { _id: new ObjectId(item.id) },
+            { $set: { 'metadata.order': parseInt(item.order) } }
+          );
+        }
+      }
+    }
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Reorder hero slides error:', error);
+    res.status(500).json({ success: false, error: 'Error reordering slides' });
   }
 };
 
@@ -138,6 +172,22 @@ exports.deleteContent = async (req, res) => {
 
     const doc = await db.collection('sitecontents').findOne({ _id: new ObjectId(req.params.id) });
     const section = doc?.section || 'homepage';
+    const key = doc?.key || '';
+
+    // Enforce Hero Slider minimum layout
+    if (section === 'homepage' && key.startsWith('hero-')) {
+      const count = await db.collection('sitecontents').countDocuments({
+        section: 'homepage',
+        key: { $regex: '^hero-' }
+      });
+      if (count <= 1) {
+        if (req.xhr || req.headers.accept?.includes('application/json')) {
+          return res.status(400).json({ error: 'At least 1 hero slide is required' });
+        } else {
+          return res.status(400).send('At least 1 hero slide is required');
+        }
+      }
+    }
 
     await db.collection('sitecontents').deleteOne({ _id: new ObjectId(req.params.id) });
 

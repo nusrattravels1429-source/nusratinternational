@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manage <%= section.charAt(0).toUpperCase() + section.slice(1) %> Content - Admin</title>
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f2f5; color: #333; }
@@ -114,62 +116,42 @@
 
     <!-- Hero Slider -->
     <div class="panel">
-      <div class="panel-title">🎬 Hero Slider <small style="font-weight:400;font-size:12px;color:#94a3b8;margin-left:auto;">Max 4 slides</small></div>
-      <form action="/admin/content/update-slides" method="POST" enctype="multipart/form-data">
-        <div class="slides-container" id="slidesContainer">
-          <% const slides = content['hero-slider']?.slides || [{}]; %>
-          <% slides.forEach(function(slide, i) { %>
-          <div class="slide-card" id="slide-<%= i %>">
-            <div class="slide-card-header">
-              <span class="slide-card-title">Slide <span class="slide-number"><%= i + 1 %></span></span>
-            </div>
-            <% if (slide.image_url) { %>
-              <img src="<%= slide.image_url %>" class="slide-preview" alt="Slide image">
-            <% } else { %>
-              <div class="slide-preview-placeholder">📷 No image uploaded yet</div>
-            <% } %>
-            <input type="hidden" name="slideExistingImage" value="<%= slide.image_url || '' %>">
-            <div class="form-group">
-              <label>Image (1200×800px recommended)</label>
-              <input type="file" name="slideImage_<%= i %>" class="form-control" accept="image/*">
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-              <div class="form-group">
-                <label>Title (English)</label>
-                <input type="text" name="slideTitle_en" value="<%= slide.title?.en || '' %>" class="form-control" placeholder="Explore the World">
+      <div class="panel-title" style="display:flex; justify-content:space-between; align-items:center;">
+        <span>🎬 Hero Slider</span>
+        <button class="btn btn-primary btn-sm" onclick="openSlideModal()">+ Add Slide</button>
+      </div>
+      
+      <div class="slides-container" id="slidesContainer">
+        <% 
+          const rawSlides = contentDocs.filter(d => d.key.startsWith('hero-'));
+          rawSlides.sort((a,b) => (a.metadata?.order || 0) - (b.metadata?.order || 0));
+        %>
+        <% if (rawSlides.length > 0) { %>
+          <% rawSlides.forEach(function(slide, i) { %>
+            <div class="slide-card" data-id="<%= slide._id %>" draggable="true" style="cursor: grab;" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="drop(event, this)">
+              <div class="slide-card-header">
+                <span class="slide-card-title">⋮⋮ Slide <span class="slide-number"><%= i + 1 %></span></span>
+                <div style="display:flex; gap:8px;">
+                  <button class="btn btn-sm btn-secondary" onclick="openSlideModal('<%= slide._id %>', '<%= (slide.title?.en || '').replace(/'/g, '\\\'') %>', '<%= (slide.title?.bn || '').replace(/'/g, '\\\'') %>', '<%= (slide.subtitle?.en || '').replace(/'/g, '\\\'') %>', '<%= (slide.subtitle?.bn || '').replace(/'/g, '\\\'') %>', '<%= (slide.cta_text || '').replace(/'/g, '\\\'') %>', '<%= slide.cta_link || '/' %>', '<%= slide.images && slide.images[0] ? slide.images[0].url : '' %>', <%= slide.metadata?.order || 0 %>)">✏️ Edit</button>
+                  <button class="btn btn-sm btn-danger" onclick="deleteSlide('<%= slide._id %>')">🗑️</button>
+                </div>
               </div>
-              <div class="form-group">
-                <label>Title (বাংলা)</label>
-                <input type="text" name="slideTitle_bn" value="<%= slide.title?.bn || '' %>" class="form-control" placeholder="বিশ্ব অন্বেষণ করুন">
-              </div>
-              <div class="form-group">
-                <label>Subtitle (English)</label>
-                <input type="text" name="slideSubtitle_en" value="<%= slide.subtitle?.en || '' %>" class="form-control" placeholder="Your trusted travel partner">
-              </div>
-              <div class="form-group">
-                <label>Subtitle (বাংলা)</label>
-                <input type="text" name="slideSubtitle_bn" value="<%= slide.subtitle?.bn || '' %>" class="form-control" placeholder="আপনার বিশ্বস্ত ভ্রমণ অংশীদার">
-              </div>
-              <div class="form-group">
-                <label>CTA Button Text</label>
-                <input type="text" name="slideCta" value="<%= slide.cta_text || '' %>" class="form-control" placeholder="Start Exploring">
-              </div>
-              <div class="form-group">
-                <label>CTA Link</label>
-                <input type="text" name="slideCtaLink" value="<%= slide.cta_link || '/' %>" class="form-control" placeholder="/travel">
+              <div style="display:flex; gap:16px;">
+                <img src="<%= slide.images && slide.images[0] ? slide.images[0].url : '' %>" style="width:120px; height:80px; object-fit:cover; border-radius:6px;" alt="">
+                <div>
+                  <strong><%= slide.title?.en || 'Untitled' %></strong><br>
+                  <small><%= slide.subtitle?.en || '' %></small>
+                </div>
               </div>
             </div>
-          </div>
           <% }); %>
-
-          <% if (slides.length < 4) { %>
-          <button type="button" class="btn btn-secondary" id="addSlide" style="margin-top:8px;" onclick="addSlide()">+ Add Slide (<%= slides.length %>/4)</button>
-          <% } %>
-        </div>
-        <div style="margin-top:24px;">
-          <button type="submit" class="btn btn-primary">💾 Save Slider</button>
-        </div>
-      </form>
+          <div style="margin-top:16px; text-align:right;">
+             <button class="btn btn-primary btn-sm" onclick="saveSlideOrder()">💾 Save Order</button>
+          </div>
+        <% } else { %>
+          <p style="color:#94a3b8; text-align:center; padding: 20px;">No slides found. Click "+ Add Slide" to create one.</p>
+        <% } %>
+      </div>
     </div>
 
     <!-- ===== TICKETING ===== -->
@@ -439,8 +421,96 @@
       </form>
     </div>
 
-    <div style="padding:16px;background:#fef9c3;border:1px solid #fde68a;border-radius:8px;margin-bottom:16px;">
-      <strong>💡 Team/Founder management:</strong> Go to <a href="/admin/team" style="color:#667eea;font-weight:600;">Team Members</a> section to manage the founder photo and employee cards.
+    <div class="panel" style="background:#fef9c3;border:1px solid #fde68a;">
+      <div class="panel-title">💡 Team/Founder management</div>
+      <p style="font-size:14px;">Go to the <a href="/admin/team" style="color:#667eea;font-weight:600;">Team Members</a> section to manage the founder photo, Leadership team, and employee cards.</p>
+    </div>
+
+    <!-- Our Story Section -->
+    <div class="panel">
+      <div class="panel-title">📖 Our Story</div>
+      <form action="/admin/content/update" method="POST" enctype="multipart/form-data" id="storyForm">
+        <input type="hidden" name="section" value="about">
+        <input type="hidden" name="key" value="about-story">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Section Title (English)</label>
+            <input type="text" name="title_en" value="<%= content['about-story']?.title_en || 'Our Story' %>" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Section Title (বাংলা)</label>
+            <input type="text" name="title_bn" value="<%= content['about-story']?.title_bn || 'আমাদের গল্প' %>" class="form-control">
+          </div>
+          <div class="form-group full">
+            <label>Featured Image</label>
+            <% if (content['about-story']?.imageUrl) { %>
+              <img src="<%= content['about-story'].imageUrl %>" style="max-height:100px; display:block; margin-bottom:10px; border-radius:6px;">
+            <% } %>
+            <input type="file" name="imageUrl" class="form-control" accept="image/*">
+          </div>
+        </div>
+
+        <div style="margin-top: 16px;">
+          <label style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block;">Content (English)</label>
+          <div id="quillEn" style="min-height: 200px; background: white;"><%- content['about-story']?.content_en || '' %></div>
+          <textarea name="content_en" id="storyContentEn" style="display:none;"></textarea>
+        </div>
+
+        <div style="margin-top: 24px;">
+          <label style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block;">Content (বাংলা)</label>
+          <div id="quillBn" style="min-height: 200px; background: white;"><%- content['about-story']?.content_bn || '' %></div>
+          <textarea name="content_bn" id="storyContentBn" style="display:none;"></textarea>
+        </div>
+
+        <button type="button" class="btn btn-primary" style="margin-top: 20px;" onclick="saveStory()">💾 Save Our Story</button>
+      </form>
+    </div>
+
+    <!-- Company Registration Section -->
+    <div class="panel">
+      <div class="panel-title">🔢 Company Registration Code</div>
+      <form action="/admin/content/update" method="POST">
+        <input type="hidden" name="section" value="about">
+        <input type="hidden" name="key" value="about-registration">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Registration Number</label>
+            <input type="text" name="registrationNumber" value="<%= content['about-registration']?.registrationNumber || '' %>" class="form-control" placeholder="RL-1429">
+          </div>
+          <div class="form-group">
+            <label>License / Certification Code</label>
+            <input type="text" name="licenseCode" value="<%= content['about-registration']?.licenseCode || '' %>" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Issuing Authority (English)</label>
+            <input type="text" name="issuingAuthority_en" value="<%= content['about-registration']?.issuingAuthority_en || '' %>" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Issuing Authority (বাংলা)</label>
+            <input type="text" name="issuingAuthority_bn" value="<%= content['about-registration']?.issuingAuthority_bn || '' %>" class="form-control">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">💾 Save Registration Info</button>
+      </form>
+    </div>
+
+    <!-- Our Divisions Section -->
+    <div class="panel">
+      <div class="panel-title" style="display:flex; justify-content:space-between; align-items:center;">
+        <span>🗂️ Our Divisions</span>
+        <button class="btn btn-primary btn-sm" onclick="addDivision()">+ Add Division</button>
+      </div>
+      <form action="/admin/content/update" method="POST" id="divisionsForm">
+        <input type="hidden" name="section" value="about">
+        <input type="hidden" name="key" value="about-divisions">
+        <input type="hidden" name="divisions_json" id="divisionsJson">
+        
+        <div id="divisionsContainer" style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <button type="button" class="btn btn-primary" style="margin-top:20px;" onclick="saveDivisions()">💾 Save Divisions</button>
+      </form>
     </div>
 
     <% } %>
@@ -448,40 +518,198 @@
   </main>
 </div>
 
-<script>
-  // Add slide functionality
-  let slideCount = document.querySelectorAll('.slide-card').length;
+<!-- Hero Slide Modal -->
+<div id="slideModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:12px;padding:28px;width:90%;max-width:600px;max-height:90vh;overflow-y:auto;">
+    <h3 style="margin-bottom:20px;" id="slideModalTitle">🎬 Add Hero Slide</h3>
+    <form id="slideForm" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label>Image (1200×800px recommended)</label>
+        <div id="currentSlideImage" style="margin-bottom:10px;"></div>
+        <input type="file" name="image" class="form-control" accept="image/*">
+        <input type="hidden" name="existingImage" id="sExistingImage">
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Title (English)</label><input type="text" name="titleEn" id="sTitleEn" class="form-control"></div>
+        <div class="form-group"><label>Title (বাংলা)</label><input type="text" name="titleBn" id="sTitleBn" class="form-control"></div>
+        <div class="form-group"><label>Subtitle (English)</label><input type="text" name="subtitleEn" id="sSubEn" class="form-control"></div>
+        <div class="form-group"><label>Subtitle (বাংলা)</label><input type="text" name="subtitleBn" id="sSubBn" class="form-control"></div>
+        <div class="form-group"><label>CTA Button Text</label><input type="text" name="ctaText" id="sCtaText" class="form-control"></div>
+        <div class="form-group"><label>CTA Link</label><input type="text" name="ctaLink" id="sCtaLink" class="form-control" value="/"></div>
+        <div class="form-group"><label>Display Order</label><input type="number" name="order" id="sOrder" class="form-control" value="0"></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:10px;">
+        <button type="submit" class="btn btn-primary">💾 Save Slide</button>
+        <button type="button" class="btn btn-secondary" onclick="closeSlideModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
 
-  function addSlide() {
-    if (slideCount >= 4) return;
-    const container = document.getElementById('slidesContainer');
-    const addBtn = document.getElementById('addSlide');
-    const i = slideCount;
-    const html = `
-      <div class="slide-card" id="slide-${i}">
-        <div class="slide-card-header">
-          <span class="slide-card-title">Slide <span class="slide-number">${i + 1}</span></span>
-        </div>
-        <div class="slide-preview-placeholder">📷 No image uploaded yet</div>
-        <input type="hidden" name="slideExistingImage" value="">
-        <div class="form-group">
-          <label>Image</label>
-          <input type="file" name="slideImage_${i}" class="form-control" accept="image/*">
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div class="form-group"><label>Title (EN)</label><input type="text" name="slideTitle_en" class="form-control"></div>
-          <div class="form-group"><label>Title (বাংলা)</label><input type="text" name="slideTitle_bn" class="form-control"></div>
-          <div class="form-group"><label>Subtitle (EN)</label><input type="text" name="slideSubtitle_en" class="form-control"></div>
-          <div class="form-group"><label>Subtitle (বাংলা)</label><input type="text" name="slideSubtitle_bn" class="form-control"></div>
-          <div class="form-group"><label>CTA Text</label><input type="text" name="slideCta" class="form-control"></div>
-          <div class="form-group"><label>CTA Link</label><input type="text" name="slideCtaLink" value="/" class="form-control"></div>
-        </div>
-      </div>`;
-    addBtn.insertAdjacentHTML('beforebegin', html);
-    slideCount++;
-    addBtn.textContent = `+ Add Slide (${slideCount}/4)`;
-    if (slideCount >= 4) addBtn.style.display = 'none';
+<script>
+  <% if (section === 'homepage') { %>
+  // --- HOMEPAGE SLIDER SCRIPTS ---
+  function openSlideModal(id, tEn, tBn, sEn, sBn, cT, cL, img, order) {
+    const form = document.getElementById('slideForm');
+    if (id) {
+      document.getElementById('slideModalTitle').innerText = '✏️ Edit Hero Slide';
+      form.action = '/admin/content/hero-slide/update/' + id;
+      document.getElementById('sTitleEn').value = tEn || '';
+      document.getElementById('sTitleBn').value = tBn || '';
+      document.getElementById('sSubEn').value = sEn || '';
+      document.getElementById('sSubBn').value = sBn || '';
+      document.getElementById('sCtaText').value = cT || '';
+      document.getElementById('sCtaLink').value = cL || '';
+      document.getElementById('sOrder').value = order || 0;
+      document.getElementById('sExistingImage').value = img || '';
+      document.getElementById('currentSlideImage').innerHTML = img 
+        ? `<img src="${img}" style="height:80px; width:120px; object-fit:cover; border-radius:6px;">`
+        : '';
+    } else {
+      document.getElementById('slideModalTitle').innerText = '🎬 Add Hero Slide';
+      form.action = '/admin/content/hero-slide/create';
+      form.reset();
+      document.getElementById('sExistingImage').value = '';
+      document.getElementById('currentSlideImage').innerHTML = '';
+      document.getElementById('sOrder').value = document.querySelectorAll('.slide-card').length;
+    }
+    document.getElementById('slideModal').style.display = 'flex';
   }
+
+  function closeSlideModal() {
+    document.getElementById('slideModal').style.display = 'none';
+  }
+
+  function deleteSlide(id) {
+    if(!confirm('Delete this slide?')) return;
+    fetch('/admin/content/delete/' + id, { method: 'POST', headers: {'Accept': 'application/json'} })
+      .then(res => res.json())
+      .then(data => {
+        if(data.success) location.reload();
+        else alert('Error: ' + (data.error || 'Cannot delete slide'));
+      })
+      .catch(err => alert('Network error deleting slide.'));
+  }
+
+  // Drag and drop sorting
+  let draggedCard = null;
+  function dragStart(e) { draggedCard = e.currentTarget; e.dataTransfer.effectAllowed = 'move'; }
+  function dragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+  function drop(e, targetCard) {
+    e.preventDefault();
+    if (draggedCard !== targetCard) {
+      let container = document.getElementById('slidesContainer');
+      let cards = Array.from(container.querySelectorAll('.slide-card'));
+      let draggedIdx = cards.indexOf(draggedCard);
+      let targetIdx = cards.indexOf(targetCard);
+      
+      if (draggedIdx < targetIdx) {
+        targetCard.after(draggedCard);
+      } else {
+        targetCard.before(draggedCard);
+      }
+    }
+  }
+
+  function saveSlideOrder() {
+    let cards = document.querySelectorAll('.slide-card');
+    let orders = [];
+    cards.forEach((card, index) => {
+      orders.push({ id: card.getAttribute('data-id'), order: index });
+    });
+
+    fetch('/admin/content/hero-slide/reorder', { 
+      method: 'POST', 
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ orders })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if(data.success) { alert('Order saved!'); location.reload(); }
+      else alert('Error saving order');
+    });
+  }
+  <% } %>
+
+  <% if (section === 'about') { %>
+  // --- ABOUT PAGE SCRIPTS ---
+  // Quill Editors Setup
+  let quillEn, quillBn;
+  if(document.getElementById('quillEn')) {
+    quillEn = new Quill('#quillEn', { theme: 'snow' });
+    quillBn = new Quill('#quillBn', { theme: 'snow' });
+  }
+
+  function saveStory() {
+    document.getElementById('storyContentEn').value = quillEn.root.innerHTML;
+    document.getElementById('storyContentBn').value = quillBn.root.innerHTML;
+    document.getElementById('storyForm').submit();
+  }
+
+  // Divisions logic
+  let divisions = <%- JSON.stringify(content['about-divisions']?.divisions_json ? JSON.parse(content['about-divisions'].divisions_json) : []) %>;
+  if (typeof divisions === 'string') {
+    try { divisions = JSON.parse(divisions); } catch(e) { divisions = []; }
+  }
+
+  function renderDivisions() {
+    const container = document.getElementById('divisionsContainer');
+    container.innerHTML = '';
+    divisions.forEach(function(div, idx) {
+      container.innerHTML += `
+        <div style="background:#f8faff; border:1px solid #e2e8f0; padding:16px; border-radius:8px; position:relative;">
+          <button type="button" class="btn btn-sm btn-danger" style="position:absolute; right:16px; top:16px;" onclick="removeDivision(${idx})">🗑️</button>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>Icon (FontAwesome class e.g., 'fa-solid fa-plane' or emoji)</label>
+              <input type="text" class="form-control d-icon" value="${div.icon || ''}" onchange="updateDiv(${idx}, 'icon', this.value)">
+            </div>
+            <div class="form-group">
+              <label>Title (English)</label>
+              <input type="text" class="form-control d-titleEn" value="${div.titleEn || ''}" onchange="updateDiv(${idx}, 'titleEn', this.value)">
+            </div>
+            <div class="form-group">
+              <label>Title (বাংলা)</label>
+              <input type="text" class="form-control d-titleBn" value="${div.titleBn || ''}" onchange="updateDiv(${idx}, 'titleBn', this.value)">
+            </div>
+            <div class="form-group">
+              <label>Description (English)</label>
+              <textarea class="form-control" onchange="updateDiv(${idx}, 'descEn', this.value)">${div.descEn || ''}</textarea>
+            </div>
+            <div class="form-group">
+              <label>Description (বাংলা)</label>
+              <textarea class="form-control" onchange="updateDiv(${idx}, 'descBn', this.value)">${div.descBn || ''}</textarea>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  function addDivision() {
+    divisions.push({ icon: '', titleEn: '', titleBn: '', descEn: '', descBn: '' });
+    renderDivisions();
+  }
+
+  function removeDivision(idx) {
+    if(confirm('Remove this division?')) {
+      divisions.splice(idx, 1);
+      renderDivisions();
+    }
+  }
+
+  function updateDiv(idx, field, value) {
+    divisions[idx][field] = value;
+  }
+
+  function saveDivisions() {
+    document.getElementById('divisionsJson').value = JSON.stringify(divisions);
+    document.getElementById('divisionsForm').submit();
+  }
+
+  // Initial render
+  if (document.getElementById('divisionsContainer')) renderDivisions();
+  <% } %>
 </script>
 </body>
 </html>

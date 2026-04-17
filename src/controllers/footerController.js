@@ -18,6 +18,15 @@ exports.getFooter = async (req, res) => {
         socialLinks: {},
         aboutText: { en: '', bn: '' },
         copyrightText: '© 2024 Nusrat International. All rights reserved.',
+        businessHours: {
+          mon: { open: "09:00", close: "18:00", closed: false },
+          tue: { open: "09:00", close: "18:00", closed: false },
+          wed: { open: "09:00", close: "18:00", closed: false },
+          thu: { open: "09:00", close: "18:00", closed: false },
+          fri: { open: "09:00", close: "18:00", closed: false },
+          sat: { open: "09:00", close: "18:00", closed: false },
+          sun: { open: "", close: "", closed: true }
+        },
         isActive: true,
         updatedAt: new Date()
       };
@@ -65,6 +74,7 @@ exports.updateFooter = async (req, res) => {
       },
       aboutText: { en: aboutTextEn || '', bn: aboutTextBn || '' },
       copyrightText: copyrightText || '',
+      businessHours: req.body.businessHours_json ? JSON.parse(req.body.businessHours_json) : null,
       isActive: true,
       updatedAt: new Date()
     };
