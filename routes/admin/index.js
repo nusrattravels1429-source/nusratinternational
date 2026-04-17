@@ -32,10 +32,10 @@ router.post('/content/update', protectAdmin, upload.fields([
   { name: 'heroImage', maxCount: 1 },
   { name: 'bgImage', maxCount: 1 }
 ]), contentController.updateContent);
-router.post('/content/hero-slide/create', protectAdmin, upload.single('image'), contentController.createHeroSlide);
-router.post('/content/hero-slide/update/:id', protectAdmin, upload.single('image'), contentController.updateHeroSlide);
-router.post('/content/hero-slide/reorder', protectAdmin, express.json(), contentController.reorderHeroSlides);
-router.post('/content/delete/:id', protectAdmin, contentController.deleteContent);
+router.post('/hero/add', protectAdmin, upload.single('image'), contentController.createHeroSlide);
+router.put('/hero/:id', protectAdmin, upload.single('image'), contentController.updateHeroSlide);
+router.post('/hero/reorder', protectAdmin, express.json(), contentController.reorderHeroSlides);
+router.delete('/hero/:id', protectAdmin, contentController.deleteContent);
 
 // =============================================================================
 // CARDS MANAGEMENT (Travel / Hajj / Work)

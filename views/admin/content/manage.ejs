@@ -553,7 +553,8 @@
     const form = document.getElementById('slideForm');
     if (id) {
       document.getElementById('slideModalTitle').innerText = '✏️ Edit Hero Slide';
-      form.action = '/admin/content/hero-slide/update/' + id;
+      form.dataset.action = '/admin/hero/' + id;
+      form.dataset.method = 'PUT';
       document.getElementById('sTitleEn').value = tEn || '';
       document.getElementById('sTitleBn').value = tBn || '';
       document.getElementById('sSubEn').value = sEn || '';
@@ -567,7 +568,8 @@
         : '';
     } else {
       document.getElementById('slideModalTitle').innerText = '🎬 Add Hero Slide';
-      form.action = '/admin/content/hero-slide/create';
+      form.dataset.action = '/admin/hero/add';
+      form.dataset.method = 'POST';
       form.reset();
       document.getElementById('sExistingImage').value = '';
       document.getElementById('currentSlideImage').innerHTML = '';
@@ -576,16 +578,27 @@
     document.getElementById('slideModal').style.display = 'flex';
   }
 
+  document.getElementById('slideForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch(this.dataset.action, { method: this.dataset.method, body: formData })
+      .then(res => {
+        if (res.redirected) window.location.href = res.url;
+        else location.reload();
+      })
+      .catch(err => alert('Network error submitting slide.'));
+  });
+
   function closeSlideModal() {
     document.getElementById('slideModal').style.display = 'none';
   }
 
   function deleteSlide(id) {
     if(!confirm('Delete this slide?')) return;
-    fetch('/admin/content/delete/' + id, { method: 'POST', headers: {'Accept': 'application/json'} })
-      .then(res => res.json())
+    fetch('/admin/hero/' + id, { method: 'DELETE', headers: {'Accept': 'application/json'} })
+      .then(res => res.json().catch(() => res.text().then(t => ({success: false, error: t}))))
       .then(data => {
-        if(data.success) location.reload();
+        if(data.success || !data.error) location.reload();
         else alert('Error: ' + (data.error || 'Cannot delete slide'));
       })
       .catch(err => alert('Network error deleting slide.'));
@@ -618,14 +631,20 @@
       orders.push({ id: card.getAttribute('data-id'), order: index });
     });
 
-    fetch('/admin/content/hero-slide/reorder', { 
+    fetch('/admin/hero/reorder', { 
       method: 'POST', 
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ orders })
     })
     .then(res => res.json())
     .then(data => {
-      if(data.success) { alert('Order saved!'); location.reload(); }
+      if(data.success) { 
+        // Toast style alert
+        const t = document.createElement('div');
+        t.className = 'toast'; t.innerText = 'Order saved!';
+        document.body.appendChild(t);
+        setTimeout(() => location.reload(), 1000); 
+      }
       else alert('Error saving order');
     });
   }
