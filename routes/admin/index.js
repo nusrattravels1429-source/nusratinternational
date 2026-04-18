@@ -94,4 +94,18 @@ router.post('/navigation/delete/:id', protectAdmin, navigationController.deleteL
 router.get('/footer', protectAdmin, footerController.manageFooter);
 router.post('/footer/update', protectAdmin, upload.single('logo'), footerController.updateFooter);
 
+// =============================================================================
+// HERO SLIDER MANAGEMENT
+// =============================================================================
+const heroRoutes = require('./hero');
+router.use('/api/admin/hero-slides', heroRoutes);
+
+router.get('/hero-manage', protectAdmin, (req, res) => {
+  res.render('admin/hero/manage', { 
+    title: 'Manage Hero Slider',
+    admin: req.admin || req.session?.admin || { username: 'Admin' },
+    activePage: 'hero-manage'
+  });
+});
+
 module.exports = router;
