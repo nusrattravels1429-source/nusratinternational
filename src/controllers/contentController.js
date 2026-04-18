@@ -69,7 +69,11 @@ exports.updateContent = async (req, res) => {
       { upsert: true }
     );
 
-    res.redirect('/admin/content/manage/' + section);
+    if (req.body.redirect) {
+      res.redirect(req.body.redirect);
+    } else {
+      res.redirect('/admin/content/manage/' + section);
+    }
   } catch (error) {
     console.error('Update content error:', error);
     res.status(500).send('Error updating content: ' + error.message);
