@@ -12,6 +12,9 @@ const certificationController = require('../../src/controllers/certificationCont
 const navigationController = require('../../src/controllers/navigationController');
 const footerController = require('../../src/controllers/footerController');
 
+// --- Centralized Nav/Footer Module ---
+const navFooterRoutes = require('./navFooter');
+
 // --- Auth Middleware & Uploads ---
 const { protectAdmin } = require('../../src/middleware/auth');
 const { upload } = require('../../src/middleware/upload');
@@ -100,6 +103,19 @@ router.post('/footer/update', protectAdmin, upload.single('logo'), footerControl
 // =============================================================================
 const heroRoutes = require('./hero');
 router.use('/api/admin/hero-slides', heroRoutes);
+
+// =============================================================================
+// NAVBAR & FOOTER CENTRALIZED MODULE
+// =============================================================================
+router.use('/api', navFooterRoutes); // Mounts to /admin/api/navbar and /admin/api/footer
+
+router.get('/nav-footer', protectAdmin, (req, res) => {
+  res.render('admin/navfooter/manage', { 
+    title: 'Manage Navbar & Footer',
+    admin: req.admin || req.session?.admin || { username: 'Admin' },
+    activePage: 'nav-footer'
+  });
+});
 
 router.get('/hero-manage', protectAdmin, async (req, res) => {
   try {

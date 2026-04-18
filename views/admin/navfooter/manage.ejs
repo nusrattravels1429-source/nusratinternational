@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sidebar { background: #f8fafc; border-right: 1px solid #e2e8f0; width: 250px; min-height: 100vh; position: fixed; left: 0; top: 0; padding: 20px; }
+        .sidebar-menu li { margin-bottom: 10px; }
+        .sidebar-menu a { text-decoration: none; color: #334155; }
+        .sidebar-menu a.active { font-weight: bold; color: #2563eb; }
+        .main-content { margin-left: 250px; padding: 20px; }
+        .tab-btn.active { border-bottom: 2px solid #2563eb; color: #2563eb; }
+        .grab-handle { cursor: grab; color: #9ca3af; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+<div class="flex">
+    <%- include('../partials/sidebar', { admin: admin, activePage: activePage }) %>
+
+    <div class="main-content flex-grow container mx-auto px-4 py-8 max-w-6xl">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6"><%= title %></h1>
+        <div id="toast-container" class="fixed top-4 right-4 z-50"></div>
+
+        <!-- TABS -->
+        <div class="flex border-b mb-6">
+            <button class="tab-btn active px-4 py-2 font-semibold text-gray-600 hover:text-blue-600" onclick="switchTab('navbar')">Navbar Links</button>
+            <button class="tab-btn px-4 py-2 font-semibold text-gray-600 hover:text-blue-600" onclick="switchTab('footer')">Footer Settings</button>
+        </div>
+
+        <!-- NAVBAR MANAGER -->
+        <div id="navbar-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Manage Navigation Links</h2>
+                <button onclick="openNavModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">+ Add Link</button>
+            </div>
+            <div class="bg-white rounded shadow text-sm mb-4">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 border-b">
+                            <th class="p-3 w-10"></th>
+                            <th class="p-3">Label (EN)</th>
+                            <th class="p-3">Label (BN)</th>
+                            <th class="p-3">Link Path</th>
+                            <th class="p-3">External</th>
+                            <th class="p-3">Status</th>
+                            <th class="p-3 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="nav-list" class="divide-y">
+                        <tr><td colspan="7" class="p-4 text-center text-gray-500">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <button onclick="saveNavOrder()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold px-4 py-2 rounded">Save Order</button>
+        </div>
+
+        <!-- FOOTER SETTINGS -->
+        <div id="footer-tab" class="tab-content hidden">
+            <form id="footerForm" onsubmit="saveFooter(event)" class="bg-white rounded shadow p-6 space-y-6">
+                
+                <h2 class="text-xl font-bold border-b pb-2">Global Content</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block font-medium mb-1">Company Name (EN)</label><input type="text" name="companyNameEn" class="w-full border rounded p-2"></div>
+                    <div><label class="block font-medium mb-1">Company Name (BN)</label><input type="text" name="companyNameBn" class="w-full border rounded p-2"></div>
+                    <div class="col-span-2"><label class="block font-medium mb-1">Copyright Text (EN)</label><input type="text" name="copyrightEn" class="w-full border rounded p-2"></div>
+                    <div class="col-span-2"><label class="block font-medium mb-1">Copyright Text (BN)</label><input type="text" name="copyrightBn" class="w-full border rounded p-2"></div>
+                </div>
+
+                <h2 class="text-xl font-bold border-b pb-2 mt-6">Contact Info</h2>
+                <div class="grid grid-cols-3 gap-4">
+                    <div><label class="block font-medium mb-1">Phone</label><input type="text" name="phone" class="w-full border rounded p-2"></div>
+                    <div><label class="block font-medium mb-1">Email</label><input type="email" name="email" class="w-full border rounded p-2"></div>
+                    <div><label class="block font-medium mb-1">WhatsApp</label><input type="text" name="whatsapp" class="w-full border rounded p-2"></div>
+                    <div class="col-span-3 grid grid-cols-2 gap-4">
+                        <div><label class="block font-medium mb-1">Address (EN)</label><textarea name="addressEn" class="w-full border rounded p-2"></textarea></div>
+                        <div><label class="block font-medium mb-1">Address (BN)</label><textarea name="addressBn" class="w-full border rounded p-2"></textarea></div>
+                    </div>
+                </div>
+
+                <h2 class="text-xl font-bold border-b pb-2 mt-6">Social Links</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-sm mb-1">Facebook URL</label><input type="text" name="facebook" class="w-full border rounded p-2"></div>
+                    <div><label class="block text-sm mb-1">Instagram URL</label><input type="text" name="instagram" class="w-full border rounded p-2"></div>
+                    <div><label class="block text-sm mb-1">YouTube URL</label><input type="text" name="youtube" class="w-full border rounded p-2"></div>
+                    <div><label class="block text-sm mb-1">LinkedIn URL</label><input type="text" name="linkedin" class="w-full border rounded p-2"></div>
+                    <div><label class="block text-sm mb-1">Twitter URL</label><input type="text" name="twitter" class="w-full border rounded p-2"></div>
+                </div>
+
+                <h2 class="text-xl font-bold border-b pb-2 mt-6">Business Hours</h2>
+                <div class="grid grid-cols-1 gap-2" id="business-hours-container">
+                    <!-- JS populated -->
+                </div>
+
+                <h2 class="text-xl font-bold border-b pb-2 mt-6 flex justify-between">
+                    <span>Quick Links</span>
+                    <button type="button" onclick="addQuickLink()" class="text-sm bg-blue-100 text-blue-700 px-2 py-1 rounded">+ Add</button>
+                </h2>
+                <div id="quick-links-container" class="space-y-2">
+                    <!-- JS populated -->
+                </div>
+
+                <div class="mt-8 border-t pt-4 flex justify-end">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow" id="btnSaveFooter">Save Footer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Navbar Modal -->
+<div id="navModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+    <form id="navForm" onsubmit="saveNav(event)" class="bg-white rounded-lg w-full max-w-md p-6 relative">
+        <button type="button" onclick="closeNavModal()" class="absolute top-4 right-4 text-gray-500 font-bold">&times;</button>
+        <h2 id="navModalTitle" class="text-xl font-bold mb-4">Add Link</h2>
+        <input type="hidden" id="navId" name="navId">
+        
+        <div class="space-y-4">
+            <div><label class="block mb-1">Label (EN)</label><input type="text" name="labelEn" id="labelEn" class="w-full border rounded p-2" required></div>
+            <div><label class="block mb-1">Label (BN)</label><input type="text" name="labelBn" id="labelBn" class="w-full border rounded p-2" required></div>
+            <div><label class="block mb-1">Link URL (e.g. /about)</label><input type="text" name="link" id="link" class="w-full border rounded p-2" required></div>
+            <div class="flex gap-4">
+                <label class="flex items-center gap-2"><input type="checkbox" name="isActive" id="isActive" value="true" checked> Active / Visible</label>
+                <label class="flex items-center gap-2"><input type="checkbox" name="isExternal" id="isExternal" value="true"> Open New Tab</label>
+            </div>
+        </div>
+        <div class="mt-6 flex justify-end gap-2">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Save</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // --- Utilities ---
+    function showToast(msg, type='success') {
+        const c = document.getElementById('toast-container');
+        const t = document.createElement('div');
+        t.className = `text-white px-6 py-3 rounded shadow-lg mb-2 opacity-0 transition-opacity duration-300 ${type==='success'?'bg-green-500':'bg-red-500'}`;
+        t.innerText = msg;
+        c.appendChild(t);
+        setTimeout(()=>t.classList.remove('opacity-0'), 10);
+        setTimeout(()=>{ t.classList.add('opacity-0'); setTimeout(()=>t.remove(), 300); }, 3000);
+    }
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(tab+'-tab').classList.remove('hidden');
+        event.target.classList.add('active');
+    }
+
+    // --- NAVBAR Logic ---
+    let navItems = [];
+    let draggedRow = null;
+
+    async function loadNav() {
+        const res = await fetch('/admin/api/navbar');
+        const json = await res.json();
+        if(json.success){
+            navItems = json.data;
+            renderNav();
+        }
+    }
+
+    function renderNav() {
+        const tbody = document.getElementById('nav-list');
+        tbody.innerHTML = '';
+        if(navItems.length === 0) return tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center">No links found.</td></tr>';
+        
+        navItems.forEach((item, idx) => {
+            const tr = document.createElement('tr');
+            tr.draggable = true;
+            tr.dataset.id = item._id;
+            tr.className = 'hover:bg-gray-50 border-b';
+            tr.innerHTML = `
+                <td class="p-3 text-center grab-handle cursor-move">⣿</td>
+                <td class="p-3">${item.label.en}</td>
+                <td class="p-3">${item.label.bn}</td>
+                <td class="p-3 text-blue-600"><code>${item.link}</code></td>
+                <td class="p-3">${item.isExternal ? '✅' : '❌'}</td>
+                <td class="p-3">
+                    <span class="px-2 py-1 rounded text-xs ${item.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                        ${item.isActive ? 'Active' : 'Hidden'}
+                    </span>
+                </td>
+                <td class="p-3 text-right">
+                    <button type="button" onclick='editNav(${JSON.stringify(item).replace(/'/g,"&#39;")})' class="text-blue-500 hover:underline mr-3">Edit</button>
+                    <button type="button" onclick="deleteNav('${item._id}')" class="text-red-500 hover:underline">Delete</button>
+                </td>
+            `;
+
+            // Drag events
+            tr.addEventListener('dragstart', (e) => { draggedRow = tr; e.dataTransfer.effectAllowed = 'move'; });
+            tr.addEventListener('dragover', (e) => { e.preventDefault(); tr.classList.add('bg-blue-50'); });
+            tr.addEventListener('dragleave', () => { tr.classList.remove('bg-blue-50'); });
+            tr.addEventListener('drop', (e) => {
+                e.preventDefault();
+                tr.classList.remove('bg-blue-50');
+                if (draggedRow !== tr) {
+                    const allRows = Array.from(tbody.querySelectorAll('tr'));
+                    const draggedIdx = allRows.indexOf(draggedRow);
+                    const droppedIdx = allRows.indexOf(tr);
+                    if (draggedIdx < droppedIdx) tr.after(draggedRow);
+                    else tr.before(draggedRow);
+                }
+            });
+
+            tbody.appendChild(tr);
+        });
+    }
+
+    function openNavModal() {
+        document.getElementById('navForm').reset();
+        document.getElementById('navId').value = '';
+        document.getElementById('navModalTitle').innerText = 'Add Link';
+        document.getElementById('navModal').classList.remove('hidden');
+    }
+    
+    function closeNavModal() { document.getElementById('navModal').classList.add('hidden'); }
+
+    function editNav(item) {
+        document.getElementById('navId').value = item._id;
+        document.getElementById('labelEn').value = item.label.en;
+        document.getElementById('labelBn').value = item.label.bn;
+        document.getElementById('link').value = item.link;
+        document.getElementById('isActive').checked = item.isActive;
+        document.getElementById('isExternal').checked = item.isExternal;
+        document.getElementById('navModalTitle').innerText = 'Edit Link';
+        document.getElementById('navModal').classList.remove('hidden');
+    }
+
+    async function saveNav(e) {
+        e.preventDefault();
+        const id = document.getElementById('navId').value;
+        const fd = new FormData(e.target);
+        const url = id ? `/admin/api/navbar/${id}` : `/admin/api/navbar`;
+        const method = id ? 'PUT' : 'POST';
+
+        const res = await fetch(url, { method, body: fd });
+        const json = await res.json();
+        if(json.success) { showToast('Saved successfully'); closeNavModal(); loadNav(); }
+        else showToast(json.message, 'error');
+    }
+
+    async function deleteNav(id) {
+        if(!confirm('Delete this link?')) return;
+        const res = await fetch(`/admin/api/navbar/${id}`, { method: 'DELETE' });
+        const json = await res.json();
+        if(json.success) { showToast('Deleted successfully'); loadNav(); }
+        else showToast(json.message, 'error');
+    }
+
+    async function saveNavOrder() {
+        const rows = document.querySelectorAll('#nav-list tr[data-id]');
+        const orderData = Array.from(rows).map((tr, idx) => ({ _id: tr.dataset.id, order: idx }));
+        
+        const res = await fetch('/admin/api/navbar/reorder', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(orderData)
+        });
+        const json = await res.json();
+        if(json.success) showToast('Order saved successfully');
+        else showToast('Failed to save order', 'error');
+    }
+
+    // --- FOOTER Logic ---
+    async function loadFooter() {
+        const res = await fetch('/admin/api/footer');
+        const json = await res.json();
+        if(json.success && json.data) {
+            populateFooterForm(json.data);
+        }
+    }
+
+    function populateFooterForm(d) {
+        const f = document.getElementById('footerForm');
+        f.companyNameEn.value = d.companyName?.en || ''; f.companyNameBn.value = d.companyName?.bn || '';
+        f.copyrightEn.value = d.copyright?.en || ''; f.copyrightBn.value = d.copyright?.bn || '';
+        f.phone.value = d.phone || ''; f.email.value = d.email || ''; f.whatsapp.value = d.whatsapp || '';
+        f.addressEn.value = d.address?.en || ''; f.addressBn.value = d.address?.bn || '';
+        f.facebook.value = d.socialLinks?.facebook || ''; f.instagram.value = d.socialLinks?.instagram || '';
+        f.youtube.value = d.socialLinks?.youtube || ''; f.linkedin.value = d.socialLinks?.linkedin || '';
+        f.twitter.value = d.socialLinks?.twitter || '';
+
+        // Hours
+        const b = d.businessHours || {};
+        const days = ['mon','tue','wed','thu','fri','sat','sun'];
+        const dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+        const c = document.getElementById('business-hours-container');
+        c.innerHTML = '';
+        days.forEach((day, i) => {
+            const h = b[day] || {open:'', close:'', closed:false};
+            c.innerHTML += `
+            <div class="flex items-center gap-4 border p-2 rounded bg-gray-50">
+                <div class="font-semibold w-24">${dayNames[i]}</div>
+                <input type="time" name="${day}Open" value="${h.open}" class="border rounded px-2" ${h.closed?'disabled':''}>
+                <span>to</span>
+                <input type="time" name="${day}Close" value="${h.close}" class="border rounded px-2" ${h.closed?'disabled':''}>
+                <label class="flex items-center gap-2 ml-4 text-red-600 font-medium">
+                    <input type="checkbox" name="${day}Closed" value="true" ${h.closed?'checked':''} onchange="toggleHours(this, '${day}')"> Closed
+                </label>
+            </div>
+            `;
+        });
+
+        // Quick Links
+        document.getElementById('quick-links-container').innerHTML = '';
+        if(Array.isArray(d.quickLinks)) {
+            d.quickLinks.forEach(ql => addQuickLink(ql));
+        }
+    }
+
+    function toggleHours(chk, day) {
+        const parent = chk.closest('div');
+        parent.querySelector(`[name="${day}Open"]`).disabled = chk.checked;
+        parent.querySelector(`[name="${day}Close"]`).disabled = chk.checked;
+    }
+
+    function addQuickLink(data = {label:{en:'', bn:''}, link:''}) {
+        const c = document.getElementById('quick-links-container');
+        const el = document.createElement('div');
+        el.className = 'flex gap-2 items-center mb-2';
+        el.innerHTML = `
+            <input type="text" name="qlLabelEn" placeholder="EN Title" value="${data.label?.en || ''}" class="border rounded p-2 flex-grow">
+            <input type="text" name="qlLabelBn" placeholder="BN Title" value="${data.label?.bn || ''}" class="border rounded p-2 flex-grow">
+            <input type="text" name="qlLink" placeholder="/path or https://" value="${data.link || ''}" class="border rounded p-2 flex-grow">
+            <button type="button" onclick="this.parentElement.remove()" class="text-red-500 font-bold px-2">X</button>
+        `;
+        c.appendChild(el);
+    }
+
+    async function saveFooter(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnSaveFooter');
+        btn.innerText = 'Saving...'; btn.disabled = true;
+
+        const fd = new FormData(e.target);
+        try {
+            const res = await fetch('/admin/api/footer', { method: 'PUT', body: fd });
+            const json = await res.json();
+            if(json.success) showToast('Footer settings saved');
+            else showToast(json.message, 'error');
+        } catch(err) { showToast('Error saving footer', 'error'); }
+        
+        btn.innerText = 'Save Footer'; btn.disabled = false;
+    }
+
+    // Init
+    document.addEventListener("DOMContentLoaded", () => {
+        loadNav();
+        loadFooter();
+    });
+</script>
+
+</body>
+</html>

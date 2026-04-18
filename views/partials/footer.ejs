@@ -1,24 +1,117 @@
 <footer>
-  <div class="footer-inner">
+  <div class="footer-inner" id="footer-inner">
     <div class="footer-brand">
       <div class="footer-logo-container">
         <a href="/" class="footer-logo-link">
           <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Logo" class="footer-logo-img" onerror="this.style.display='none'" />
-          <span class="footer-logo-text">Nusrat International</span>
+          <span class="footer-logo-text" id="footer-company-name">Nusrat International</span>
         </a>
       </div>
-      <p>Your trusted partner for Hajj, Umrah, travel & work. Serving Bangladesh since 2010.</p>
-      <div class="social-links"><a href="#">FB</a><a href="#">YT</a><a href="#">IG</a><a href="#">WA</a></div>
+      <p id="footer-address">Your trusted partner for Hajj, Umrah, travel & work. Serving Bangladesh since 2010.</p>
+      <div class="social-links" id="footer-social-links"><a href="#">FB</a><a href="#">YT</a><a href="#">IG</a><a href="#">WA</a></div>
+      <div class="mt-4" id="footer-contact-info">
+         <!-- Contact info will be dynamically populated here -->
+      </div>
     </div>
-    <div class="footer-links"><h4>Services</h4><a href="/travel">Travel Packages</a><a href="/hajj">Hajj Packages</a><a href="/hajj">Umrah Packages</a><a href="/work">Work Visas</a></div>
-    <div class="footer-links"><h4>Company</h4><a href="/about">About Us</a><a href="/employees">Our Team</a><a href="/testimonials">Testimonials</a><a href="/contact">Contact</a></div>
+    
+    <div class="footer-links" id="footer-quick-links-container">
+      <h4>Quick Links</h4>
+      <a href="/travel">Travel Packages</a>
+      <a href="/hajj">Hajj Packages</a>
+      <a href="/work">Work Visas</a>
+      <a href="/about">About Us</a>
+      <a href="/contact">Contact</a>
+    </div>
+
+    <div class="footer-links" id="footer-biz-hours-container">
+      <h4>Business Hours</h4>
+      <!-- Hours dynamically populated here -->
+      <span>Mon - Sat: 09:00 - 18:00</span>
+    </div>
+
     <div class="footer-links">
       <h4>Our Location</h4>
       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.7194346099836!2d90.4049653103119!3d23.79300323072133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c70e90bb671d%3A0x7eab77d0896252c0!2sBanani%20Super%20Market!5e0!3m2!1sen!2sbd!4v1771968108612!5m2!1sen!2sbd" width="100%" height="200" class="footer-iframe" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
   </div>
-  <div class="footer-bottom"><p>© 2026 Nusrat International Bangladesh. All rights reserved. | সর্বস্বত্ব সংরক্ষিত।</p></div>
+  <div class="footer-bottom"><p id="footer-copyright">© 2026 Nusrat International Bangladesh. All rights reserved. | সর্বস্বত্ব সংরক্ষিত।</p></div>
 </footer>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    try {
+      const res = await window.fetch('/api/public/footer');
+      const json = await res.json();
+      if(json.success && json.data) {
+        const d = json.data;
+        
+        // Update Brand/Company Name
+        if(d.companyName && (d.companyName.en || d.companyName.bn)) {
+          document.getElementById('footer-company-name').innerHTML = d.companyName.en + (d.companyName.bn ? `<br/><small>${d.companyName.bn}</small>` : '');
+        }
+
+        // Update Address
+        if(d.address && (d.address.en || d.address.bn)) {
+          document.getElementById('footer-address').innerHTML = `<strong>Address:</strong><br/>` + (d.address.en ? `${d.address.en}<br/>` : '') + (d.address.bn ? `${d.address.bn}` : '');
+        }
+
+        // Base Contact Info
+        let contactHtml = '';
+        if(d.phone) contactHtml += `<div><strong>Phone:</strong> ${d.phone}</div>`;
+        if(d.whatsapp) contactHtml += `<div><strong>WhatsApp:</strong> ${d.whatsapp}</div>`;
+        if(d.email) contactHtml += `<div><strong>Email:</strong> ${d.email}</div>`;
+        if(contactHtml) document.getElementById('footer-contact-info').innerHTML = contactHtml;
+
+        // Social Links
+        if(d.socialLinks) {
+          let sl = '';
+          if(d.socialLinks.facebook) sl += `<a href="${d.socialLinks.facebook}" target="_blank">FB</a>`;
+          if(d.socialLinks.instagram) sl += `<a href="${d.socialLinks.instagram}" target="_blank">IG</a>`;
+          if(d.socialLinks.youtube) sl += `<a href="${d.socialLinks.youtube}" target="_blank">YT</a>`;
+          if(d.socialLinks.linkedin) sl += `<a href="${d.socialLinks.linkedin}" target="_blank">IN</a>`;
+          if(d.socialLinks.twitter) sl += `<a href="${d.socialLinks.twitter}" target="_blank">TW</a>`;
+          if(sl) document.getElementById('footer-social-links').innerHTML = sl;
+        }
+
+        // Quick Links
+        if(d.quickLinks && d.quickLinks.length > 0) {
+          const qlc = document.getElementById('footer-quick-links-container');
+          qlc.innerHTML = '<h4>Quick Links</h4>';
+          d.quickLinks.forEach(ql => {
+            const label = ql.label.en + (ql.label.bn ? ` | ${ql.label.bn}` : '');
+            qlc.innerHTML += `<a href="${ql.link}">${label}</a>`;
+          });
+        }
+
+        // Business Hours
+        if(d.businessHours) {
+          const bhc = document.getElementById('footer-biz-hours-container');
+          bhc.innerHTML = '<h4>Business Hours</h4>';
+          const days = ['mon','tue','wed','thu','fri','sat','sun'];
+          const dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+          
+          let hoursHtml = `<table style="width:100%; font-size:14px; opacity: 0.8;">`;
+          days.forEach((day, i) => {
+            const hours = d.businessHours[day];
+            if(hours) {
+                const text = hours.closed ? 'Closed' : `${hours.open} - ${hours.close}`;
+                hoursHtml += `<tr><td style="padding-bottom: 4px;"><strong>${dayNames[i]}</strong></td><td style="text-align: right; padding-bottom: 4px;">${text}</td></tr>`;
+            }
+          });
+          hoursHtml += `</table>`;
+          bhc.innerHTML += hoursHtml;
+        }
+
+        // Copyright
+        if(d.copyright && (d.copyright.en || d.copyright.bn)) {
+          document.getElementById('footer-copyright').innerHTML = d.copyright.en + (d.copyright.bn ? ` | ${d.copyright.bn}` : '');
+        }
+      }
+    } catch(err) {
+      console.warn('Failed to load dynamic footer settings', err);
+    }
+  });
+</script>
 <script src="/js/common.js"></script>
 </body>
 </html>

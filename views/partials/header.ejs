@@ -22,21 +22,50 @@
     <button class="hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
 
     <ul class="nav-links" id="nav-links">
+      <!-- STATIC FALLBACK -->
       <li><a href="/" class="<%= activePage==='home' ? 'active' : '' %>">Home | হোম</a></li>
       <li><a href="/ticketing">Ticketing | ভ্রমণ</a></li>
       <li><a href="/travel" class="<%= activePage==='travel' ? 'active' : '' %>">Travel | ভ্রমণ</a></li>
       <li><a href="/hajj" class="<%= activePage==='hajj' ? 'active' : '' %>">Hajj | হাজ্জ</a></li>
       <li><a href="/work" class="<%= activePage==='work' ? 'active' : '' %>">Work | কাজ</a></li>
       <li><a href="/contact" class="<%= activePage==='contact' ? 'active' : '' %>">Contact | যোগাযোগ</a></li>
-      <li class="has-dropdown" id="aboutDropdown">
-        <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">About | আমাদের সম্পর্কে <span class="drop-arrow">▾</span></button>
-        <ul class="dropdown-menu" role="menu">
-          <li role="none"><a href="/about"><span class="dm-text"><strong>About Us</strong><small>Our story & leadership</small></span></a></li>
-          <li role="none"><a href="/gallery"><span class="dm-text"><strong>Gallery</strong><small>Photos & memories</small></span></a></li>
-          <li role="none"><a href="/employees"><span class="dm-text"><strong>Our Team</strong><small>Meet our employees</small></span></a></li>
-          <li role="none"><a href="/certifications"><span class="dm-text"><strong>Approvals & Certifications</strong><small>BAIRA · IATA · ATAB · RL-1429</small></span></a></li>
-        </ul>
-      </li>
     </ul>
   </div>
 </nav>
+
+<script>
+  // Dynamically load Navigation Bar links
+  document.addEventListener("DOMContentLoaded", async () => {
+    try {
+      const res = await window.fetch('/api/public/navbar');
+      const json = await res.json();
+      if(json.success && json.data && json.data.length > 0) {
+        const navList = document.getElementById('nav-links');
+        navList.innerHTML = ''; // Clear fallback
+        
+        json.data.forEach(item => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = item.link;
+          if (item.isExternal) a.target = '_blank';
+          
+          // Determine if active
+          const currentPath = window.location.pathname;
+          if (currentPath === item.link || (item.link !== '/' && currentPath.startsWith(item.link))) {
+             a.className = 'active';
+             // Also support legacy activePage if defined
+             if ('<%= typeof activePage !== "undefined" ? activePage : "" %>' === item.link.replace('/','')) {
+                 a.className = 'active';
+             }
+          }
+          
+          a.innerHTML = item.label.en + (item.label.bn ? ` | ${item.label.bn}` : '');
+          li.appendChild(a);
+          navList.appendChild(li);
+        });
+      }
+    } catch(err) {
+      console.warn('Failed to dynamically load navbar, using static fallback.', err);
+    }
+  });
+</script>
