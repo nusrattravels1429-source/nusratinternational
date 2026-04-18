@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     const db = await getDb(req);
 
     const [slider, ticketing, certifications, travelPackages, hajjPackages, workPackages] = await Promise.all([
-      db.collection('sitecontents').findOne({ section: 'homepage', key: 'hero-slider' }),
+      db.collection('sitecontents').find({ section: 'homepage', key: { $regex: /^hero-/ } }).sort({ 'metadata.order': 1 }).toArray(),
       db.collection('sitecontents').findOne({ section: 'ticketing', key: 'ticketing-intro' }),
       db.collection('certifications').find({ isActive: true }).sort({ order: 1, isFeatured: -1 }).toArray(),
       db.collection('cards').find({ type: 'travel', isActive: true, isPaused: { $ne: true } }).sort({ order: 1, createdAt: -1 }).limit(6).toArray(),
@@ -25,8 +25,8 @@ router.get('/', async (req, res) => {
       travelPackages,
       hajjPackages,
       workPackages,
-      homepageHero: slider,
-      sliderSlides: slider?.slides || [],
+      homepageHero: slider.length > 0 ? slider[0] : null,
+      sliderSlides: slider,
       ticketingContent: ticketing,
       certifications,
       activePage: 'home',

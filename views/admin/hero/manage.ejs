@@ -18,7 +18,6 @@
 </head>
 <body>
 <div class="flex">
-    <!-- Using existing partial via your previous setup, if it breaks adjust accordingly -->
     <%- include('../partials/sidebar', { admin: admin || {username:'Admin'}, activePage: activePage || 'hero-manage' }) %>
 
 <div class="main-content flex-grow container mx-auto px-4 py-8 max-w-6xl">
@@ -41,13 +40,12 @@
         </div>
 
         <ul id="slides-list" class="divide-y divide-gray-200">
-            <!-- Dynamically populated via JS -->
             <li class="p-8 text-center text-gray-500 loading-indicator">Loading slides...</li>
         </ul>
     </div>
 </div>
 
-<!-- Add/Edit Modal (Can be toggled) -->
+<!-- Add/Edit Modal -->
 <div id="slideFormModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 flex justify-center items-center">
     <div class="bg-white rounded-lg w-full max-w-2xl p-6 relative max-h-[90vh] overflow-y-auto">
         <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 font-bold text-xl">&times;</button>
@@ -129,7 +127,6 @@
             li.draggable = true;
             li.dataset.id = slide._id;
             
-            // Drag and Drop Event Listeners
             li.addEventListener('dragstart', handleDragStart);
             li.addEventListener('dragover', handleDragOver);
             li.addEventListener('drop', handleDrop);
@@ -140,7 +137,7 @@
                     &#9776;
                 </div>
                 <div class="col-span-3 pr-4">
-                    <img src="\${slide.imageUrl}" alt="Slide Preview" class="w-full h-20 object-cover rounded shadow-sm">
+                    <img src="\${slide.imageUrl || (slide.images && slide.images.length > 0 ? slide.images[0].url : '')}" alt="Slide Preview" class="w-full h-20 object-cover rounded shadow-sm">
                 </div>
                 <div class="col-span-3 pr-2">
                     <div class="text-sm font-semibold">\${slide.title?.en || '-'}</div>
@@ -171,7 +168,6 @@
         const method = isEdit ? 'PUT' : 'POST';
         const url = isEdit ? \`/api/admin/hero-slides/\${slideId}\` : \`/api/admin/hero-slides\`;
 
-        // Only enforce image on creation
         if (!isEdit && !document.getElementById('heroImage').files.length) {
             return showToast('Please select an image', 'error');
         }
@@ -218,7 +214,6 @@
         }
     }
 
-    // Modal Helpers
     function openModal() {
         document.getElementById('slideFormModal').classList.remove('hidden');
         document.getElementById('slideForm').reset();
@@ -241,7 +236,7 @@
         document.getElementById('caption_bn').value = slide.caption?.bn || '';
         
         const preview = document.getElementById('imagePreview');
-        preview.src = slide.imageUrl;
+        preview.src = slide.imageUrl || (slide.images && slide.images.length > 0 ? slide.images[0].url : '');
         preview.classList.remove('hidden');
     }
 
@@ -257,7 +252,6 @@
         }
     }
 
-    // Drag and Drop Logic
     function handleDragStart(e) {
         dragSourceEl = this;
         e.dataTransfer.effectAllowed = 'move';
@@ -297,7 +291,7 @@
         const newOrder = items.map((li, index) => ({
             _id: li.dataset.id,
             order: index
-        })).filter(item => item._id); // ensure valid ids
+        })).filter(item => item._id);
 
         if (newOrder.length === 0) return;
 
@@ -313,11 +307,10 @@
             }
         } catch (error) {
             showToast('Failed to save new order', 'error');
-            fetchSlides(); // Revert UI if fail
+            fetchSlides();
         }
     }
 
-    // Toast Utility
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');

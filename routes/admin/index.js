@@ -4,6 +4,7 @@ const router = express.Router();
 // --- Controllers ---
 const authController = require('../../src/controllers/authController');
 const contentController = require('../../src/controllers/contentController');
+const heroController = require('../../src/controllers/heroController');
 const cardController = require('../../src/controllers/cardController');
 const galleryController = require('../../src/controllers/galleryController');
 const teamController = require('../../src/controllers/teamController');
