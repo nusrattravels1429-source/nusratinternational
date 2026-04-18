@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Admin Panel</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'DM Sans', sans-serif; background: #f5f6fa; }
-    
-    .admin-layout { display: flex; min-height: 100vh; }
-    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f5f6fa;
+    }
+
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
     /* Sidebar */
     .sidebar {
       width: 260px;
@@ -20,16 +32,33 @@
       height: 100vh;
       overflow-y: auto;
     }
+
     .sidebar-header {
       text-align: center;
       padding-bottom: 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       margin-bottom: 20px;
     }
-    .sidebar-header img { width: 60px; height: 60px; object-fit: contain; }
-    .sidebar-header h2 { margin-top: 10px; font-size: 18px; }
-    .sidebar-menu { list-style: none; }
-    .sidebar-menu li { margin-bottom: 5px; }
+
+    .sidebar-header img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
+
+    .sidebar-header h2 {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 5px;
+    }
+
     .sidebar-menu a {
       display: block;
       padding: 12px 15px;
@@ -38,17 +67,24 @@
       border-radius: 5px;
       transition: background 0.3s;
     }
-    .sidebar-menu a:hover, .sidebar-menu a.active {
-      background: rgba(255,255,255,0.2);
+
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: rgba(255, 255, 255, 0.2);
     }
-    .sidebar-menu .logout { margin-top: 30px; background: rgba(255,0,0,0.3); }
-    
+
+    .sidebar-menu .logout {
+      margin-top: 30px;
+      background: rgba(255, 0, 0, 0.3);
+    }
+
     /* Main Content */
     .main-content {
       flex: 1;
       margin-left: 260px;
       padding: 30px;
     }
+
     .header {
       background: white;
       padding: 20px 30px;
@@ -57,11 +93,20 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
-    .header h1 { color: #333; font-size: 28px; }
-    .user-info { display: flex; align-items: center; gap: 10px; }
-    
+
+    .header h1 {
+      color: #333;
+      font-size: 28px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     /* Stats Cards */
     .stats-grid {
       display: grid;
@@ -69,32 +114,74 @@
       gap: 20px;
       margin-bottom: 30px;
     }
+
     .stat-card {
       background: white;
       padding: 25px;
       border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       transition: transform 0.3s;
     }
-    .stat-card:hover { transform: translateY(-5px); }
-    .stat-card h3 { color: #888; font-size: 14px; margin-bottom: 10px; }
-    .stat-card .number { font-size: 36px; font-weight: bold; color: #667eea; }
-    .stat-card.travel .number { color: #667eea; }
-    .stat-card.hajj .number { color: #f093fb; }
-    .stat-card.work .number { color: #4facfe; }
-    .stat-card.gallery .number { color: #43e97b; }
-    .stat-card.certifications .number { color: #fa709a; }
-    .stat-card.team .number { color: #fee140; }
-    
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-card h3 {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .stat-card .number {
+      font-size: 36px;
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .stat-card.travel .number {
+      color: #667eea;
+    }
+
+    .stat-card.hajj .number {
+      color: #f093fb;
+    }
+
+    .stat-card.work .number {
+      color: #4facfe;
+    }
+
+    .stat-card.gallery .number {
+      color: #43e97b;
+    }
+
+    .stat-card.certifications .number {
+      color: #fa709a;
+    }
+
+    .stat-card.team .number {
+      color: #fee140;
+    }
+
     /* Quick Actions */
     .quick-actions {
       background: white;
       padding: 25px;
       border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
-    .quick-actions h2 { margin-bottom: 20px; color: #333; }
-    .action-buttons { display: flex; gap: 15px; flex-wrap: wrap; }
+
+    .quick-actions h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
     .btn {
       padding: 12px 25px;
       border-radius: 5px;
@@ -103,32 +190,51 @@
       transition: transform 0.2s;
       display: inline-block;
     }
-    .btn:hover { transform: translateY(-2px); }
-    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-    .btn-secondary { background: #f0f0f0; color: #333; }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
   </style>
 </head>
+
 <body>
   <div class="admin-layout">
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-header">
-        <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Logo" onerror="this.style.display='none'" />
+        <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg"
+          alt="Logo" onerror="this.style.display='none'" />
         <h2>Admin Panel</h2>
       </div>
       <ul class="sidebar-menu">
         <li><a href="/admin/dashboard" class="active">📊 Dashboard</a></li>
-        <li><strong style="color: rgba(255,255,255,0.6); font-size: 12px; padding: 10px 15px; display: block;">CONTENT</strong></li>
+        <li><strong
+            style="color: rgba(255,255,255,0.6); font-size: 12px; padding: 10px 15px; display: block;">CONTENT</strong>
+        </li>
         <li><a href="/admin/hero-manage">🎬 Hero Slider</a></li>
         <li><a href="/admin/content/manage/homepage">🏠 Landing Page</a></li>
         <li><a href="/admin/content/manage/ticketing">🎫 Ticketing Page</a></li>
         <li><a href="/admin/content/manage/about">ℹ️ About Page</a></li>
-        <li><strong style="color: rgba(255,255,255,0.6); font-size: 12px; padding: 10px 15px; display: block;">PACKAGES</strong></li>
+        <li><strong
+            style="color: rgba(255,255,255,0.6); font-size: 12px; padding: 10px 15px; display: block;">PACKAGES</strong>
+        </li>
         <li><a href="/admin/cards?type=all">🎴 All Cards</a></li>
         <li><a href="/admin/cards?type=travel">✈️ Travel Packages</a></li>
         <li><a href="/admin/cards?type=hajj">🕋 Hajj Packages</a></li>
         <li><a href="/admin/cards?type=work">💼 Work Packages</a></li>
-        <li><strong style="color: rgba(255,255,255,0.6); font-size: 12px; padding: 10px 15px; display: block;">MANAGE</strong></li>
+        <li><strong
+            style="color: rgba(255,255,255,0.6); font-size: 12px; padding: 10px 15px; display: block;">MANAGE</strong>
+        </li>
         <li><a href="/admin/gallery">🖼️ Gallery</a></li>
         <li><a href="/admin/certifications">📜 Certifications</a></li>
         <li><a href="/admin/team">👥 Team Members</a></li>
@@ -137,7 +243,7 @@
         <li><a href="/admin/logout" class="logout">🚪 Logout</a></li>
       </ul>
     </aside>
-    
+
     <!-- Main Content -->
     <main class="main-content">
       <div class="header">
@@ -146,35 +252,47 @@
           <span>Welcome, <%= admin.username %></span>
         </div>
       </div>
-      
+
       <!-- Stats -->
       <div class="stats-grid">
         <div class="stat-card travel">
           <h3>Travel Packages</h3>
-          <div class="number"><%= stats.travel %></div>
+          <div class="number">
+            <%= stats.travel %>
+          </div>
         </div>
         <div class="stat-card hajj">
           <h3>Hajj Packages</h3>
-          <div class="number"><%= stats.hajj %></div>
+          <div class="number">
+            <%= stats.hajj %>
+          </div>
         </div>
         <div class="stat-card work">
           <h3>Work Packages</h3>
-          <div class="number"><%= stats.work %></div>
+          <div class="number">
+            <%= stats.work %>
+          </div>
         </div>
         <div class="stat-card gallery">
           <h3>Gallery Items</h3>
-          <div class="number"><%= stats.gallery %></div>
+          <div class="number">
+            <%= stats.gallery %>
+          </div>
         </div>
         <div class="stat-card certifications">
           <h3>Certifications</h3>
-          <div class="number"><%= stats.certifications %></div>
+          <div class="number">
+            <%= stats.certifications %>
+          </div>
         </div>
         <div class="stat-card team">
           <h3>Team Members</h3>
-          <div class="number"><%= stats.team %></div>
+          <div class="number">
+            <%= stats.team %>
+          </div>
         </div>
       </div>
-      
+
       <!-- Quick Actions -->
       <div class="quick-actions">
         <h2>Quick Actions</h2>
@@ -187,4 +305,5 @@
     </main>
   </div>
 </body>
+
 </html>
