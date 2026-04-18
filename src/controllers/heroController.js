@@ -2,7 +2,7 @@ const { ObjectId } = require('mongodb');
 
 exports.getSlides = async (req, res) => {
   try {
-    const db = req.app.locals.getDb();
+    const db = await req.app.locals.getDb();
     
     // Fetch slots 1 to 4
     let slides = await db.collection('sitecontents')
@@ -48,7 +48,7 @@ exports.getSlides = async (req, res) => {
 
 exports.updateSlide = async (req, res) => {
     try {
-        const db = req.app.locals.getDb();
+        const db = await req.app.locals.getDb();
         const { id } = req.params;
         
         const updateDoc = {
