@@ -23,8 +23,60 @@
 <div class="main-content flex-grow container mx-auto px-4 py-8 max-w-6xl">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Manage Hero Slider</h1>
-        <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow transition">
-            + Add Slide
+    </div>
+
+    <div id="toast-container" class="fixed top-4 right-4 z-50"></div>
+
+    <!-- Global Text Form -->
+    <div class="bg-white rounded-lg shadow p-6 mb-8 border border-gray-200">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Hero Text (Global for all images)</h2>
+        <form action="/admin/content/update" method="POST">
+            <input type="hidden" name="section" value="homepage">
+            <input type="hidden" name="key" value="homepage-hero-text">
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Tagline/Subtitle (EN) (e.g., ✦ DISCOVER THE WORLD)</label>
+                    <input type="text" name="subtitle_en" value="<%= heroText?.subtitle_en || '' %>" class="w-full border rounded p-2">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Tagline/Subtitle (BN)</label>
+                    <input type="text" name="subtitle_bn" value="<%= heroText?.subtitle_bn || '' %>" class="w-full border rounded p-2">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Main Title (EN) (Use HTML like <code>&lt;br/&gt;</code> for newlines)</label>
+                    <input type="text" name="title_en" value="<%= heroText?.title_en || '' %>" class="w-full border rounded p-2">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Main Title (BN)</label>
+                    <input type="text" name="title_bn" value="<%= heroText?.title_bn || '' %>" class="w-full border rounded p-2">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Description (EN)</label>
+                    <textarea name="description_en" class="w-full border rounded p-2 h-20"><%= heroText?.description_en || '' %></textarea>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Description (BN)</label>
+                    <textarea name="description_bn" class="w-full border rounded p-2 h-20"><%= heroText?.description_bn || '' %></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow transition">
+                💾 Save Global Text
+            </button>
+        </form>
+    </div>
+
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-800">Slider Images</h2>
+        <button onclick="openModal()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow transition text-sm">
+            + Add Slide Image
         </button>
     </div>
 
@@ -33,9 +85,7 @@
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <div class="grid grid-cols-12 bg-gray-100 p-4 font-semibold text-gray-700 border-b">
             <div class="col-span-1">Reorder</div>
-            <div class="col-span-3">Image</div>
-            <div class="col-span-3">Title (EN / BN)</div>
-            <div class="col-span-3">Caption (EN / BN)</div>
+            <div class="col-span-9">Image Preview</div>
             <div class="col-span-2 text-right">Actions</div>
         </div>
 
@@ -54,32 +104,10 @@
         <form id="slideForm" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
             <input type="hidden" id="slideId" name="slideId">
             
-            <div class="mb-4">
-                <label class="block text-gray-700 font-medium mb-1">Image</label>
+            <div class="mb-6">
+                <label class="block text-gray-700 font-medium mb-1">Image (1600x900px recommended)</label>
                 <input type="file" id="heroImage" name="heroImage" accept="image/*" class="w-full border rounded p-2" onchange="previewImage(this)">
-                <img id="imagePreview" class="hidden mt-2 max-h-40 rounded shadow">
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block text-gray-700 font-medium mb-1">Title (EN)</label>
-                    <input type="text" id="title_en" name="title.en" class="w-full border rounded p-2">
-                </div>
-                <div>
-                    <label class="block text-gray-700 font-medium mb-1">Title (BN)</label>
-                    <input type="text" id="title_bn" name="title.bn" class="w-full border rounded p-2">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 mb-6">
-                <div>
-                    <label class="block text-gray-700 font-medium mb-1">Caption (EN)</label>
-                    <input type="text" id="caption_en" name="caption.en" class="w-full border rounded p-2">
-                </div>
-                <div>
-                    <label class="block text-gray-700 font-medium mb-1">Caption (BN)</label>
-                    <input type="text" id="caption_bn" name="caption.bn" class="w-full border rounded p-2">
-                </div>
+                <img id="imagePreview" class="hidden mt-4 max-h-40 rounded shadow-md border">
             </div>
 
             <div class="flex justify-end gap-2">
@@ -133,19 +161,11 @@
             li.addEventListener('dragend', handleDragEnd);
 
             li.innerHTML = \`
-                <div class="col-span-1 text-gray-400 cursor-move text-xl" title="Drag to reorder">
+                <div class="col-span-1 text-gray-400 cursor-move text-xl flex items-center justify-center" title="Drag to reorder">
                     &#9776;
                 </div>
-                <div class="col-span-3 pr-4">
-                    <img src="\${slide.imageUrl || (slide.images && slide.images.length > 0 ? slide.images[0].url : '')}" alt="Slide Preview" class="w-full h-20 object-cover rounded shadow-sm">
-                </div>
-                <div class="col-span-3 pr-2">
-                    <div class="text-sm font-semibold">\${slide.title?.en || '-'}</div>
-                    <div class="text-xs text-gray-500">\${slide.title?.bn || '-'}</div>
-                </div>
-                <div class="col-span-3 pr-2">
-                    <div class="text-sm">\${slide.caption?.en || '-'}</div>
-                    <div class="text-xs text-gray-500">\${slide.caption?.bn || '-'}</div>
+                <div class="col-span-9 pr-4">
+                    <img src="\${slide.imageUrl || (slide.images && slide.images.length > 0 ? slide.images[0].url : '')}" alt="Slide Preview" class="w-full h-24 object-cover rounded border shadow-sm">
                 </div>
                 <div class="col-span-2 text-right flex justify-end gap-2">
                     <button onclick='editSlide(\${JSON.stringify(slide).replace(/'/g, "&#39;")})' class="text-blue-500 hover:text-blue-700 bg-blue-50 py-1 px-3 rounded">Edit</button>
@@ -228,12 +248,8 @@
 
     function editSlide(slide) {
         openModal();
-        document.getElementById('modalTitle').innerText = 'Edit Slide';
+        document.getElementById('modalTitle').innerText = 'Edit Slide Image';
         document.getElementById('slideId').value = slide._id;
-        document.getElementById('title_en').value = slide.title?.en || '';
-        document.getElementById('title_bn').value = slide.title?.bn || '';
-        document.getElementById('caption_en').value = slide.caption?.en || '';
-        document.getElementById('caption_bn').value = slide.caption?.bn || '';
         
         const preview = document.getElementById('imagePreview');
         preview.src = slide.imageUrl || (slide.images && slide.images.length > 0 ? slide.images[0].url : '');

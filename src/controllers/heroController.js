@@ -28,14 +28,6 @@ exports.createSlide = async (req, res) => {
     const slide = {
       key: `hero-${Date.now()}`,
       section: 'homepage',
-      title: { 
-          en: req.body['title.en'] || '', 
-          bn: req.body['title.bn'] || '' 
-      },
-      caption: { 
-          en: req.body['caption.en'] || '', 
-          bn: req.body['caption.bn'] || '' 
-      },
       imageUrl: `/uploads/hero/${req.file.filename}`,
       order: count,
       isActive: true,
@@ -59,10 +51,6 @@ exports.updateSlide = async (req, res) => {
         const { id } = req.params;
         
         const updateDoc = {
-            'title.en': req.body['title.en'] || '',
-            'title.bn': req.body['title.bn'] || '',
-            'caption.en': req.body['caption.en'] || '',
-            'caption.bn': req.body['caption.bn'] || '',
             updatedAt: new Date()
         };
 

@@ -101,12 +101,21 @@ router.post('/footer/update', protectAdmin, upload.single('logo'), footerControl
 const heroRoutes = require('./hero');
 router.use('/api/admin/hero-slides', heroRoutes);
 
-router.get('/hero-manage', protectAdmin, (req, res) => {
-  res.render('admin/hero/manage', { 
-    title: 'Manage Hero Slider',
-    admin: req.admin || req.session?.admin || { username: 'Admin' },
-    activePage: 'hero-manage'
-  });
+router.get('/hero-manage', protectAdmin, async (req, res) => {
+  try {
+    const db = await req.app.locals.getDb();
+    const heroText = await db.collection('sitecontents').findOne({ section: 'homepage', key: 'homepage-hero-text' }) || {};
+
+    res.render('admin/hero/manage', { 
+      title: 'Manage Hero Slider',
+      admin: req.admin || req.session?.admin || { username: 'Admin' },
+      activePage: 'hero-manage',
+      heroText: heroText
+    });
+  } catch (error) {
+    console.error('Error in /hero-manage:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 module.exports = router;

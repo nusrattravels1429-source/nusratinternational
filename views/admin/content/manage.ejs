@@ -114,44 +114,10 @@
     <!-- ===== HOMEPAGE ===== -->
     <% if (section === 'homepage') { %>
 
-    <!-- Hero Slider -->
-    <div class="panel">
-      <div class="panel-title" style="display:flex; justify-content:space-between; align-items:center;">
-        <span>🎬 Hero Slider</span>
-        <button class="btn btn-primary btn-sm" onclick="openSlideModal()">+ Add Slide</button>
-      </div>
-      
-      <div class="slides-container" id="slidesContainer">
-        <% 
-          const rawSlides = contentDocs.filter(d => d.key.startsWith('hero-'));
-          rawSlides.sort((a,b) => (a.metadata?.order || 0) - (b.metadata?.order || 0));
-        %>
-        <% if (rawSlides.length > 0) { %>
-          <% rawSlides.forEach(function(slide, i) { %>
-            <div class="slide-card" data-id="<%= slide._id %>" draggable="true" style="cursor: grab;" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="drop(event, this)">
-              <div class="slide-card-header">
-                <span class="slide-card-title">⋮⋮ Slide <span class="slide-number"><%= i + 1 %></span></span>
-                <div style="display:flex; gap:8px;">
-                  <button class="btn btn-sm btn-secondary" onclick="openSlideModal('<%= slide._id %>', '<%= (slide.title?.en || '').replace(/'/g, '\\\'') %>', '<%= (slide.title?.bn || '').replace(/'/g, '\\\'') %>', '<%= (slide.subtitle?.en || '').replace(/'/g, '\\\'') %>', '<%= (slide.subtitle?.bn || '').replace(/'/g, '\\\'') %>', '<%= (slide.cta_text || '').replace(/'/g, '\\\'') %>', '<%= slide.cta_link || '/' %>', '<%= slide.images && slide.images[0] ? slide.images[0].url : '' %>', <%= slide.metadata?.order || 0 %>)">✏️ Edit</button>
-                  <button class="btn btn-sm btn-danger" onclick="deleteSlide('<%= slide._id %>')">🗑️</button>
-                </div>
-              </div>
-              <div style="display:flex; gap:16px;">
-                <img src="<%= slide.images && slide.images[0] ? slide.images[0].url : '' %>" style="width:120px; height:80px; object-fit:cover; border-radius:6px;" alt="">
-                <div>
-                  <strong><%= slide.title?.en || 'Untitled' %></strong><br>
-                  <small><%= slide.subtitle?.en || '' %></small>
-                </div>
-              </div>
-            </div>
-          <% }); %>
-          <div style="margin-top:16px; text-align:right;">
-             <button class="btn btn-primary btn-sm" onclick="saveSlideOrder()">💾 Save Order</button>
-          </div>
-        <% } else { %>
-          <p style="color:#94a3b8; text-align:center; padding: 20px;">No slides found. Click "+ Add Slide" to create one.</p>
-        <% } %>
-      </div>
+    <div class="panel" style="background:#eff6ff;border:1px solid #bfdbfe;">
+      <div class="panel-title">🎬 Hero Slider & Global Text</div>
+      <p style="font-size:14px; margin-bottom:12px;">The hero slider images and its global text are managed in a dedicated section.</p>
+      <a href="/admin/hero-manage" class="btn btn-primary" style="display:inline-block; text-decoration:none;">Go to Manage Hero Slider</a>
     </div>
 
     <!-- ===== TICKETING ===== -->
@@ -518,137 +484,7 @@
   </main>
 </div>
 
-<!-- Hero Slide Modal -->
-<div id="slideModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;">
-  <div style="background:white;border-radius:12px;padding:28px;width:90%;max-width:600px;max-height:90vh;overflow-y:auto;">
-    <h3 style="margin-bottom:20px;" id="slideModalTitle">🎬 Add Hero Slide</h3>
-    <form id="slideForm" method="POST" enctype="multipart/form-data">
-      <div class="form-group">
-        <label>Image (1200×800px recommended)</label>
-        <div id="currentSlideImage" style="margin-bottom:10px;"></div>
-        <input type="file" name="image" class="form-control" accept="image/*">
-        <input type="hidden" name="existingImage" id="sExistingImage">
-      </div>
-      <div class="form-grid">
-        <div class="form-group"><label>Title (English)</label><input type="text" name="titleEn" id="sTitleEn" class="form-control"></div>
-        <div class="form-group"><label>Title (বাংলা)</label><input type="text" name="titleBn" id="sTitleBn" class="form-control"></div>
-        <div class="form-group"><label>Subtitle (English)</label><input type="text" name="subtitleEn" id="sSubEn" class="form-control"></div>
-        <div class="form-group"><label>Subtitle (বাংলা)</label><input type="text" name="subtitleBn" id="sSubBn" class="form-control"></div>
-        <div class="form-group"><label>CTA Button Text</label><input type="text" name="ctaText" id="sCtaText" class="form-control"></div>
-        <div class="form-group"><label>CTA Link</label><input type="text" name="ctaLink" id="sCtaLink" class="form-control" value="/"></div>
-        <div class="form-group"><label>Display Order</label><input type="number" name="order" id="sOrder" class="form-control" value="0"></div>
-      </div>
-      <div style="display:flex;gap:10px;margin-top:10px;">
-        <button type="submit" class="btn btn-primary">💾 Save Slide</button>
-        <button type="button" class="btn btn-secondary" onclick="closeSlideModal()">Cancel</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<script>
-  <% if (section === 'homepage') { %>
-  // --- HOMEPAGE SLIDER SCRIPTS ---
-  function openSlideModal(id, tEn, tBn, sEn, sBn, cT, cL, img, order) {
-    const form = document.getElementById('slideForm');
-    if (id) {
-      document.getElementById('slideModalTitle').innerText = '✏️ Edit Hero Slide';
-      form.dataset.action = '/admin/hero/' + id;
-      form.dataset.method = 'PUT';
-      document.getElementById('sTitleEn').value = tEn || '';
-      document.getElementById('sTitleBn').value = tBn || '';
-      document.getElementById('sSubEn').value = sEn || '';
-      document.getElementById('sSubBn').value = sBn || '';
-      document.getElementById('sCtaText').value = cT || '';
-      document.getElementById('sCtaLink').value = cL || '';
-      document.getElementById('sOrder').value = order || 0;
-      document.getElementById('sExistingImage').value = img || '';
-      document.getElementById('currentSlideImage').innerHTML = img 
-        ? `<img src="${img}" style="height:80px; width:120px; object-fit:cover; border-radius:6px;">`
-        : '';
-    } else {
-      document.getElementById('slideModalTitle').innerText = '🎬 Add Hero Slide';
-      form.dataset.action = '/admin/hero/add';
-      form.dataset.method = 'POST';
-      form.reset();
-      document.getElementById('sExistingImage').value = '';
-      document.getElementById('currentSlideImage').innerHTML = '';
-      document.getElementById('sOrder').value = document.querySelectorAll('.slide-card').length;
-    }
-    document.getElementById('slideModal').style.display = 'flex';
-  }
-
-  document.getElementById('slideForm')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const formData = new FormData(this);
-    fetch(this.dataset.action, { method: this.dataset.method, body: formData })
-      .then(res => {
-        if (res.redirected) window.location.href = res.url;
-        else location.reload();
-      })
-      .catch(err => alert('Network error submitting slide.'));
-  });
-
-  function closeSlideModal() {
-    document.getElementById('slideModal').style.display = 'none';
-  }
-
-  function deleteSlide(id) {
-    if(!confirm('Delete this slide?')) return;
-    fetch('/admin/hero/' + id, { method: 'DELETE', headers: {'Accept': 'application/json'} })
-      .then(res => res.json().catch(() => res.text().then(t => ({success: false, error: t}))))
-      .then(data => {
-        if(data.success || !data.error) location.reload();
-        else alert('Error: ' + (data.error || 'Cannot delete slide'));
-      })
-      .catch(err => alert('Network error deleting slide.'));
-  }
-
-  // Drag and drop sorting
-  let draggedCard = null;
-  function dragStart(e) { draggedCard = e.currentTarget; e.dataTransfer.effectAllowed = 'move'; }
-  function dragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
-  function drop(e, targetCard) {
-    e.preventDefault();
-    if (draggedCard !== targetCard) {
-      let container = document.getElementById('slidesContainer');
-      let cards = Array.from(container.querySelectorAll('.slide-card'));
-      let draggedIdx = cards.indexOf(draggedCard);
-      let targetIdx = cards.indexOf(targetCard);
-      
-      if (draggedIdx < targetIdx) {
-        targetCard.after(draggedCard);
-      } else {
-        targetCard.before(draggedCard);
-      }
-    }
-  }
-
-  function saveSlideOrder() {
-    let cards = document.querySelectorAll('.slide-card');
-    let orders = [];
-    cards.forEach((card, index) => {
-      orders.push({ id: card.getAttribute('data-id'), order: index });
-    });
-
-    fetch('/admin/hero/reorder', { 
-      method: 'POST', 
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ orders })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if(data.success) { 
-        // Toast style alert
-        const t = document.createElement('div');
-        t.className = 'toast'; t.innerText = 'Order saved!';
-        document.body.appendChild(t);
-        setTimeout(() => location.reload(), 1000); 
-      }
-      else alert('Error saving order');
-    });
-  }
-  <% } %>
+  <% if (false) { %><% }
 
   <% if (section === 'about') { %>
   // --- ABOUT PAGE SCRIPTS ---

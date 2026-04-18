@@ -9,9 +9,9 @@
         <img src="<%= slide.imageUrl || (slide.images && slide.images.length > 0 ? slide.images[0].url : '') %>" alt="Hero Image" />
         <div class="overlay" style="pointer-events: none;"></div>
         <div class="hero-content">
-          <span class="hero-tag"><%= slide.caption?.en || (homepageHero && homepageHero.subtitle_en) || '✦ DISCOVER THE WORLD' %></span>
-          <h1><%- slide.title?.en || (homepageHero && homepageHero.title_en) || 'Explore Beyond<br/><em>The Horizon</em>' %></h1>
-          <p><%= slide.caption?.bn || (homepageHero && homepageHero.description_en) || 'Unforgettable journeys crafted for the curious soul.<br />বিশ্বজুড়ে অসাধারণ অভিজ্ঞতার সন্ধানে।' %></p>
+          <span class="hero-tag"><%= (homepageHero && homepageHero.subtitle_en) || '✦ DISCOVER THE WORLD' %></span>
+          <h1><%- (homepageHero && homepageHero.title_en) || 'Explore Beyond<br/><em>The Horizon</em>' %></h1>
+          <p><%= (homepageHero && homepageHero.description_en) || 'Unforgettable journeys crafted for the curious soul.<br />বিশ্বজুড়ে অসাধারণ অভিজ্ঞতার সন্ধানে।' %></p>
           <div class="hero-btns"><a href="#travel" class="btn-primary">Start Exploring</a></div>
         </div>
       </div>
