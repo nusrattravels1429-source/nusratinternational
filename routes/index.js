@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     const db = await getDb(req);
 
     const [slider, heroText, ticketing, certifications, travelPackages, hajjPackages, workPackages] = await Promise.all([
-      db.collection('sitecontents').find({ section: 'homepage', key: { $regex: /^hero-[0-9]+$/ } }).sort({ order: 1 }).toArray(),
+      db.collection('sitecontents').find({ section: 'homepage', key: { $in: ['hero-1', 'hero-2', 'hero-3', 'hero-4'] }, imageUrl: { $ne: '' } }).sort({ order: 1 }).toArray(),
       db.collection('sitecontents').findOne({ section: 'homepage', key: 'homepage-hero-text' }),
       db.collection('sitecontents').findOne({ section: 'ticketing', key: 'ticketing-intro' }),
       db.collection('certifications').find({ isActive: true }).sort({ order: 1, isFeatured: -1 }).toArray(),

@@ -74,18 +74,13 @@
     </div>
 
     <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-gray-800">Slider Images</h2>
-        <button onclick="openModal()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow transition text-sm">
-            + Add Slide Image
-        </button>
+        <h2 class="text-xl font-bold text-gray-800">Slider Images (Fixed 4 Slots)</h2>
     </div>
-
-    <div id="toast-container" class="fixed top-4 right-4 z-50"></div>
 
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <div class="grid grid-cols-12 bg-gray-100 p-4 font-semibold text-gray-700 border-b">
-            <div class="col-span-1">Reorder</div>
-            <div class="col-span-9">Image Preview</div>
+            <div class="col-span-2">Slot</div>
+            <div class="col-span-8">Image Preview</div>
             <div class="col-span-2 text-right">Actions</div>
         </div>
 
@@ -95,24 +90,24 @@
     </div>
 </div>
 
-<!-- Add/Edit Modal -->
+<!-- Edit Modal -->
 <div id="slideFormModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[9999] flex justify-center items-center">
     <div class="bg-white rounded-lg w-full max-w-2xl p-6 relative max-h-[90vh] overflow-y-auto">
         <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 font-bold text-xl">&times;</button>
-        <h2 id="modalTitle" class="text-xl font-bold mb-4">Add New Slide</h2>
+        <h2 id="modalTitle" class="text-xl font-bold mb-4">Upload Slide Image</h2>
         
         <form id="slideForm" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
             <input type="hidden" id="slideId" name="slideId">
             
             <div class="mb-6">
                 <label class="block text-gray-700 font-medium mb-1">Image (1600x900px recommended)</label>
-                <input type="file" id="heroImage" name="heroImage" accept="image/*" class="w-full border rounded p-2" onchange="previewImage(this)">
+                <input type="file" id="heroImage" name="heroImage" accept="image/*" class="w-full border rounded p-2" onchange="previewImage(this)" required>
                 <img id="imagePreview" class="hidden mt-4 max-h-40 rounded shadow-md border">
             </div>
 
             <div class="flex justify-end gap-2">
                 <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" id="submitBtn">Save Slide</button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" id="submitBtn">Save Image</button>
             </div>
         </form>
     </div>
@@ -121,7 +116,6 @@
 
 <script>
     let slidesData = [];
-    let dragSourceEl = null;
 
     document.addEventListener("DOMContentLoaded", fetchSlides);
 
@@ -145,34 +139,28 @@
         list.innerHTML = '';
         
         if (slidesData.length === 0) {
-            list.innerHTML = `<li class="p-8 text-center text-gray-500">No slides found. Add one above.</li>`;
+            list.innerHTML = `<li class="p-8 text-center text-gray-500">No slides configured. Please refresh.</li>`;
             return;
         }
 
         slidesData.forEach((slide, index) => {
             const li = document.createElement('li');
             li.className = 'grid grid-cols-12 items-center p-4 hover:bg-gray-50 bg-white transition duration-150 ease-in-out';
-            li.draggable = true;
-            li.dataset.id = slide._id;
             
-            li.addEventListener('dragstart', handleDragStart);
-            li.addEventListener('dragover', handleDragOver);
-            li.addEventListener('drop', handleDrop);
-            li.addEventListener('dragend', handleDragEnd);
-
             li.innerHTML = \`
-                <div class="col-span-1 text-gray-400 cursor-move text-xl flex items-center justify-center" title="Drag to reorder">
-                    &#9776;
+                <div class="col-span-2 font-semibold text-gray-700">
+                    Slide \${slide.order}
                 </div>
-                <div class="col-span-9 pr-4">
-                    <img src="\${slide.imageUrl || (slide.images && slide.images.length > 0 ? slide.images[0].url : '')}" alt="Slide Preview" class="w-full h-24 object-cover rounded border shadow-sm">
+                <div class="col-span-8 pr-4">
+                    \${slide.imageUrl 
+                        ? \`<img src="\${slide.imageUrl}" alt="Slide Preview" class="w-full h-24 object-cover rounded border shadow-sm">\`
+                        : \`<div class="w-full h-24 bg-gray-100 flex items-center justify-center text-gray-400 rounded border border-dashed border-gray-300">No Image Uploaded</div>\`
+                    }
                 </div>
                 <div class="col-span-2 text-right flex justify-end gap-2">
-                    <button onclick='editSlide(\${JSON.stringify(slide).replace(/'/g, "&#39;")})' class="text-blue-500 hover:text-blue-700 bg-blue-50 py-1 px-3 rounded">Edit</button>
-                    \${slidesData.length > 1 
-                        ? \`<button onclick="deleteSlide('\${slide._id}')" class="text-red-500 hover:text-red-700 bg-red-50 py-1 px-3 rounded">Delete</button>\` 
-                        : \`<button disabled class="text-gray-400 bg-gray-100 py-1 px-3 rounded cursor-not-allowed" title="Minimum 1 slide required">Delete</button>\`
-                    }
+                    <button onclick='editSlide(\${JSON.stringify(slide).replace(/'/g, "&#39;")})' class="text-blue-500 hover:text-blue-700 bg-blue-50 py-1 px-3 rounded">
+                        \${slide.imageUrl ? 'Change' : 'Upload'}
+                    </button>
                 </div>
             \`;
             list.appendChild(li);
@@ -184,21 +172,19 @@
         const slideId = document.getElementById('slideId').value;
         const formData = new FormData(e.target);
         
-        const isEdit = !!slideId;
-        const method = isEdit ? 'PUT' : 'POST';
-        const url = isEdit ? \`/api/admin/hero-slides/\${slideId}\` : \`/api/admin/hero-slides\`;
+        const url = \`/api/admin/hero-slides/\${slideId}\`;
 
-        if (!isEdit && !document.getElementById('heroImage').files.length) {
+        if (!document.getElementById('heroImage').files.length) {
             return showToast('Please select an image', 'error');
         }
 
         const btn = document.getElementById('submitBtn');
         const oldText = btn.innerText;
-        btn.innerText = 'Saving...';
+        btn.innerText = 'Uploading...';
         btn.disabled = true;
 
         try {
-            const res = await fetch(url, { method, body: formData });
+            const res = await fetch(url, { method: 'PUT', body: formData });
             const data = await res.json();
 
             if (data.success) {
@@ -216,30 +202,12 @@
         }
     }
 
-    async function deleteSlide(id) {
-        if (!confirm('Are you sure you want to delete this slide?')) return;
-
-        try {
-            const res = await fetch(\`/api/admin/hero-slides/\${id}\`, { method: 'DELETE' });
-            const data = await res.json();
-
-            if (data.success) {
-                showToast(data.message, 'success');
-                fetchSlides();
-            } else {
-                showToast(data.message, 'error');
-            }
-        } catch (error) {
-            showToast('An error occurred during deletion', 'error');
-        }
-    }
-
     function openModal() {
         document.getElementById('slideFormModal').classList.remove('hidden');
         document.getElementById('slideForm').reset();
         document.getElementById('slideId').value = '';
         document.getElementById('imagePreview').classList.add('hidden');
-        document.getElementById('modalTitle').innerText = 'Add New Slide';
+        document.getElementById('modalTitle').innerText = 'Upload Slide Image';
     }
 
     function closeModal() {
@@ -248,12 +216,14 @@
 
     function editSlide(slide) {
         openModal();
-        document.getElementById('modalTitle').innerText = 'Edit Slide Image';
+        document.getElementById('modalTitle').innerText = \`Upload Image for Slide \${slide.order}\`;
         document.getElementById('slideId').value = slide._id;
         
         const preview = document.getElementById('imagePreview');
-        preview.src = slide.imageUrl || (slide.images && slide.images.length > 0 ? slide.images[0].url : '');
-        preview.classList.remove('hidden');
+        if (slide.imageUrl) {
+            preview.src = slide.imageUrl;
+            preview.classList.remove('hidden');
+        }
     }
 
     function previewImage(input) {
@@ -265,65 +235,6 @@
                 preview.classList.remove('hidden');
             }
             reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function handleDragStart(e) {
-        dragSourceEl = this;
-        e.dataTransfer.effectAllowed = 'move';
-        this.classList.add('opacity-50');
-    }
-
-    function handleDragOver(e) {
-        if (e.preventDefault) { e.preventDefault(); }
-        e.dataTransfer.dropEffect = 'move';
-        return false;
-    }
-
-    function handleDrop(e) {
-        if (e.stopPropagation) { e.stopPropagation(); }
-        if (dragSourceEl !== this) {
-            const list = document.getElementById('slides-list');
-            const items = Array.from(list.children);
-            const dropIndex = items.indexOf(this);
-            const draggedIndex = items.indexOf(dragSourceEl);
-
-            if (dropIndex > draggedIndex) {
-                this.parentNode.insertBefore(dragSourceEl, this.nextSibling);
-            } else {
-                this.parentNode.insertBefore(dragSourceEl, this);
-            }
-            saveNewOrder();
-        }
-        return false;
-    }
-
-    function handleDragEnd(e) {
-        this.classList.remove('opacity-50');
-    }
-
-    async function saveNewOrder() {
-        const items = Array.from(document.getElementById('slides-list').children);
-        const newOrder = items.map((li, index) => ({
-            _id: li.dataset.id,
-            order: index
-        })).filter(item => item._id);
-
-        if (newOrder.length === 0) return;
-
-        try {
-            const res = await fetch('/api/admin/hero-slides/reorder', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newOrder)
-            });
-            const data = await res.json();
-            if (data.success) {
-                showToast('Slides reordered successfully', 'success');
-            }
-        } catch (error) {
-            showToast('Failed to save new order', 'error');
-            fetchSlides();
         }
     }
 
