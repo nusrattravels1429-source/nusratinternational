@@ -185,7 +185,7 @@ exports.updateHeroSlider = async (req, res) => {
       res.json({
         success: true,
         message: 'Hero slider updated successfully',
-         heroSlider
+        data: heroSlider
       });
     } else {
       res.redirect('/admin/hero-manage');
@@ -229,7 +229,7 @@ exports.resetHeroSlider = async (req, res) => {
       res.json({
         success: true,
         message: 'Hero slider reset to defaults',
-         heroSlider
+        data: heroSlider
       });
     } else {
       res.redirect('/admin/hero-manage');
@@ -271,7 +271,7 @@ exports.getHeroSliderAPI = async (req, res) => {
 
       return res.json({
         success: true,
-         {
+        data: {
           slides: slider.map(s => ({
             imageUrl: s.imageUrl,
             order: s.order,
@@ -286,7 +286,7 @@ exports.getHeroSliderAPI = async (req, res) => {
     // Return formatted data from HeroSlider model
     res.json({
       success: true,
-       {
+      data: {
         slides: heroSlider.slides
           .filter(s => s.isActive && s.imageUrl)
           .sort((a, b) => a.order - b.order)
@@ -358,7 +358,7 @@ exports.updateSlide = async (req, res) => {
       heroSlider = await heroSliderModel.saveHeroSlider(db, heroSlider);
     }
 
-    res.json({ success: true, message: 'Slide image updated successfully',  result });
+    res.json({ success: true, message: 'Slide image updated successfully', data: result });
   } catch (error) {
     console.error('Error updating slide:', error);
     res.status(500).json({ success: false, message: 'Failed to update slide', error: error.message });
@@ -405,7 +405,7 @@ exports.getSlides = async (req, res) => {
     // Sort by order 1-4
     slides.sort((a, b) => a.order - b.order);
 
-    res.json({ success: true, message: 'Slides fetched successfully',  slides });
+    res.json({ success: true, message: 'Slides fetched successfully', data: slides });
   } catch (error) {
     console.error('Error fetching slides:', error);
     res.status(500).json({ success: false, message: 'Failed to fetch slides', error: error.message });
