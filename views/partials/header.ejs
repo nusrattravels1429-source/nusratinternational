@@ -22,13 +22,26 @@
     <button class="hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
 
     <ul class="nav-links" id="nav-links">
-      <!-- STATIC FALLBACK -->
-      <li><a href="/" class="<%= activePage==='home' ? 'active' : '' %>">Home | হোম</a></li>
-      <li><a href="/ticketing">Ticketing | ভ্রমণ</a></li>
-      <li><a href="/travel" class="<%= activePage==='travel' ? 'active' : '' %>">Travel | ভ্রমণ</a></li>
-      <li><a href="/hajj" class="<%= activePage==='hajj' ? 'active' : '' %>">Hajj | হাজ্জ</a></li>
-      <li><a href="/work" class="<%= activePage==='work' ? 'active' : '' %>">Work | কাজ</a></li>
-      <li><a href="/contact" class="<%= activePage==='contact' ? 'active' : '' %>">Contact | যোগাযোগ</a></li>
+      <div id="dynamic-links-container" style="display: contents;">
+        <!-- STATIC FALLBACK -->
+        <li><a href="/" class="<%= activePage==='home' ? 'active' : '' %>">Home | হোম</a></li>
+        <li><a href="/ticketing">Ticketing | ভ্রমণ</a></li>
+        <li><a href="/travel" class="<%= activePage==='travel' ? 'active' : '' %>">Travel | ভ্রমণ</a></li>
+        <li><a href="/hajj" class="<%= activePage==='hajj' ? 'active' : '' %>">Hajj | হাজ্জ</a></li>
+        <li><a href="/work" class="<%= activePage==='work' ? 'active' : '' %>">Work | কাজ</a></li>
+        <li><a href="/contact" class="<%= activePage==='contact' ? 'active' : '' %>">Contact | যোগাযোগ</a></li>
+      </div>
+
+      <!-- PERMANENT ABOUT DROPDOWN -->
+      <li class="has-dropdown" id="aboutDropdown">
+        <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">About | আমাদের সম্পর্কে <span class="drop-arrow">▾</span></button>
+        <ul class="dropdown-menu" role="menu">
+          <li role="none"><a href="/about"><span class="dm-text"><strong>About Us</strong><small>Our story & leadership</small></span></a></li>
+          <li role="none"><a href="/gallery"><span class="dm-text"><strong>Gallery</strong><small>Photos & memories</small></span></a></li>
+          <li role="none"><a href="/employees"><span class="dm-text"><strong>Our Team</strong><small>Meet our employees</small></span></a></li>
+          <li role="none"><a href="/certifications"><span class="dm-text"><strong>Approvals & Certifications</strong><small>BAIRA · IATA · ATAB · RL-1429</small></span></a></li>
+        </ul>
+      </li>
     </ul>
   </div>
 </nav>
@@ -50,8 +63,8 @@
 
         // Update Links
         if (json.data.items && json.data.items.length > 0) {
-          const navList = document.getElementById('nav-links');
-          navList.innerHTML = ''; // Clear fallback
+          const dynamicContainer = document.getElementById('dynamic-links-container');
+          dynamicContainer.innerHTML = ''; // Clear fallback
           
           json.data.items.forEach(item => {
             const li = document.createElement('li');
@@ -71,39 +84,8 @@
             
             a.innerHTML = item.label.en + (item.label.bn ? ` | ${item.label.bn}` : '');
             li.appendChild(a);
-            navList.appendChild(li);
+            dynamicContainer.appendChild(li);
           });
-          
-          // Re-inject the static About Us dropdown at the end of the navigation list for sub-menus
-          const aboutHTML = `
-            <li class="has-dropdown" id="aboutDropdown">
-              <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">About | আমাদের সম্পর্কে <span class="drop-arrow">▾</span></button>
-              <ul class="dropdown-menu" role="menu">
-                <li role="none"><a href="/about"><span class="dm-text"><strong>About Us</strong><small>Our story & leadership</small></span></a></li>
-                <li role="none"><a href="/gallery"><span class="dm-text"><strong>Gallery</strong><small>Photos & memories</small></span></a></li>
-                <li role="none"><a href="/employees"><span class="dm-text"><strong>Our Team</strong><small>Meet our employees</small></span></a></li>
-                <li role="none"><a href="/certifications"><span class="dm-text"><strong>Approvals & Certifications</strong><small>BAIRA · IATA · ATAB · RL-1429</small></span></a></li>
-              </ul>
-            </li>
-          `;
-          navList.insertAdjacentHTML('beforeend', aboutHTML);
-
-          // Force re-attach the dropdown event listener since the DOM was rewritten
-          setTimeout(() => {
-            const dropdown = document.getElementById('aboutDropdown');
-            const dropTrigger = dropdown ? dropdown.querySelector('.dropdown-trigger') : null;
-            if(dropTrigger) {
-              dropTrigger.addEventListener('click', function (e) {
-                if (window.innerWidth <= 768) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  const isOpen = dropdown.classList.toggle('mobile-open');
-                  this.setAttribute('aria-expanded', isOpen);
-                }
-              });
-            }
-          }, 100);
-          
         }
       }
     } catch(err) {
