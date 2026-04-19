@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Hero Slider</title>
-    <!-- Include Tailwind CSS if not already in the admin layout -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .sidebar { background: #f8fafc; border-right: 1px solid #e2e8f0; width: 250px; min-height: 100vh; position: fixed; left: 0; top: 0; padding: 20px; }
@@ -14,6 +13,15 @@
         .main-content { margin-left: 250px; padding: 20px; }
         .loading-indicator { font-style: italic; color: #888; }
         body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; }
+        .tab-btn { padding: 8px 16px; border-radius: 6px 6px 0 0; cursor: pointer; transition: all 0.2s; }
+        .tab-btn.active { background: #2563eb; color: white; }
+        .tab-btn:not(.active) { background: #e5e7eb; color: #6b7280; }
+        .tab-btn:not(.active):hover { background: #d1d5db; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .drag-handle { cursor: grab; }
+        .drag-handle:active { cursor: grabbing; }
+        .slide-item.dragging { opacity: 0.5; background: #f0f9ff; }
     </style>
 </head>
 <body>
@@ -23,227 +31,382 @@
 <div class="main-content flex-grow container mx-auto px-4 py-8 max-w-6xl">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Manage Hero Slider</h1>
+        <div class="flex gap-2">
+            <a href="/" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow transition text-sm">
+                👁 Preview on Site
+            </a>
+            <form action="/admin/hero-slider/reset" method="POST" onsubmit="return confirm('Reset all text content to defaults? Images will be kept.')">
+                <button type="submit" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded shadow transition text-sm">
+                    🔄 Reset to Defaults
+                </button>
+            </form>
+        </div>
     </div>
 
     <div id="toast-container" class="fixed top-4 right-4 z-50"></div>
 
-    <!-- Global Text Form -->
-    <div class="bg-white rounded-lg shadow p-6 mb-8 border border-gray-200">
-        <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Hero Text (Global for all images)</h2>
-        <form action="/admin/content/update" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="section" value="homepage">
-            <input type="hidden" name="key" value="homepage-hero-text">
-            <input type="hidden" name="redirect" value="/admin/hero-manage">
+    <!-- Tabs -->
+    <div class="flex mb-6 border-b border-gray-200">
+        <button class="tab-btn active mr-2" onclick="switchTab('images')">🖼️ Slider Images</button>
+        <button class="tab-btn" onclick="switchTab('content')">📝 Text Content</button>
+        <button class="tab-btn" onclick="switchTab('settings')">⚙️ Settings</button>
+    </div>
+
+    <!-- Images Tab -->
+    <div id="tab-images" class="tab-content active">
+        <div class="bg-white rounded-lg shadow p-6 mb-6 border border-gray-200">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Upload Slider Images (4 Slots)</h2>
+            <p class="text-gray-600 mb-4 text-sm">Upload up to 4 images for the hero slider. Recommended size: 1920x1080px. Max file size: 5MB per image.</p>
             
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block text-gray-700 font-medium mb-1">Tagline/Subtitle (EN) (e.g., ✦ DISCOVER THE WORLD)</label>
-                    <input type="text" name="subtitle_en" value="<%= heroText?.subtitle_en || '' %>" class="w-full border rounded p-2">
+            <form id="imageUploadForm" enctype="multipart/form-data" onsubmit="handleImageUpload(event)">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4" id="uploadSlots">
+                    <% for(let i = 0; i < 4; i++) { 
+                        const slide = heroSlider?.slides?.[i] || {};
+                    %>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition relative group" data-index="<%= i %>">
+                        <input type="file" name="sliderImages[]" accept="image/*" class="hidden" id="upload-<%= i %>" onchange="previewUpload(this, <%= i %>)">
+                        <% if (slide.imageUrl) { %>
+                            <img src="<%= slide.imageUrl %>" alt="Slide <%= i + 1 %>" class="w-full h-32 object-cover rounded mb-2 preview-img">
+                            <button type="button" onclick="removeImage(<%= i %>)" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">×</button>
+                            <p class="text-xs text-gray-500">Click to replace</p>
+                        <% } else { %>
+                            <div class="w-full h-32 bg-gray-100 rounded mb-2 flex items-center justify-center preview-placeholder">
+                                <span class="text-gray-400 text-sm">No image</span>
+                            </div>
+                            <p class="text-xs text-gray-500">Click to upload</p>
+                        <% } %>
+                        <button type="button" onclick="document.getElementById('upload-<%= i %>').click()" class="mt-2 text-blue-600 hover:text-blue-700 text-sm font-medium">
+                            <%= slide.imageUrl ? 'Change Image' : 'Upload Image' %>
+                        </button>
+                    </div>
+                    <% } %>
                 </div>
-                <div>
-                    <label class="block text-gray-700 font-medium mb-1">Tagline/Subtitle (BN)</label>
-                    <input type="text" name="subtitle_bn" value="<%= heroText?.subtitle_bn || '' %>" class="w-full border rounded p-2">
+                
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow transition" id="saveImagesBtn">
+                        💾 Save All Images
+                    </button>
                 </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block text-gray-700 font-medium mb-1">Main Title (EN) (Use HTML like <code>&lt;br/&gt;</code> for newlines)</label>
-                    <input type="text" name="title_en" value="<%= heroText?.title_en || '' %>" class="w-full border rounded p-2">
-                </div>
-                <div>
-                    <label class="block text-gray-700 font-medium mb-1">Main Title (BN)</label>
-                    <input type="text" name="title_bn" value="<%= heroText?.title_bn || '' %>" class="w-full border rounded p-2">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 mb-6">
-                <div>
-                    <label class="block text-gray-700 font-medium mb-1">Description (EN)</label>
-                    <textarea name="description_en" class="w-full border rounded p-2 h-20"><%= heroText?.description_en || '' %></textarea>
-                </div>
-                <div>
-                    <label class="block text-gray-700 font-medium mb-1">Description (BN)</label>
-                    <textarea name="description_bn" class="w-full border rounded p-2 h-20"><%= heroText?.description_bn || '' %></textarea>
-                </div>
-            </div>
-
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow transition">
-                💾 Save Global Text
-            </button>
-        </form>
-    </div>
-
-    <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-gray-800">Slider Images (Fixed 4 Slots)</h2>
-    </div>
-
-    <div class="bg-white rounded-lg shadow overflow-hidden">
-        <div class="grid grid-cols-12 bg-gray-100 p-4 font-semibold text-gray-700 border-b">
-            <div class="col-span-2">Slot</div>
-            <div class="col-span-8">Image Preview</div>
-            <div class="col-span-2 text-right">Actions</div>
+            </form>
         </div>
 
-        <ul id="slides-list" class="divide-y divide-gray-200">
-            <li class="p-8 text-center text-gray-500 loading-indicator">Loading slides...</li>
-        </ul>
-    </div>
-</div>
-
-<!-- Edit Modal -->
-<div id="slideFormModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[9999] flex justify-center items-center">
-    <div class="bg-white rounded-lg w-full max-w-2xl p-6 relative max-h-[90vh] overflow-y-auto">
-        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 font-bold text-xl">&times;</button>
-        <h2 id="modalTitle" class="text-xl font-bold mb-4">Upload Slide Image</h2>
-        
-        <form id="slideForm" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
-            <input type="hidden" id="slideId" name="slideId">
-            
-            <div class="mb-6">
-                <label class="block text-gray-700 font-medium mb-1">Image (1600x900px recommended)</label>
-                <input type="file" id="heroImage" name="heroImage" accept="image/*" class="w-full border rounded p-2" onchange="previewImage(this)" required>
-                <img id="imagePreview" class="hidden mt-4 max-h-40 rounded shadow-md border">
+        <!-- Slide Order -->
+        <div class="bg-white rounded-lg shadow p-6 border border-gray-200">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Slide Order & Status</h2>
+            <div class="space-y-2" id="slideOrderList">
+                <% (heroSlider?.slides || []).forEach((slide, index) => { %>
+                <div class="flex items-center gap-4 p-3 bg-gray-50 rounded border drag-item" data-index="<%= index %>">
+                    <span class="drag-handle text-gray-400 text-xl">⋮⋮</span>
+                    <div class="w-16 h-10 bg-gray-200 rounded overflow-hidden flex-shrink-0">
+                        <% if (slide.imageUrl) { %>
+                            <img src="<%= slide.imageUrl %>" class="w-full h-full object-cover">
+                        <% } %>
+                    </div>
+                    <span class="font-medium flex-grow">Slide <%= index + 1 %></span>
+                    <label class="flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="active-toggle" <%= slide.isActive !== false ? 'checked' : '' %> onchange="toggleSlideActive(<%= index %>, this.checked)">
+                        Active
+                    </label>
+                </div>
+                <% }) %>
             </div>
+        </div>
+    </div>
 
-            <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" id="submitBtn">Save Image</button>
+    <!-- Content Tab -->
+    <div id="tab-content" class="tab-content">
+        <form action="/admin/hero-slider/update" method="POST" enctype="multipart/form-data" onsubmit="handleContentSubmit(event)">
+            <div class="bg-white rounded-lg shadow p-6 mb-6 border border-gray-200">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Global Text Content (Applied to All Slides)</h2>
+                
+                <div class="mb-6">
+                    <h3 class="font-semibold text-gray-700 mb-3">Subtitle / Tagline</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1 text-sm">English</label>
+                            <input type="text" name="subtitle_en" value="<%= heroContent?.subtitle_en || '' %>" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500" placeholder="✦ DISCOVER THE WORLD">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1 text-sm">বাংলা (Bengali)</label>
+                            <input type="text" name="subtitle_bn" value="<%= heroContent?.subtitle_bn || '' %>" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500" placeholder="✦ বিশ্ব জুড়ে অন্বেষণ">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="font-semibold text-gray-700 mb-3">Main Title (HTML allowed: &lt;br/&gt;, &lt;em&gt;)</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1 text-sm">English</label>
+                            <input type="text" name="title_en" value="<%= heroContent?.title_en || '' %>" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500" placeholder="Explore Beyond<br/><em>The Horizon</em>">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1 text-sm">বাংলা (Bengali)</label>
+                            <input type="text" name="title_bn" value="<%= heroContent?.title_bn || '' %>" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500" placeholder="দিগন্তের ওপারে<br/><em>অন্বেষণ করুন</em>">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="font-semibold text-gray-700 mb-3">Description (HTML allowed: &lt;br/&gt;)</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1 text-sm">English</label>
+                            <textarea name="description_en" class="w-full border rounded p-2 h-24 focus:ring-2 focus:ring-blue-500" placeholder="Unforgettable journeys..."><%= heroContent?.description_en || '' %></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1 text-sm">বাংলা (Bengali)</label>
+                            <textarea name="description_bn" class="w-full border rounded p-2 h-24 focus:ring-2 focus:ring-blue-500" placeholder="উৎসুক আত্মার জন্য..."><%= heroContent?.description_bn || '' %></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="font-semibold text-gray-700 mb-3">Call-to-Action Button</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1 text-sm">Button Text (EN)</label>
+                            <input type="text" name="ctaText_en" value="<%= heroContent?.ctaText_en || 'Start Exploring' %>" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1 text-sm">Button Text (BN)</label>
+                            <input type="text" name="ctaText_bn" value="<%= heroContent?.ctaText_bn || 'অন্বেষণ শুরু করুন' %>" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1 text-sm">Link URL</label>
+                            <input type="text" name="ctaLink" value="<%= heroContent?.ctaLink || '#travel' %>" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow transition">
+                        💾 Save Text Content
+                    </button>
+                </div>
             </div>
         </form>
+
+        <!-- Live Preview -->
+        <div class="bg-white rounded-lg shadow p-6 border border-gray-200 mt-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Live Preview</h2>
+            <div class="relative h-64 bg-gradient-to-r from-blue-900 to-purple-900 rounded-lg overflow-hidden" id="livePreview">
+                <div class="absolute inset-0 bg-black opacity-40"></div>
+                <div class="relative z-10 h-full flex flex-col justify-center items-center text-center text-white p-8">
+                    <span class="text-sm tracking-widest mb-2" id="preview-subtitle"><%= heroContent?.subtitle_en || '✦ DISCOVER THE WORLD' %></span>
+                    <h1 class="text-3xl font-bold mb-4" id="preview-title"><%- heroContent?.title_en || 'Explore Beyond<br/><em>The Horizon</em>' %></h1>
+                    <p class="text-lg mb-6 max-w-2xl" id="preview-description"><%= heroContent?.description_en || 'Unforgettable journeys crafted for the curious soul.' %></p>
+                    <a href="#" class="bg-white text-gray-900 px-6 py-3 rounded font-semibold hover:bg-gray-100 transition" id="preview-cta"><%= heroContent?.ctaText_en || 'Start Exploring' %></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div id="tab-settings" class="tab-content">
+        <div class="bg-white rounded-lg shadow p-6 border border-gray-200">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Slider Settings</h2>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <label class="font-medium text-gray-700">Auto Play</label>
+                        <p class="text-sm text-gray-500">Automatically cycle through slides</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" name="autoPlay" <%= heroSlider?.settings?.autoPlay !== false ? 'checked' : '' %> class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <label class="font-medium text-gray-700">Show Navigation Dots</label>
+                        <p class="text-sm text-gray-500">Display dots at bottom for slide navigation</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" name="showDots" <%= heroSlider?.settings?.showDots !== false ? 'checked' : '' %> class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <label class="font-medium text-gray-700">Show Arrows</label>
+                        <p class="text-sm text-gray-500">Display previous/next arrows</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" name="showArrows" <%= heroSlider?.settings?.showArrows !== false ? 'checked' : '' %> class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                </div>
+                <div>
+                    <label class="block font-medium text-gray-700 mb-2">Transition Speed (ms)</label>
+                    <input type="number" name="transitionSpeed" value="<%= heroSlider?.settings?.transitionSpeed || 5000 %>" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500" min="1000" max="10000" step="500">
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button type="button" onclick="saveSettings()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow transition">
+                    💾 Save Settings
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 </div>
 
 <script>
-    let slidesData = [];
-
-    document.addEventListener("DOMContentLoaded", fetchSlides);
-
-    async function fetchSlides() {
-        try {
-            const res = await fetch('/admin/api/admin/hero-slides');
-            const result = await res.json();
-            if (result.success) {
-                slidesData = result.data || [];
-                renderSlides();
-            } else {
-                showToast(result.message, 'error');
-            }
-        } catch (error) {
-            showToast('Failed to load slides', 'error');
-        }
-    }
-
-    function renderSlides() {
-        const list = document.getElementById('slides-list');
-        list.innerHTML = '';
+    // Tab switching
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
         
-        if (slidesData.length === 0) {
-            list.innerHTML = `<li class="p-8 text-center text-gray-500">No slides configured. Please refresh.</li>`;
-            return;
-        }
-
-        slidesData.forEach((slide, index) => {
-            const li = document.createElement('li');
-            li.className = 'grid grid-cols-12 items-center p-4 hover:bg-gray-50 bg-white transition duration-150 ease-in-out';
-            
-            li.innerHTML = \`
-                <div class="col-span-2 font-semibold text-gray-700">
-                    Slide \${slide.order}
-                </div>
-                <div class="col-span-8 pr-4">
-                    \${slide.imageUrl 
-                        ? \`<img src="\${slide.imageUrl}" alt="Slide Preview" class="w-full h-24 object-cover rounded border shadow-sm">\`
-                        : \`<div class="w-full h-24 bg-gray-100 flex items-center justify-center text-gray-400 rounded border border-dashed border-gray-300">No Image Uploaded</div>\`
-                    }
-                </div>
-                <div class="col-span-2 text-right flex justify-end gap-2">
-                    <button onclick='editSlide(\${JSON.stringify(slide).replace(/'/g, "&#39;")})' class="text-blue-500 hover:text-blue-700 bg-blue-50 py-1 px-3 rounded">
-                        \${slide.imageUrl ? 'Change' : 'Upload'}
-                    </button>
-                </div>
-            \`;
-            list.appendChild(li);
-        });
+        event.target.classList.add('active');
+        document.getElementById('tab-' + tabName).classList.add('active');
     }
 
-    async function handleFormSubmit(e) {
-        e.preventDefault();
-        const slideId = document.getElementById('slideId').value;
-        const formData = new FormData(e.target);
-        
-        const url = \`/admin/api/admin/hero-slides/\${slideId}\`;
-
-        if (!document.getElementById('heroImage').files.length) {
-            return showToast('Please select an image', 'error');
-        }
-
-        const btn = document.getElementById('submitBtn');
-        const oldText = btn.innerText;
-        btn.innerText = 'Uploading...';
-        btn.disabled = true;
-
-        try {
-            const res = await fetch(url, { method: 'PUT', body: formData });
-            const data = await res.json();
-
-            if (data.success) {
-                showToast(data.message, 'success');
-                closeModal();
-                fetchSlides();
-            } else {
-                showToast(data.message, 'error');
-            }
-        } catch (error) {
-            showToast('An error occurred while saving', 'error');
-        } finally {
-            btn.innerText = oldText;
-            btn.disabled = false;
-        }
-    }
-
-    function openModal() {
-        document.getElementById('slideFormModal').classList.remove('hidden');
-        document.getElementById('slideForm').reset();
-        document.getElementById('slideId').value = '';
-        document.getElementById('imagePreview').classList.add('hidden');
-        document.getElementById('modalTitle').innerText = 'Upload Slide Image';
-    }
-
-    function closeModal() {
-        document.getElementById('slideFormModal').classList.add('hidden');
-    }
-
-    function editSlide(slide) {
-        openModal();
-        document.getElementById('modalTitle').innerText = \`Upload Image for Slide \${slide.order}\`;
-        document.getElementById('slideId').value = slide._id;
-        
-        const preview = document.getElementById('imagePreview');
-        if (slide.imageUrl) {
-            preview.src = slide.imageUrl;
-            preview.classList.remove('hidden');
-        }
-    }
-
-    function previewImage(input) {
+    // Image preview on upload
+    function previewUpload(input, index) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                const preview = document.getElementById('imagePreview');
-                preview.src = e.target.result;
-                preview.classList.remove('hidden');
-            }
+                const slot = input.closest('[data-index="' + index + '"]');
+                const img = slot.querySelector('img.preview-img');
+                const placeholder = slot.querySelector('.preview-placeholder');
+                
+                if (img) {
+                    img.src = e.target.result;
+                } else {
+                    if (placeholder) {
+                        placeholder.outerHTML = '<img src="' + e.target.result + '" alt="Preview" class="w-full h-32 object-cover rounded mb-2 preview-img">';
+                    }
+                }
+            };
             reader.readAsDataURL(input.files[0]);
         }
     }
 
+    // Remove image from slot
+    function removeImage(index) {
+        const input = document.getElementById('upload-' + index);
+        input.value = '';
+        const slot = input.closest('[data-index="' + index + '"]');
+        const img = slot.querySelector('.preview-img');
+        if (img) {
+            img.outerHTML = '<div class="w-full h-32 bg-gray-100 rounded mb-2 flex items-center justify-center preview-placeholder"><span class="text-gray-400 text-sm">No image</span></div>';
+        }
+    }
+
+    // Handle image form submit
+    async function handleImageUpload(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        const btn = document.getElementById('saveImagesBtn');
+        const oldText = btn.innerText;
+        
+        btn.disabled = true;
+        btn.innerText = 'Saving...';
+        
+        try {
+            const res = await fetch('/admin/hero-slider/update', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (res.ok) {
+                showToast('Images saved successfully!', 'success');
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                const data = await res.json();
+                showToast(data.message || 'Failed to save images', 'error');
+            }
+        } catch (error) {
+            showToast('An error occurred while saving', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerText = oldText;
+        }
+    }
+
+    // Handle content form submit
+    async function handleContentSubmit(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        
+        try {
+            const res = await fetch('/admin/hero-slider/update', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (res.ok) {
+                showToast('Text content saved successfully!', 'success');
+                updateLivePreview(formData);
+            } else {
+                const data = await res.json();
+                showToast(data.message || 'Failed to save content', 'error');
+            }
+        } catch (error) {
+            showToast('An error occurred while saving', 'error');
+        }
+    }
+
+    // Update live preview
+    function updateLivePreview(formData) {
+        document.getElementById('preview-subtitle').textContent = formData.get('subtitle_en') || '✦ DISCOVER THE WORLD';
+        document.getElementById('preview-title').innerHTML = formData.get('title_en') || 'Explore Beyond<br/><em>The Horizon</em>';
+        document.getElementById('preview-description').textContent = formData.get('description_en') || '';
+        document.getElementById('preview-cta').textContent = formData.get('ctaText_en') || 'Start Exploring';
+    }
+
+    // Toggle slide active status
+    async function toggleSlideActive(index, isActive) {
+        try {
+            const res = await fetch('/admin/hero-slider/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    slideOrders: JSON.stringify([{ index, isActive }])
+                })
+            });
+            
+            if (!res.ok) throw new Error('Failed to update');
+        } catch (error) {
+            showToast('Failed to update slide status', 'error');
+        }
+    }
+
+    // Save settings
+    async function saveSettings() {
+        const autoPlay = document.querySelector('input[name="autoPlay"]').checked;
+        const showDots = document.querySelector('input[name="showDots"]').checked;
+        const showArrows = document.querySelector('input[name="showArrows"]').checked;
+        const transitionSpeed = document.querySelector('input[name="transitionSpeed"]').value;
+        
+        try {
+            const res = await fetch('/admin/hero-slider/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    settings: { autoPlay, showDots, showArrows, transitionSpeed: parseInt(transitionSpeed) }
+                })
+            });
+            
+            if (res.ok) {
+                showToast('Settings saved successfully!', 'success');
+            } else {
+                showToast('Failed to save settings', 'error');
+            }
+        } catch (error) {
+            showToast('An error occurred while saving', 'error');
+        }
+    }
+
+    // Toast notification
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
         const color = type === 'success' ? 'bg-green-500' : 'bg-red-500';
-        toast.className = \`\${color} text-white px-6 py-3 rounded shadow-lg mb-2 opacity-0 transition-opacity duration-300\`;
+        toast.className = `${color} text-white px-6 py-3 rounded shadow-lg mb-2 opacity-0 transition-opacity duration-300`;
         toast.innerText = message;
         
         container.appendChild(toast);

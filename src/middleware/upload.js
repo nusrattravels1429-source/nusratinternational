@@ -14,7 +14,7 @@ try {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
   // Also create subdirectories for organized uploads
-  const subDirs = ['admin', 'packages', 'gallery', 'certifications', 'team', 'content'];
+  const subDirs = ['admin', 'packages', 'gallery', 'certifications', 'team', 'content', 'hero'];
   subDirs.forEach(dir => {
     const subDir = path.join(uploadDir, dir);
     if (!fs.existsSync(subDir)) {
