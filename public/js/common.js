@@ -68,36 +68,47 @@ closeMenu = function () {
 let heroIndex = 0;
 const heroSlider = document.getElementById('slider');
 const heroSlides = document.querySelectorAll('.slide');
-const totalSlides = heroSlides.length;
 const dotsContainer = document.getElementById('dots');
 
-heroSlides.forEach((_, i) => {
-  const d = document.createElement('button');
-  d.className = 'dot' + (i === 0 ? ' active' : '');
-  d.addEventListener('click', () => goToSlide(i));
-  dotsContainer.appendChild(d);
-});
+if (heroSlider && heroSlides.length > 0) {
+  const totalSlides = heroSlides.length;
 
-function goToSlide(i) {
-  heroIndex = i;
-  heroSlider.style.transform = `translateX(-${i * 100}%)`;
-  document.querySelectorAll('.dot').forEach((d, idx) => {
-    d.classList.toggle('active', idx === i);
+  heroSlides.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goToSlide(i));
+    if (dotsContainer) dotsContainer.appendChild(d);
   });
+
+  function goToSlide(i) {
+    heroIndex = i;
+    heroSlider.style.transform = `translateX(-${i * 100}%)`;
+    document.querySelectorAll('.dot').forEach((d, idx) => {
+      d.classList.toggle('active', idx === i);
+    });
+  }
+
+  let autoSlide = setInterval(() => {
+    goToSlide((heroIndex + 1) % totalSlides);
+  }, 5000);
+
+  const nextBtn = document.querySelector('.next');
+  const prevBtn = document.querySelector('.prev');
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      clearInterval(autoSlide);
+      goToSlide((heroIndex + 1) % totalSlides);
+    });
+  }
+  
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      clearInterval(autoSlide);
+      goToSlide((heroIndex - 1 + totalSlides) % totalSlides);
+    });
+  }
 }
-
-const autoSlide = setInterval(() => {
-  goToSlide((heroIndex + 1) % totalSlides);
-}, 5000);
-
-document.querySelector('.next').addEventListener('click', () => {
-  clearInterval(autoSlide);
-  goToSlide((heroIndex + 1) % totalSlides);
-});
-document.querySelector('.prev').addEventListener('click', () => {
-  clearInterval(autoSlide);
-  goToSlide((heroIndex - 1 + totalSlides) % totalSlides);
-});
 
 // ---- CARDS SLIDERS ----
 function initCardsSlider(trackId, prevBtn, nextBtn) {

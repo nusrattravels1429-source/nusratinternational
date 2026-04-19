@@ -60,7 +60,7 @@
                         const slide = heroSlider?.slides?.[i] || {};
                     %>
                     <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition relative group" data-index="<%= i %>">
-                        <input type="file" name="sliderImages[]" accept="image/*" class="hidden" id="upload-<%= i %>" onchange="previewUpload(this, <%= i %>)">
+                        <input type="file" name="sliderImages" accept="image/*" class="hidden" id="upload-<%= i %>" onchange="previewUpload(this, <%= i %>)">
                         <% if (slide.imageUrl) { %>
                             <img src="<%= slide.imageUrl %>" alt="Slide <%= i + 1 %>" class="w-full h-32 object-cover rounded mb-2 preview-img">
                             <button type="button" onclick="removeImage(<%= i %>)" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">×</button>
@@ -294,7 +294,23 @@
     async function handleImageUpload(e) {
         e.preventDefault();
         const form = e.target;
-        const formData = new FormData(form);
+        const formData = new FormData();
+        
+        // Ensure files retain their slot indices for the backend
+        let hasFiles = false;
+        for (let i = 0; i < 4; i++) {
+            const fileInput = document.getElementById('upload-' + i);
+            if (fileInput && fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                formData.append('sliderImages', file, `[${i}]_${file.name}`);
+                hasFiles = true;
+            }
+        }
+        
+        if (!hasFiles) {
+            showToast('No images selected to upload.', 'error');
+            return;
+        }
         const btn = document.getElementById('saveImagesBtn');
         const oldText = btn.innerText;
         

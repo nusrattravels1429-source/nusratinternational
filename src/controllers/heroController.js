@@ -101,25 +101,21 @@ exports.updateHeroSlider = async (req, res) => {
     // Process uploaded images
     if (req.files && req.files.length > 0) {
       const uploadOrder = JSON.parse(req.body.slideOrders || '[]');
-
-      // Sort files by their field name index (sliderImages[0], sliderImages[1], etc.)
-      const sortedFiles = req.files.sort((a, b) => {
-        const aIndex = parseInt(a.originalname.match(/\[(\d+)\]/)?.[1] || 0);
-        const bIndex = parseInt(b.originalname.match(/\[(\d+)\]/)?.[1] || 0);
-        return aIndex - bIndex;
-      });
-
-      // Update slides with new images
-      sortedFiles.forEach((file, index) => {
-        if (index < 4) {
+      // Update slides with new images into their specific slots
+      req.files.forEach((file) => {
+        // Extract the slot index from the uploaded file's originalname (which was injected by frontend)
+        const match = file.originalname.match(/\[(\d+)\]/);
+        const slotIndex = match ? parseInt(match[1]) : 0;
+        
+        if (slotIndex >= 0 && slotIndex < 4) {
           const relativePath = `/uploads/hero/${file.filename}`;
 
-          if (heroSlider.slides[index]) {
-            heroSlider.slides[index].imageUrl = relativePath;
+          if (heroSlider.slides[slotIndex]) {
+            heroSlider.slides[slotIndex].imageUrl = relativePath;
           } else {
             heroSlider.slides.push({
               imageUrl: relativePath,
-              order: index,
+              order: slotIndex,
               isActive: true
             });
           }
