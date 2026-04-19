@@ -29,13 +29,13 @@ const DEFAULT_SETTINGS = {
 exports.getHeroSliderAdmin = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    
+
     // Get hero slider data from MongoDB using native driver
     let heroSlider = await heroSliderModel.getOrCreateHeroSlider(db);
-    
+
     // Also fetch legacy data from sitecontents for backward compatibility
     const heroText = await db.collection('sitecontents').findOne({ section: 'homepage', key: 'homepage-hero-text' }) || {};
-    
+
     // Merge legacy content with new model data (legacy takes precedence during migration)
     const content = {
       ...heroSlider.content,
@@ -46,8 +46,8 @@ exports.getHeroSliderAdmin = async (req, res) => {
       ...(heroText.description_en ? { description_en: heroText.description_en } : {}),
       ...(heroText.description_bn ? { description_bn: heroText.description_bn } : {})
     };
-    
-    res.render('admin/hero/manage', { 
+
+    res.render('admin/hero/manage', {
       title: 'Manage Hero Slider',
       admin: req.admin || req.session?.admin || { username: 'Admin' },
       activePage: 'hero-manage',
@@ -67,7 +67,7 @@ exports.getHeroSliderAdmin = async (req, res) => {
 exports.updateHeroSlider = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const { 
+    const {
       subtitle_en, subtitle_bn,
       title_en, title_bn,
       description_en, description_bn,
@@ -75,17 +75,17 @@ exports.updateHeroSlider = async (req, res) => {
       ctaLink,
       slideOrders
     } = req.body;
-    
+
     // Get or create hero slider using native driver
     let heroSlider = await heroSliderModel.getOrCreateHeroSlider(db);
-    
+
     // Update text content with sanitization
     const sanitizeHtml = (str) => {
       if (!str) return '';
       // Allow only <br/>, <em>, </em> tags
       return str.replace(/<(?!\/?(?:br\/?|em)\b)[^>]*>/gi, '');
     };
-    
+
     heroSlider.content = {
       subtitle_en: sanitizeHtml(subtitle_en)?.trim() || DEFAULT_CONTENT.subtitle_en,
       subtitle_bn: sanitizeHtml(subtitle_bn)?.trim() || DEFAULT_CONTENT.subtitle_bn,
@@ -97,23 +97,23 @@ exports.updateHeroSlider = async (req, res) => {
       ctaText_bn: sanitizeHtml(ctaText_bn)?.trim() || DEFAULT_CONTENT.ctaText_bn,
       ctaLink: ctaLink?.trim() || DEFAULT_CONTENT.ctaLink
     };
-    
+
     // Process uploaded images
     if (req.files && req.files.length > 0) {
       const uploadOrder = JSON.parse(req.body.slideOrders || '[]');
-      
+
       // Sort files by their field name index (sliderImages[0], sliderImages[1], etc.)
       const sortedFiles = req.files.sort((a, b) => {
         const aIndex = parseInt(a.originalname.match(/\[(\d+)\]/)?.[1] || 0);
         const bIndex = parseInt(b.originalname.match(/\[(\d+)\]/)?.[1] || 0);
         return aIndex - bIndex;
       });
-      
+
       // Update slides with new images
       sortedFiles.forEach((file, index) => {
         if (index < 4) {
           const relativePath = `/uploads/hero/${file.filename}`;
-          
+
           if (heroSlider.slides[index]) {
             heroSlider.slides[index].imageUrl = relativePath;
           } else {
@@ -126,7 +126,7 @@ exports.updateHeroSlider = async (req, res) => {
         }
       });
     }
-    
+
     // Ensure we have exactly 4 slides
     while (heroSlider.slides.length < 4) {
       heroSlider.slides.push({
@@ -135,7 +135,7 @@ exports.updateHeroSlider = async (req, res) => {
         isActive: true
       });
     }
-    
+
     // Update order and active status based on form data
     if (slideOrders) {
       const orders = typeof slideOrders === 'string' ? JSON.parse(slideOrders) : slideOrders;
@@ -146,14 +146,14 @@ exports.updateHeroSlider = async (req, res) => {
         }
       });
     }
-    
+
     // Save using native driver
     heroSlider = await heroSliderModel.saveHeroSlider(db, heroSlider);
-    
+
     // Also update legacy sitecontents collection for backward compatibility
     await db.collection('sitecontents').updateOne(
       { section: 'homepage', key: 'homepage-hero-text' },
-      { 
+      {
         $set: {
           ...heroSlider.content,
           section: 'homepage',
@@ -163,7 +163,7 @@ exports.updateHeroSlider = async (req, res) => {
       },
       { upsert: true }
     );
-    
+
     // Update individual slide records in sitecontents for legacy support
     for (let i = 0; i < heroSlider.slides.length; i++) {
       const slide = heroSlider.slides[i];
@@ -180,12 +180,12 @@ exports.updateHeroSlider = async (req, res) => {
         { upsert: true }
       );
     }
-    
+
     if (req.xhr || req.headers.accept?.includes('application/json')) {
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         message: 'Hero slider updated successfully',
-        data: heroSlider
+         heroSlider
       });
     } else {
       res.redirect('/admin/hero-manage');
@@ -193,10 +193,10 @@ exports.updateHeroSlider = async (req, res) => {
   } catch (error) {
     console.error('Error updating hero slider:', error);
     if (req.xhr || req.headers.accept?.includes('application/json')) {
-      res.status(500).json({ 
-        success: false, 
-        message: 'Failed to update hero slider', 
-        error: error.message 
+      res.status(500).json({
+        success: false,
+        message: 'Failed to update hero slider',
+        error: error.message
       });
     } else {
       res.status(500).send('Error updating hero slider: ' + error.message);
@@ -210,26 +210,26 @@ exports.updateHeroSlider = async (req, res) => {
 exports.resetHeroSlider = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    
+
     let heroSlider = await heroSliderModel.getOrCreateHeroSlider(db);
-    
+
     // Reset content to defaults but keep images
     heroSlider.content = DEFAULT_CONTENT;
     heroSlider.settings = DEFAULT_SETTINGS;
     heroSlider = await heroSliderModel.saveHeroSlider(db, heroSlider);
-    
+
     // Also reset legacy data
     await db.collection('sitecontents').updateOne(
       { section: 'homepage', key: 'homepage-hero-text' },
       { $set: { ...DEFAULT_CONTENT, updatedAt: new Date() } },
       { upsert: true }
     );
-    
+
     if (req.xhr || req.headers.accept?.includes('application/json')) {
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         message: 'Hero slider reset to defaults',
-        data: heroSlider
+         heroSlider
       });
     } else {
       res.redirect('/admin/hero-manage');
@@ -237,10 +237,10 @@ exports.resetHeroSlider = async (req, res) => {
   } catch (error) {
     console.error('Error resetting hero slider:', error);
     if (req.xhr || req.headers.accept?.includes('application/json')) {
-      res.status(500).json({ 
-        success: false, 
-        message: 'Failed to reset hero slider', 
-        error: error.message 
+      res.status(500).json({
+        success: false,
+        message: 'Failed to reset hero slider',
+        error: error.message
       });
     } else {
       res.status(500).send('Error resetting hero slider: ' + error.message);
@@ -254,24 +254,24 @@ exports.resetHeroSlider = async (req, res) => {
 exports.getHeroSliderAPI = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    
+
     // Try to get from native HeroSlider model first
     let heroSlider = await heroSliderModel.getHeroSlider(db);
-    
+
     if (!heroSlider) {
       // Fallback to legacy sitecontents collection
       const [slider, heroText] = await Promise.all([
-        db.collection('sitecontents').find({ 
-          section: 'homepage', 
+        db.collection('sitecontents').find({
+          section: 'homepage',
           key: { $in: ['hero-1', 'hero-2', 'hero-3', 'hero-4'] },
           imageUrl: { $ne: '' }
         }).sort({ order: 1 }).toArray(),
         db.collection('sitecontents').findOne({ section: 'homepage', key: 'homepage-hero-text' })
       ]);
-      
+
       return res.json({
         success: true,
-        data: {
+         {
           slides: slider.map(s => ({
             imageUrl: s.imageUrl,
             order: s.order,
@@ -282,11 +282,11 @@ exports.getHeroSliderAPI = async (req, res) => {
         }
       });
     }
-    
+
     // Return formatted data from HeroSlider model
     res.json({
       success: true,
-      data: {
+       {
         slides: heroSlider.slides
           .filter(s => s.isActive && s.imageUrl)
           .sort((a, b) => a.order - b.order)
@@ -301,10 +301,10 @@ exports.getHeroSliderAPI = async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching hero slider API:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Failed to fetch hero slider', 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch hero slider',
+      error: error.message
     });
   }
 };
@@ -316,11 +316,11 @@ exports.updateSlide = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
     const { id } = req.params;
-    
+
     if (!ObjectId.isValid(id)) {
       return res.status(400).json({ success: false, message: 'Invalid slide ID' });
     }
-    
+
     const updateDoc = {
       updatedAt: new Date()
     };
@@ -344,7 +344,7 @@ exports.updateSlide = async (req, res) => {
     // Also update HeroSlider model
     let heroSlider = await heroSliderModel.getOrCreateHeroSlider(db);
     const slideIndex = parseInt(result.key?.replace('hero-', '')) - 1;
-    
+
     if (slideIndex >= 0 && slideIndex < 4) {
       if (heroSlider.slides[slideIndex]) {
         heroSlider.slides[slideIndex].imageUrl = updateDoc.imageUrl;
@@ -358,7 +358,7 @@ exports.updateSlide = async (req, res) => {
       heroSlider = await heroSliderModel.saveHeroSlider(db, heroSlider);
     }
 
-    res.json({ success: true, message: 'Slide image updated successfully', data: result });
+    res.json({ success: true, message: 'Slide image updated successfully',  result });
   } catch (error) {
     console.error('Error updating slide:', error);
     res.status(500).json({ success: false, message: 'Failed to update slide', error: error.message });
@@ -371,7 +371,7 @@ exports.updateSlide = async (req, res) => {
 exports.getSlides = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    
+
     // Fetch slots 1 to 4
     let slides = await db.collection('sitecontents')
       .find({ section: 'homepage', key: { $in: ['hero-1', 'hero-2', 'hero-3', 'hero-4'] } })
@@ -379,7 +379,7 @@ exports.getSlides = async (req, res) => {
 
     const existingKeys = slides.map(s => s.key);
     const newSlides = [];
-    
+
     // Initialize missing slots
     for (let i = 1; i <= 4; i++) {
       if (!existingKeys.includes(`hero-${i}`)) {
@@ -394,7 +394,7 @@ exports.getSlides = async (req, res) => {
         });
       }
     }
-    
+
     if (newSlides.length > 0) {
       await db.collection('sitecontents').insertMany(newSlides);
       slides = await db.collection('sitecontents')
@@ -405,7 +405,7 @@ exports.getSlides = async (req, res) => {
     // Sort by order 1-4
     slides.sort((a, b) => a.order - b.order);
 
-    res.json({ success: true, message: 'Slides fetched successfully', data: slides });
+    res.json({ success: true, message: 'Slides fetched successfully',  slides });
   } catch (error) {
     console.error('Error fetching slides:', error);
     res.status(500).json({ success: false, message: 'Failed to fetch slides', error: error.message });
