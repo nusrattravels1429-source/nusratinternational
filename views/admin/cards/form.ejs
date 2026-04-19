@@ -10,38 +10,6 @@
     
     .admin-layout { display: flex; min-height: 100vh; }
     
-    .sidebar {
-      width: 260px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 20px;
-      position: fixed;
-      height: 100vh;
-      overflow-y: auto;
-    }
-    .sidebar-header {
-      text-align: center;
-      padding-bottom: 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-      margin-bottom: 20px;
-    }
-    .sidebar-header img { width: 60px; height: 60px; object-fit: contain; }
-    .sidebar-header h2 { margin-top: 10px; font-size: 18px; }
-    .sidebar-menu { list-style: none; }
-    .sidebar-menu li { margin-bottom: 5px; }
-    .sidebar-menu a {
-      display: block;
-      padding: 12px 15px;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-    .sidebar-menu a:hover, .sidebar-menu a.active {
-      background: rgba(255,255,255,0.2);
-    }
-    .sidebar-menu .logout { margin-top: 30px; background: rgba(255,0,0,0.3); }
-    
     .main-content {
       flex: 1;
       margin-left: 260px;
@@ -190,24 +158,7 @@
 </head>
 <body>
   <div class="admin-layout">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Logo" onerror="this.style.display='none'" />
-        <h2>Admin Panel</h2>
-      </div>
-      <ul class="sidebar-menu">
-        <li><a href="/admin/dashboard">📊 Dashboard</a></li>
-        <li><a href="/admin/cards?type=all" class="active">🎴 Manage Cards</a></li>
-        <li><a href="/admin/cards?type=travel">✈️ Travel Packages</a></li>
-        <li><a href="/admin/cards?type=hajj">🕋 Hajj Packages</a></li>
-        <li><a href="/admin/cards?type=work">💼 Work Packages</a></li>
-        <li><a href="#">🖼️ Gallery</a></li>
-        <li><a href="#">📜 Certifications</a></li>
-        <li><a href="#">👥 Team Members</a></li>
-        <li><a href="#">⚙️ Site Settings</a></li>
-        <li><a href="/admin/logout" class="logout">🚪 Logout</a></li>
-      </ul>
-    </aside>
+    <%- include('../partials/sidebar', { admin: typeof admin !== 'undefined' ? admin : {}, activePage: action === 'create' ? 'cards-all' : 'cards-all' }) %>
     
     <main class="main-content">
       <div class="header">

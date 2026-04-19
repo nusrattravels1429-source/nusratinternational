@@ -9,11 +9,9 @@ const cardController = require('../../src/controllers/cardController');
 const galleryController = require('../../src/controllers/galleryController');
 const teamController = require('../../src/controllers/teamController');
 const certificationController = require('../../src/controllers/certificationController');
-const navigationController = require('../../src/controllers/navigationController');
-const footerController = require('../../src/controllers/footerController');
+const headerFooterController = require('../../src/controllers/headerFooterController');
 
-// --- Centralized Nav/Footer Module ---
-const navFooterRoutes = require('./navFooter');
+// --- Removed legacy Nav/Footer Module links ---
 
 // --- Auth Middleware & Uploads ---
 const { protectAdmin } = require('../../src/middleware/auth');
@@ -85,18 +83,12 @@ router.post('/certifications/delete/:id', protectAdmin, certificationController.
 router.post('/certifications/toggle-featured/:id', protectAdmin, certificationController.toggleFeatured);
 
 // =============================================================================
-// NAVIGATION MANAGEMENT
+// HEADER & FOOTER MANAGEMENT
 // =============================================================================
-router.get('/navigation', protectAdmin, navigationController.manageNavigation);
-router.post('/navigation/create', protectAdmin, navigationController.createLink);
-router.post('/navigation/update/:id', protectAdmin, navigationController.updateLink);
-router.post('/navigation/delete/:id', protectAdmin, navigationController.deleteLink);
-
-// =============================================================================
-// FOOTER MANAGEMENT
-// =============================================================================
-router.get('/footer', protectAdmin, footerController.manageFooter);
-router.post('/footer/update', protectAdmin, upload.single('logo'), footerController.updateFooter);
+router.get('/header-footer', protectAdmin, headerFooterController.manageHeaderFooter);
+// ALIASES for old sidebar links
+router.get('/navigation', protectAdmin, headerFooterController.manageHeaderFooter);
+router.get('/footer', protectAdmin, headerFooterController.manageHeaderFooter);
 
 // =============================================================================
 // HERO SLIDER MANAGEMENT
@@ -109,17 +101,9 @@ router.post('/hero-slider/update', protectAdmin, upload.array('sliderImages', 4)
 router.post('/hero-slider/reset', protectAdmin, heroController.resetHeroSlider);
 
 // =============================================================================
-// NAVBAR & FOOTER CENTRALIZED MODULE
+// NAVBAR & FOOTER CENTRALIZED MODULE (Removed old navfooter routes)
 // =============================================================================
-router.use('/api', navFooterRoutes); // Mounts to /admin/api/navbar and /admin/api/footer
 
-router.get('/nav-footer', protectAdmin, (req, res) => {
-  res.render('admin/navfooter/manage', { 
-    title: 'Manage Navbar & Footer',
-    admin: req.admin || req.session?.admin || { username: 'Admin' },
-    activePage: 'nav-footer'
-  });
-});
 
 router.get('/hero-manage', protectAdmin, heroController.getHeroSliderAdmin);
 

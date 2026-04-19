@@ -1,137 +1,165 @@
-// GET /admin/gallery - List all gallery items
-exports.getGallery = async (req, res) => {
+const { ObjectId } = require('mongodb');
+
+// ==========================================
+// VIEWS (Admin)
+// ==========================================
+exports.manageGallery = async (req, res) => {
+  res.render('admin/gallery/manage', { 
+    admin: req.admin || req.session?.admin || { username: 'Admin' }, 
+    activePage: 'gallery' 
+  });
+};
+
+// ==========================================
+// ADMIN API ROUTES
+// ==========================================
+
+// GET /api/admin/gallery
+exports.getAdminGallery = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const { category = 'all' } = req.query;
-
-    let query = {};
-    if (category !== 'all') query.category = category;
-
-    const galleryItems = await db.collection('galleryitems').find(query)
+    const items = await db.collection('galleryitems')
+      .find({})
       .sort({ order: 1, createdAt: -1 })
       .toArray();
-
-    res.render('admin/gallery/manage', {
-      admin: req.admin,
-      items: galleryItems,
-      currentCategory: category
-    });
+    res.json({ success: true, data: items || [] });
   } catch (error) {
-    console.error('Get gallery error:', error);
-    res.status(500).send('Error loading gallery: ' + error.message);
+    res.status(500).json({ success: false, message: 'Failed to fetch gallery', error: error.message });
   }
 };
 
-// POST /admin/gallery/create - Create new gallery item
-exports.createGallery = async (req, res) => {
+// POST /api/admin/gallery
+exports.createGalleryItem = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const { titleEn, titleBn, category, isActive } = req.body;
+    const { titleEn, titleBn, captionEn, captionBn, category, isActive } = req.body;
 
-    let imageUrl = '';
-    if (req.file) {
-      imageUrl = req.file.path || ('/uploads/' + req.file.filename);
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'Image file is required' });
     }
+
+    const imageUrl = `/uploads/gallery/${req.file.filename}`;
 
     const galleryItem = {
       title: { en: titleEn || '', bn: titleBn || '' },
+      caption: { en: captionEn || '', bn: captionBn || '' },
       imageUrl,
       category: category || 'general',
-      isActive: isActive !== 'false',
-      order: 0,
-      createdAt: new Date()
+      order: Date.now(), // default high order
+      isActive: isActive === 'true' || isActive === true,
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
 
-    await db.collection('galleryitems').insertOne(galleryItem);
-    res.redirect('/admin/gallery');
+    const result = await db.collection('galleryitems').insertOne(galleryItem);
+    res.json({ success: true, message: 'Image uploaded successfully', data: { _id: result.insertedId, ...galleryItem } });
   } catch (error) {
-    console.error('Create gallery error:', error);
-    res.status(500).send('Error creating gallery item: ' + error.message);
+    res.status(500).json({ success: false, message: 'Failed to create item', error: error.message });
   }
 };
 
-// POST /admin/gallery/update/:id - Update gallery item
-exports.updateGallery = async (req, res) => {
+// PUT /api/admin/gallery/:id
+exports.updateGalleryItem = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const { ObjectId } = require('mongodb');
-    const { titleEn, titleBn, category, isActive } = req.body;
+    const { titleEn, titleBn, captionEn, captionBn, category, isActive } = req.body;
 
     const updateData = {
       title: { en: titleEn || '', bn: titleBn || '' },
+      caption: { en: captionEn || '', bn: captionBn || '' },
       category: category || 'general',
-      isActive: isActive !== 'false',
+      isActive: isActive === 'true' || isActive === true,
       updatedAt: new Date()
     };
 
     if (req.file) {
-      updateData.imageUrl = req.file.path || ('/uploads/' + req.file.filename);
+      updateData.imageUrl = `/uploads/gallery/${req.file.filename}`;
     }
 
-    await db.collection('galleryitems').updateOne(
+    const result = await db.collection('galleryitems').findOneAndUpdate(
       { _id: new ObjectId(req.params.id) },
-      { $set: updateData }
+      { $set: updateData },
+      { returnDocument: 'after' }
     );
 
-    res.redirect('/admin/gallery');
+    if (!result) {
+      return res.status(404).json({ success: false, message: 'Item not found' });
+    }
+
+    res.json({ success: true, message: 'Item updated successfully', data: result });
   } catch (error) {
-    console.error('Update gallery error:', error);
-    res.status(500).send('Error updating gallery item: ' + error.message);
+    res.status(500).json({ success: false, message: 'Failed to update item', error: error.message });
   }
 };
 
-// POST /admin/gallery/delete/:id - Delete gallery item
-exports.deleteGallery = async (req, res) => {
+// DELETE /api/admin/gallery/:id
+exports.deleteGalleryItem = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const { ObjectId } = require('mongodb');
-
-    await db.collection('galleryitems').deleteOne({
-      _id: new ObjectId(req.params.id)
-    });
-
-    if (req.xhr || req.headers.accept?.includes('application/json')) {
-      res.json({ success: true });
-    } else {
-      res.redirect('/admin/gallery');
+    
+    // Hard delete for simplicity as requested "Soft ... or hard delete"
+    const result = await db.collection('galleryitems').deleteOne({ _id: new ObjectId(req.params.id) });
+    
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ success: false, message: 'Item not found' });
     }
+
+    res.json({ success: true, message: 'Item deleted successfully' });
   } catch (error) {
-    console.error('Delete gallery error:', error);
-    if (req.xhr || req.headers.accept?.includes('application/json')) {
-      res.status(500).json({ success: false, error: 'Error deleting gallery item' });
-    } else {
-      res.status(500).send('Error deleting gallery item: ' + error.message);
-    }
+    res.status(500).json({ success: false, message: 'Failed to delete item', error: error.message });
   }
 };
 
-// API: GET /api/gallery - Get all gallery items
-exports.apiGetGallery = async (req, res) => {
+// POST /api/admin/gallery/reorder
+exports.reorderGalleryItems = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const { key, category, isActive } = req.query;
+    const { items } = req.body; // Array of { _id, order }
 
-    let query = {};
-    if (key) {
-      const { ObjectId } = require('mongodb');
-      query._id = new ObjectId(key);
+    if (!Array.isArray(items)) {
+      return res.status(400).json({ success: false, message: 'Invalid payload' });
     }
-    if (category) query.category = category;
-    if (isActive !== undefined) query.isActive = isActive === 'true';
 
-    const galleryItems = await db.collection('galleryitems').find(query)
+    const bulkOps = items.map(item => ({
+      updateOne: {
+        filter: { _id: new ObjectId(item._id) },
+        update: { $set: { order: parseInt(item.order, 10), updatedAt: new Date() } }
+      }
+    }));
+
+    if (bulkOps.length > 0) {
+      await db.collection('galleryitems').bulkWrite(bulkOps);
+    }
+
+    res.json({ success: true, message: 'Items reordered successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to reorder items', error: error.message });
+  }
+};
+
+// ==========================================
+// PUBLIC API ROUTES
+// ==========================================
+
+// GET /api/public/gallery
+exports.getPublicGallery = async (req, res) => {
+  try {
+    const db = await req.app.locals.getDb();
+    const { category, limit = 50 } = req.query;
+
+    const query = { isActive: true };
+    if (category && category !== 'all') {
+      query.category = category;
+    }
+
+    const items = await db.collection('galleryitems')
+      .find(query)
       .sort({ order: 1, createdAt: -1 })
+      .limit(parseInt(limit, 10))
       .toArray();
 
-    res.json({ success: true, items: galleryItems });
+    res.json({ success: true, data: items || [] });
   } catch (error) {
-    console.error('API get gallery error:', error);
-    res.status(500).json({ success: false, error: 'Error loading gallery' });
+    res.status(500).json({ success: false, message: 'Failed to fetch public gallery', error: error.message });
   }
 };
-
-// Aliases for admin routes
-exports.manageGallery = exports.getGallery;
-exports.createGalleryItem = exports.createGallery;
-exports.updateGalleryItem = exports.updateGallery;
-exports.deleteGalleryItem = exports.deleteGallery;

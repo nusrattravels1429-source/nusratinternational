@@ -1,49 +1,135 @@
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-logo">🌐</div>
-      <h2>Nusrat Admin</h2>
-      <p class="admin-name">
-        <%= admin.username %>
-      </p>
-    </div>
-    <ul class="sidebar-menu">
-      <li><a href="/admin/dashboard" class="<%= activePage === 'dashboard' ? 'active' : '' %>">📊 Dashboard</a></li>
+<style>
+  .admin-sidebar {
+    width: 260px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+    box-sizing: border-box;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .admin-sidebar .sidebar-header {
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 20px;
+  }
+  .admin-sidebar .sidebar-logo {
+    font-size: 3rem;
+  }
+  .admin-sidebar .sidebar-header img {
+    max-width: 60px;
+    max-height: 60px;
+    object-fit: contain;
+  }
+  .admin-sidebar .sidebar-header h2 {
+    margin-top: 10px;
+    font-size: 18px;
+    color: white;
+    font-weight: 600;
+  }
+  .admin-sidebar .admin-name {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  .admin-sidebar .sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .admin-sidebar .sidebar-menu li {
+    margin-bottom: 5px;
+  }
+  .admin-sidebar .sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .admin-sidebar .sidebar-menu a:hover,
+  .admin-sidebar .sidebar-menu a.active {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .admin-sidebar .menu-label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    padding: 15px 15px 5px 15px;
+    display: block;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .admin-sidebar .menu-separator {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 15px 0;
+  }
+  .admin-sidebar .sidebar-menu .logout-link {
+    margin-top: 20px;
+    background: rgba(255, 0, 0, 0.3);
+  }
+  .admin-sidebar .sidebar-menu .logout-link:hover {
+    background: rgba(255, 0, 0, 0.5);
+  }
 
-      <li class="menu-label">CONTENT</li>
-      <li><a href="/admin/hero-manage" class="<%= activePage === 'hero-manage' ? 'active' : '' %>">🎬 Hero Slider</a>
-      </li>
-      <li><a href="/admin/content/manage/homepage" class="<%= activePage === 'homepage' ? 'active' : '' %>">🏠
-          Homepage</a></li>
-      <li><a href="/admin/content/manage/ticketing" class="<%= activePage === 'ticketing' ? 'active' : '' %>">🎫
-          Ticketing</a></li>
-      <li><a href="/admin/content/manage/travel" class="<%= activePage === 'travel' ? 'active' : '' %>">✈️ Travel
-          Page</a></li>
-      <li><a href="/admin/content/manage/hajj" class="<%= activePage === 'hajj' ? 'active' : '' %>">🕋 Hajj Page</a>
-      </li>
-      <li><a href="/admin/content/manage/work" class="<%= activePage === 'work' ? 'active' : '' %>">💼 Work Page</a>
-      </li>
-      <li><a href="/admin/content/manage/contact" class="<%= activePage === 'contact' ? 'active' : '' %>">📞 Contact</a>
-      </li>
-      <li><a href="/admin/content/manage/about" class="<%= activePage === 'about' ? 'active' : '' %>">ℹ️ About</a></li>
+  /* Global Fixes to adjust main-content when the partial is included */
+  .main-content {
+    margin-left: 260px !important;
+  }
+  
+  /* Reset some basic styles for the sidebar incase host drops it */
+  .admin-sidebar * {
+    box-sizing: border-box;
+  }
+</style>
 
-      <li class="menu-label">PACKAGES</li>
-      <li><a href="/admin/cards?type=all" class="<%= activePage === 'cards-all' ? 'active' : '' %>">🎴 All Cards</a>
-      </li>
-      <li><a href="/admin/cards?type=travel" class="<%= activePage === 'cards-travel' ? 'active' : '' %>">✈️ Travel</a>
-      </li>
-      <li><a href="/admin/cards?type=hajj" class="<%= activePage === 'cards-hajj' ? 'active' : '' %>">🕋 Hajj</a></li>
-      <li><a href="/admin/cards?type=work" class="<%= activePage === 'cards-work' ? 'active' : '' %>">💼 Work</a></li>
+<aside class="admin-sidebar">
+  <div class="sidebar-header">
+    <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Logo" onerror="this.outerHTML='<div class=\'sidebar-logo\'>🌐</div>'" />
+    <h2>Admin Panel</h2>
+    <p class="admin-name">
+      <%= (typeof admin !== 'undefined' && admin.username) ? admin.username : 'Admin' %>
+    </p>
+  </div>
+  <ul class="sidebar-menu">
+    <li><a href="/admin/dashboard" class="<%= (typeof activePage !== 'undefined' && activePage === 'dashboard') ? 'active' : '' %>">📊 Dashboard</a></li>
 
-      <li class="menu-label">MANAGE</li>
-      <li><a href="/admin/gallery" class="<%= activePage === 'gallery' ? 'active' : '' %>">🖼️ Gallery</a></li>
-      <li><a href="/admin/certifications" class="<%= activePage === 'certifications' ? 'active' : '' %>">📜
-          Certifications</a></li>
-      <li><a href="/admin/team" class="<%= activePage === 'team' ? 'active' : '' %>">👥 Team</a></li>
-      <li><a href="/admin/navigation" class="<%= activePage === 'navigation' ? 'active' : '' %>">🧭 Navigation</a></li>
-      <li><a href="/admin/footer" class="<%= activePage === 'footer' ? 'active' : '' %>">⚙️ Footer</a></li>
+    <li class="menu-label">CONTENT</li>
+    <li><a href="/admin/hero-manage" class="<%= (typeof activePage !== 'undefined' && activePage === 'hero-manage') ? 'active' : '' %>">🎬 Hero Slider</a></li>
+    <li><a href="/admin/content/manage/homepage" class="<%= (typeof activePage !== 'undefined' && activePage === 'homepage') ? 'active' : '' %>">🏠 Landing Page</a></li>
+    <li><a href="/admin/content/manage/ticketing" class="<%= (typeof activePage !== 'undefined' && activePage === 'ticketing') ? 'active' : '' %>">🎫 Ticketing</a></li>
+    <li><a href="/admin/content/manage/travel" class="<%= (typeof activePage !== 'undefined' && activePage === 'travel') ? 'active' : '' %>">✈️ Travel Page</a></li>
+    <li><a href="/admin/content/manage/hajj" class="<%= (typeof activePage !== 'undefined' && activePage === 'hajj') ? 'active' : '' %>">🕋 Hajj Page</a></li>
+    <li><a href="/admin/content/manage/work" class="<%= (typeof activePage !== 'undefined' && activePage === 'work') ? 'active' : '' %>">💼 Work Page</a></li>
+    <li><a href="/admin/content/manage/about" class="<%= (typeof activePage !== 'undefined' && activePage === 'about') ? 'active' : '' %>">ℹ️ About</a></li>
+    <li><a href="/admin/content/manage/contact" class="<%= (typeof activePage !== 'undefined' && activePage === 'contact') ? 'active' : '' %>">📞 Contact</a></li>
 
-      <li class="menu-separator"></li>
-      <li><a href="/" target="_blank">🌐 View Site</a></li>
-      <li><a href="/admin/logout" class="logout-link">🚪 Logout</a></li>
-    </ul>
-  </aside>
+    <li class="menu-label">PACKAGES</li>
+    <li><a href="/admin/cards?type=all" class="<%= (typeof activePage !== 'undefined' && activePage === 'cards-all') ? 'active' : '' %>">🎴 All Cards</a></li>
+    <li><a href="/admin/cards?type=travel" class="<%= (typeof activePage !== 'undefined' && activePage === 'cards-travel') ? 'active' : '' %>">✈️ Travel Packages</a></li>
+    <li><a href="/admin/cards?type=hajj" class="<%= (typeof activePage !== 'undefined' && activePage === 'cards-hajj') ? 'active' : '' %>">🕋 Hajj Packages</a></li>
+    <li><a href="/admin/cards?type=work" class="<%= (typeof activePage !== 'undefined' && activePage === 'cards-work') ? 'active' : '' %>">💼 Work Packages</a></li>
+
+    <li class="menu-label">MANAGE</li>
+    <li><a href="/admin/gallery" class="<%= (typeof activePage !== 'undefined' && activePage === 'gallery') ? 'active' : '' %>">🖼️ Gallery</a></li>
+    <li><a href="/admin/certifications" class="<%= (typeof activePage !== 'undefined' && activePage === 'certifications') ? 'active' : '' %>">📜 Certifications</a></li>
+    <li><a href="/admin/team" class="<%= (typeof activePage !== 'undefined' && activePage === 'team') ? 'active' : '' %>">👥 Team Members</a></li>
+    <li><a href="/admin/header-footer" class="<%= (typeof activePage !== 'undefined' && activePage === 'header-footer') ? 'active' : '' %>">🧭 Header & Footer</a></li>
+
+    <li class="menu-separator"></li>
+    <li><a href="/" target="_blank">🌐 View Site</a></li>
+    <li><a href="/admin/logout" class="logout-link">🚪 Logout</a></li>
+  </ul>
+</aside>

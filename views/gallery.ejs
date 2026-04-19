@@ -14,16 +14,16 @@
       <% if (typeof galleryItems !== 'undefined' && galleryItems.length > 0) { %>
         <% galleryItems.forEach(item => { %>
           <div class="gallery-item">
-            <img src="<%= item.image %>" alt="<%= item.title || 'Gallery Image' %>" loading="lazy">
-            <% if (item.caption) { %>
+            <img src="<%= item.imageUrl %>" alt="<%= item.title?.en || 'Gallery Image' %>" loading="lazy">
+            <% if (item.caption?.en || item.caption?.bn) { %>
               <div class="gallery-caption">
-                <span class="gallery-caption-text"><%= item.caption %></span>
+                <span class="gallery-caption-text"><%= item.caption.en || item.caption.bn %></span>
               </div>
             <% } %>
           </div>
         <% }) %>
       <% } else { %>
-        <!-- Default gallery items -->
+        <!-- Default gallery items (Fallback) -->
         <div class="gallery-item">
           <img src="https://picsum.photos/600/400?1" alt="Hajj Group 2025" loading="lazy">
           <div class="gallery-caption">
@@ -46,18 +46,6 @@
           <img src="https://picsum.photos/600/400?4" alt="Happy Clients" loading="lazy">
           <div class="gallery-caption">
             <span class="gallery-caption-text">📸 Happy Clients - Making travel dreams come true</span>
-          </div>
-        </div>
-        <div class="gallery-item">
-          <img src="https://picsum.photos/600/400?5" alt="Office Opening" loading="lazy">
-          <div class="gallery-caption">
-            <span class="gallery-caption-text">📸 Office Opening Ceremony - Expanding our services to serve you better</span>
-          </div>
-        </div>
-        <div class="gallery-item">
-          <img src="https://picsum.photos/600/400?6" alt="Award Ceremony" loading="lazy">
-          <div class="gallery-caption">
-            <span class="gallery-caption-text">📸 Award Ceremony 2024 - Recognized for excellence in service</span>
           </div>
         </div>
       <% } %>

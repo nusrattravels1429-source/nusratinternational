@@ -1,109 +1,91 @@
 <%- include('partials/header', { pageTitle: 'Approvals & Certifications | Nusrat International', activePage: 'about', bodyClass: '' }) %>
 
 <style>
-  .cert-page-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
-  }
+  .cert-page-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+  .cert-title-main { text-align: center; font-size: 2.5rem; font-weight: 700; color: #1a1a2e; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 3px solid #c9a227; }
   
-  .cert-title-main {
-    text-align: center;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #1a1a2e;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 3px solid #c9a227;
-  }
+  .cert-featured-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 50px; }
+  .cert-featured-wrapper img { max-width: 100%; height: auto; max-height: 500px; cursor: pointer; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .cert-featured-wrapper img:hover { transform: scale(1.02); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+  .cert-caption { text-align: center; margin-top: 15px; }
+  .cert-caption h3 { font-size: 1.5rem; color: #1a1a2e; margin-bottom: 5px; }
+  .cert-caption p { color: #6b7280; font-size: 0.95rem; }
+  .cert-tag { display: inline-block; background: #e0e7ff; color: #3730a3; padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; margin-top: 5px; }
+
+  .cert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
+  .cert-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.2s; }
+  .cert-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+  .cert-card img { width: 100%; height: 200px; object-fit: contain; background: #fafafa; border-bottom: 1px solid #eee; padding: 10px; cursor: pointer; }
+  .cert-card-body { padding: 20px; text-align: center; }
+
+  /* Lightbox */
+  .cert-lightbox { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); animation: fadeIn 0.3s ease; }
+  .cert-lightbox.active { display: flex; justify-content: center; align-items: center; }
+  .cert-lightbox-content { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 8px; animation: zoomIn 0.3s ease; }
+  .cert-lightbox-close { position: absolute; top: 20px; right: 35px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; transition: color 0.3s ease; }
+  .cert-lightbox-close:hover { color: #c9a227; }
   
-  .cert-image-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 40px;
-  }
-  
-  .cert-image-wrapper img {
-    max-width: 100%;
-    height: auto;
-    cursor: pointer;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .cert-image-wrapper img:hover {
-    transform: scale(1.02);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Lightbox Modal */
-  .cert-lightbox {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    animation: fadeIn 0.3s ease;
-  }
-  
-  .cert-lightbox.active {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .cert-lightbox-content {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
-    border-radius: 8px;
-    animation: zoomIn 0.3s ease;
-  }
-  
-  .cert-lightbox-close {
-    position: absolute;
-    top: 20px;
-    right: 35px;
-    color: #fff;
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s ease;
-  }
-  
-  .cert-lightbox-close:hover {
-    color: #c9a227;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  @keyframes zoomIn {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 </style>
 
-<!-- PAGE HERO -->
 <section class="page-hero cert-hero">
   <span class="section-tag">📜 OFFICIAL LICENSES</span>
   <h1>Approvals &amp; Certifications</h1>
   <p>Every license we hold is a commitment to the highest standards of integrity and professionalism.</p>
 </section>
 
-<!-- MAIN CERTIFICATION DISPLAY -->
 <main class="cert-page-container">
   <h2 class="cert-title-main">Our Certifications</h2>
   
-  <div class="cert-image-wrapper">
-    <img src="https://imgs.search.brave.com/lRPPDKENw9rearEYwDJPoGF7f_NXqE5uoX8fc5YEpAE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/Zm1hc3NvY2lhdGVz/YmQuY29tL2ltYWdl/cy90cmFkZV9saWNl/bnNlL3NhbXBsZV90/cmFkZV9saWNlbnNl/X0JhbmdsYWRlc2gu/anBn" alt="IATA Accredited Certificate" id="mainCertImage" onclick="openLightbox(this.src)">
+  <div id="certContainer">
+    <% if (typeof certifications !== 'undefined' && certifications.length > 0) { %>
+      <% const featuredCerts = certifications.filter(c => c.isFeatured); %>
+      <% const normalCerts = certifications.filter(c => !c.isFeatured); %>
+
+      <% if (featuredCerts.length > 0) { %>
+        <% featuredCerts.forEach(cert => { %>
+          <div class="cert-featured-wrapper">
+            <img src="<%= cert.imageUrl %>" alt="<%= cert.title?.en || 'Certificate' %>" onclick="openLightbox(this.src)">
+            <div class="cert-caption">
+              <h3><%= cert.title?.en || '' %></h3>
+              <% if (cert.issuingAuthority) { %>
+                <p><%= cert.issuingAuthority %> &bull; <%= cert.yearAwarded || '' %></p>
+              <% } %>
+              <% if (cert.tag?.en) { %>
+                <span class="cert-tag"><%= cert.tag.en %></span>
+              <% } %>
+            </div>
+          </div>
+        <% }) %>
+      <% } %>
+
+      <% if (normalCerts.length > 0) { %>
+        <div class="cert-grid">
+          <% normalCerts.forEach(cert => { %>
+            <div class="cert-card">
+              <img src="<%= cert.imageUrl %>" alt="<%= cert.title?.en || 'Certificate' %>" onclick="openLightbox(this.src)">
+              <div class="cert-card-body">
+                <h3 style="font-size:1.1rem; margin-bottom:5px;"><%= cert.title?.en || '' %></h3>
+                <% if (cert.tag?.en) { %>
+                  <span class="cert-tag"><%= cert.tag.en %></span>
+                <% } %>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+
+    <% } else { %>
+      <!-- Fallback / Empty State -->
+      <div class="cert-featured-wrapper">
+        <img src="https://imgs.search.brave.com/lRPPDKENw9rearEYwDJPoGF7f_NXqE5uoX8fc5YEpAE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/Zm1hc3NvY2lhdGVz/YmQuY29tL2ltYWdl/cy90cmFkZV9saWNl/bnNlL3NhbXBsZV90/cmFkZV9saWNlbnNl/X0JhbmdsYWRlc2gu/anBn" alt="Default Certificate" onclick="openLightbox(this.src)">
+        <div class="cert-caption">
+          <h3>IATA Accredited</h3>
+          <p>Bangladesh Civil Aviation Authority</p>
+        </div>
+      </div>
+    <% } %>
   </div>
 </main>
 
@@ -114,23 +96,23 @@
 </div>
 
 <script>
-  function openLightbox(imageSrc) {
-    const lightbox = document.getElementById('certLightbox');
-    const lightboxImg = document.getElementById('lightboxImage');
-    lightboxImg.src = imageSrc;
-    lightbox.classList.add('active');
+  let lightboxOpen = false;
+
+  function openLightbox(src) {
+    document.getElementById('lightboxImage').src = src;
+    document.getElementById('certLightbox').classList.add('active');
     document.body.style.overflow = 'hidden';
+    lightboxOpen = true;
   }
   
   function closeLightbox() {
-    const lightbox = document.getElementById('certLightbox');
-    lightbox.classList.remove('active');
+    document.getElementById('certLightbox').classList.remove('active');
     document.body.style.overflow = 'auto';
+    lightboxOpen = false;
   }
   
-  // Close on Escape key
   document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
+    if (event.key === 'Escape' && lightboxOpen) {
       closeLightbox();
     }
   });

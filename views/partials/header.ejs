@@ -15,8 +15,8 @@
   <div class="nav-inner">
     <div class="logo">
       <a href="/">
-        <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Nusrat International Logo" onerror="this.style.display='none'" />
-        <div class="logo-text"><span>Nusrat International <br /> Nusrat Travels</span></div>
+        <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Nusrat International Logo" id="header-logo-img" onerror="this.style.display='none'" />
+        <div class="logo-text"><span id="header-logo-text">Nusrat International <br /> Nusrat Travels</span></div>
       </a>
     </div>
     <button class="hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
@@ -39,30 +39,41 @@
     try {
       const res = await window.fetch('/api/public/navbar');
       const json = await res.json();
-      if(json.success && json.data && json.data.length > 0) {
-        const navList = document.getElementById('nav-links');
-        navList.innerHTML = ''; // Clear fallback
-        
-        json.data.forEach(item => {
-          const li = document.createElement('li');
-          const a = document.createElement('a');
-          a.href = item.link;
-          if (item.isExternal) a.target = '_blank';
+      if(json.success && json.data) {
+        // Update Branding
+        if (json.data.headerLogoUrl) {
+          document.getElementById('header-logo-img').src = json.data.headerLogoUrl;
+        }
+        if (json.data.logoText) {
+          document.getElementById('header-logo-text').innerHTML = (json.data.logoText.en || '') + (json.data.logoText.bn ? `<br />${json.data.logoText.bn}` : '');
+        }
+
+        // Update Links
+        if (json.data.items && json.data.items.length > 0) {
+          const navList = document.getElementById('nav-links');
+          navList.innerHTML = ''; // Clear fallback
           
-          // Determine if active
-          const currentPath = window.location.pathname;
-          if (currentPath === item.link || (item.link !== '/' && currentPath.startsWith(item.link))) {
-             a.className = 'active';
-             // Also support legacy activePage if defined
-             if ('<%= typeof activePage !== "undefined" ? activePage : "" %>' === item.link.replace('/','')) {
-                 a.className = 'active';
-             }
-          }
-          
-          a.innerHTML = item.label.en + (item.label.bn ? ` | ${item.label.bn}` : '');
-          li.appendChild(a);
-          navList.appendChild(li);
-        });
+          json.data.items.forEach(item => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = item.link;
+            if (item.isExternal) a.target = '_blank';
+            
+            // Determine if active
+            const currentPath = window.location.pathname;
+            if (currentPath === item.link || (item.link !== '/' && currentPath.startsWith(item.link))) {
+               a.className = 'active';
+               // Also support legacy activePage if defined
+               if ('<%= typeof activePage !== "undefined" ? activePage : "" %>' === item.link.replace('/','')) {
+                   a.className = 'active';
+               }
+            }
+            
+            a.innerHTML = item.label.en + (item.label.bn ? ` | ${item.label.bn}` : '');
+            li.appendChild(a);
+            navList.appendChild(li);
+          });
+        }
       }
     } catch(err) {
       console.warn('Failed to dynamically load navbar, using static fallback.', err);

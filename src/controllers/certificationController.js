@@ -1,189 +1,211 @@
-// Fix ObjectId usage - use 'new' keyword consistently
 const { ObjectId } = require('mongodb');
 
-// GET /admin/certifications - List all certifications
-exports.getCertifications = async (req, res) => {
+// ==========================================
+// VIEWS (Admin)
+// ==========================================
+exports.manageCertifications = async (req, res) => {
+  res.render('admin/certifications/manage', { 
+    admin: req.admin || req.session?.admin || { username: 'Admin' }, 
+    activePage: 'certifications' 
+  });
+};
+
+// ==========================================
+// ADMIN API ROUTES
+// ==========================================
+
+// GET /api/admin/certifications
+exports.getAdminCertifications = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const { status = 'all' } = req.query;
-
-    let query = {};
-    if (status === 'active') query.isActive = true;
-    else if (status === 'inactive') query.isActive = false;
-
-    const certifications = await db.collection('certifications').find(query)
-      .sort({ order: 1, isFeatured: -1, createdAt: -1 })
+    const certifications = await db.collection('certifications')
+      .find({})
+      .sort({ order: 1, createdAt: -1 })
       .toArray();
 
-    res.render('admin/certifications/manage', {
-      admin: req.admin,
-      items: certifications,
-      currentStatus: status
-    });
+    res.json({ success: true, data: certifications || [] });
   } catch (error) {
-    console.error('Get certifications error:', error);
-    res.status(500).send('Error loading certifications: ' + error.message);
+    res.status(500).json({ success: false, message: 'Failed to fetch certifications', error: error.message });
   }
 };
 
-// POST /admin/certifications/create - Create new certification
+// POST /api/admin/certifications
 exports.createCertification = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const { titleEn, titleBn, tagEn, tagBn, code, isFeatured, isActive, order } = req.body;
+    const { 
+      titleEn, titleBn, 
+      tagEn, tagBn, 
+      code, 
+      descriptionEn, descriptionBn, 
+      issuingAuthority, 
+      yearAwarded, 
+      isFeatured, 
+      isActive 
+    } = req.body;
 
-    // The field names from multer upload.fields([{name:'logo'}, {name:'certificate'}])
-    // req.files is an object keyed by field name
-    let logoUrl = '';
-    let certificateUrl = '';
-
-    if (req.files) {
-      if (req.files.logo && req.files.logo[0]) {
-        const f = req.files.logo[0];
-        logoUrl = f.path || ('/uploads/' + f.filename);
-      }
-      if (req.files.certificate && req.files.certificate[0]) {
-        const f = req.files.certificate[0];
-        certificateUrl = f.path || ('/uploads/' + f.filename);
-      }
-      // Also handle single file named 'certificateImage' (legacy)
-      if (req.files.certificateImage && req.files.certificateImage[0]) {
-        const f = req.files.certificateImage[0];
-        certificateUrl = f.path || ('/uploads/' + f.filename);
-      }
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'Certificate image is required' });
     }
+
+    const imageUrl = `/uploads/certifications/${req.file.filename}`;
 
     const certification = {
       title: { en: titleEn || '', bn: titleBn || '' },
       tag: { en: tagEn || '', bn: tagBn || '' },
       code: code || '',
-      logoUrl,
-      certificateImage: certificateUrl,
-      isFeatured: isFeatured === 'on',
-      isActive: isActive !== 'false',
-      order: order ? parseInt(order) : 0,
-      createdAt: new Date()
+      imageUrl,
+      description: { en: descriptionEn || '', bn: descriptionBn || '' },
+      issuingAuthority: issuingAuthority || '',
+      yearAwarded: yearAwarded ? parseInt(yearAwarded, 10) : new Date().getFullYear(),
+      isFeatured: isFeatured === 'true' || isFeatured === true,
+      isActive: isActive === 'true' || isActive === true,
+      order: Date.now(), // default to bottom of list
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
 
-    await db.collection('certifications').insertOne(certification);
-    res.redirect('/admin/certifications');
+    const result = await db.collection('certifications').insertOne(certification);
+    res.json({ success: true, message: 'Certification created successfully', data: { _id: result.insertedId, ...certification } });
   } catch (error) {
-    console.error('Create certification error:', error);
-    res.status(500).send('Error creating certification: ' + error.message);
+    res.status(500).json({ success: false, message: 'Failed to create certification', error: error.message });
   }
 };
 
-// POST /admin/certifications/update/:id - Update certification
+// PUT /api/admin/certifications/:id
 exports.updateCertification = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const { titleEn, titleBn, tagEn, tagBn, code, isFeatured, isActive, order } = req.body;
-
-    let logoUrl = req.body.existingLogo || '';
-    let certificateUrl = req.body.existingCertificate || '';
-
-    if (req.files) {
-      if (req.files.logo && req.files.logo[0]) {
-        const f = req.files.logo[0];
-        logoUrl = f.path || ('/uploads/' + f.filename);
-      }
-      if (req.files.certificate && req.files.certificate[0]) {
-        const f = req.files.certificate[0];
-        certificateUrl = f.path || ('/uploads/' + f.filename);
-      }
-      if (req.files.certificateImage && req.files.certificateImage[0]) {
-        const f = req.files.certificateImage[0];
-        certificateUrl = f.path || ('/uploads/' + f.filename);
-      }
-    }
+    const { 
+      titleEn, titleBn, 
+      tagEn, tagBn, 
+      code, 
+      descriptionEn, descriptionBn, 
+      issuingAuthority, 
+      yearAwarded, 
+      isFeatured, 
+      isActive 
+    } = req.body;
 
     const updateData = {
       title: { en: titleEn || '', bn: titleBn || '' },
       tag: { en: tagEn || '', bn: tagBn || '' },
       code: code || '',
-      logoUrl,
-      certificateImage: certificateUrl,
-      isFeatured: isFeatured === 'on',
-      isActive: isActive !== 'false',
-      order: order ? parseInt(order) : 0,
+      description: { en: descriptionEn || '', bn: descriptionBn || '' },
+      issuingAuthority: issuingAuthority || '',
+      yearAwarded: yearAwarded ? parseInt(yearAwarded, 10) : new Date().getFullYear(),
+      isFeatured: isFeatured === 'true' || isFeatured === true,
+      isActive: isActive === 'true' || isActive === true,
       updatedAt: new Date()
     };
 
-    await db.collection('certifications').updateOne(
+    if (req.file) {
+      updateData.imageUrl = `/uploads/certifications/${req.file.filename}`;
+    }
+
+    const result = await db.collection('certifications').findOneAndUpdate(
       { _id: new ObjectId(req.params.id) },
-      { $set: updateData }
+      { $set: updateData },
+      { returnDocument: 'after' }
     );
 
-    res.redirect('/admin/certifications');
+    if (!result) {
+      return res.status(404).json({ success: false, message: 'Certification not found' });
+    }
+
+    res.json({ success: true, message: 'Certification updated successfully', data: result });
   } catch (error) {
-    console.error('Update certification error:', error);
-    res.status(500).send('Error updating certification: ' + error.message);
+    res.status(500).json({ success: false, message: 'Failed to update certification', error: error.message });
   }
 };
 
-// POST /admin/certifications/delete/:id - Delete certification
+// DELETE /api/admin/certifications/:id
 exports.deleteCertification = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
+    const result = await db.collection('certifications').deleteOne({ _id: new ObjectId(req.params.id) });
 
-    await db.collection('certifications').deleteOne({
-      _id: new ObjectId(req.params.id)
-    });
-
-    if (req.xhr || req.headers.accept?.includes('application/json')) {
-      res.json({ success: true });
-    } else {
-      res.redirect('/admin/certifications');
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ success: false, message: 'Certification not found' });
     }
+
+    res.json({ success: true, message: 'Certification deleted successfully' });
   } catch (error) {
-    console.error('Delete certification error:', error);
-    if (req.xhr || req.headers.accept?.includes('application/json')) {
-      res.status(500).json({ success: false, error: 'Error deleting certification' });
-    } else {
-      res.status(500).send('Error deleting certification: ' + error.message);
-    }
+    res.status(500).json({ success: false, message: 'Failed to delete certification', error: error.message });
   }
 };
 
-// POST /admin/certifications/toggle-featured/:id
+// POST /api/admin/certifications/reorder
+exports.reorderCertifications = async (req, res) => {
+  try {
+    const db = await req.app.locals.getDb();
+    const { items } = req.body;
+
+    if (!Array.isArray(items)) {
+      return res.status(400).json({ success: false, message: 'Invalid payload' });
+    }
+
+    const bulkOps = items.map(item => ({
+      updateOne: {
+        filter: { _id: new ObjectId(item._id) },
+        update: { $set: { order: parseInt(item.order, 10), updatedAt: new Date() } }
+      }
+    }));
+
+    if (bulkOps.length > 0) {
+      await db.collection('certifications').bulkWrite(bulkOps);
+    }
+
+    res.json({ success: true, message: 'Certifications reordered successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to reorder certifications', error: error.message });
+  }
+};
+
+// PATCH /api/admin/certifications/:id/featured
 exports.toggleFeatured = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
     const cert = await db.collection('certifications').findOne({ _id: new ObjectId(req.params.id) });
-    if (!cert) return res.status(404).json({ success: false, error: 'Not found' });
+    
+    if (!cert) {
+      return res.status(404).json({ success: false, message: 'Certification not found' });
+    }
 
     await db.collection('certifications').updateOne(
       { _id: new ObjectId(req.params.id) },
-      { $set: { isFeatured: !cert.isFeatured } }
+      { $set: { isFeatured: !cert.isFeatured, updatedAt: new Date() } }
     );
 
-    res.json({ success: true, isFeatured: !cert.isFeatured });
+    res.json({ success: true, message: 'Toggle successful', data: { isFeatured: !cert.isFeatured } });
   } catch (error) {
-    console.error('Toggle featured error:', error);
-    res.status(500).json({ success: false, error: 'Error toggling featured' });
+    res.status(500).json({ success: false, message: 'Failed to toggle featured status', error: error.message });
   }
 };
 
-// API: GET /api/certifications - Get all certifications
-exports.apiGetCertifications = async (req, res) => {
+
+// ==========================================
+// PUBLIC API ROUTES
+// ==========================================
+
+// GET /api/public/certifications
+exports.getPublicCertifications = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const { isActive, isFeatured } = req.query;
+    const { featured } = req.query;
 
-    let query = {};
-    if (isActive !== undefined) query.isActive = isActive === 'true';
-    if (isFeatured !== undefined) query.isFeatured = isFeatured === 'true';
+    let query = { isActive: true };
+    if (featured === 'true') {
+      query.isFeatured = true;
+    }
 
-    const certifications = await db.collection('certifications').find(query)
-      .sort({ order: 1, isFeatured: -1, createdAt: -1 })
+    const certifications = await db.collection('certifications')
+      .find(query)
+      .sort({ order: 1, createdAt: -1 })
       .toArray();
 
-    res.json({ success: true, certifications });
+    res.json({ success: true, data: certifications || [] });
   } catch (error) {
-    console.error('API get certifications error:', error);
-    res.status(500).json({ success: false, error: 'Error loading certifications' });
+    res.status(500).json({ success: false, message: 'Failed to fetch public certifications', error: error.message });
   }
 };
-
-// Aliases for admin routes
-exports.manageCertifications = exports.getCertifications;

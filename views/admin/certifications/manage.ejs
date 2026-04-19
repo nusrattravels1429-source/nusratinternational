@@ -3,286 +3,436 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Certifications Management - Admin</title>
+  <title>Manage Certifications - Admin</title>
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f2f5; color: #333; }
-    .admin-layout { display: flex; min-height: 100vh; }
-    .sidebar { width: 250px; background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: white; padding: 0; position: fixed; height: 100vh; overflow-y: auto; z-index: 100; }
-    .sidebar-header { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
-    .sidebar-logo { font-size: 36px; margin-bottom: 8px; }
-    .sidebar-header h2 { font-size: 16px; font-weight: 700; color: #e2e8f0; }
-    .admin-name { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
-    .sidebar-menu { list-style: none; padding: 12px 0; }
-    .sidebar-menu .menu-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 16px 20px 6px; }
-    .sidebar-menu .menu-separator { height: 1px; background: rgba(255,255,255,0.1); margin: 12px 20px; }
-    .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13.5px; transition: all 0.2s; border-left: 3px solid transparent; }
-    .sidebar-menu a:hover { background: rgba(255,255,255,0.08); color: white; border-left-color: #667eea; }
-    .sidebar-menu a.active { background: rgba(102,126,234,0.2); color: white; border-left-color: #667eea; font-weight: 600; }
-    .logout-link:hover { background: rgba(239,68,68,0.2) !important; color: #fca5a5 !important; }
-    .main-content { flex: 1; margin-left: 250px; padding: 28px; }
-    .page-header { background: white; padding: 20px 28px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-    .page-header h1 { font-size: 22px; font-weight: 700; color: #1a1a2e; }
-    .breadcrumb { font-size: 13px; color: #94a3b8; }
-    .panel { background: white; border-radius: 12px; padding: 28px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-    .panel-title { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #f0f2f5; display: flex; justify-content: space-between; align-items: center; }
-    .btn { padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; transition: all 0.2s; }
-    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-secondary { background: #f1f5f9; color: #475569; }
-    .btn-danger { background: #fee2e2; color: #dc2626; }
-    .btn-warning { background: #fef3c7; color: #d97706; }
-    .btn-sm { padding: 7px 14px; font-size: 12px; }
-    .form-control { width: 100%; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 14px; font-family: inherit; background: #fafafa; transition: border-color 0.2s; }
-    .form-control:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.12); background: white; }
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #f3f4f6;
+      --text: #1f2937;
+      --border: #e5e7eb;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+    .layout { display: flex; min-height: 100vh; }
+    
+    .container { flex: 1; padding: 2rem; max-width: 1200px; margin: 0 auto; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .header h1 { font-size: 1.8rem; font-weight: 700; }
+    
+    .btn { padding: 0.5rem 1rem; border-radius: 0.375rem; border: none; cursor: pointer; font-weight: 500; font-size: 0.875rem; transition: background 0.2s; color: white; display: inline-flex; align-items: center; gap: 0.5rem; justify-content: center; }
+    .btn-primary { background: var(--primary); }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-danger { background: #ef4444; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-secondary { background: #6b7280; }
+    .btn-secondary:hover { background: #4b5563; }
+    .btn-featured { background: #f59e0b; }
+    .btn-featured:hover { background: #d97706; }
+    
+    .filters { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
+    
+    /* List View */
+    .list-container { background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+    .list-item { display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border); transition: background 0.2s; cursor: grab; }
+    .list-item:active { cursor: grabbing; background: #f9fafb; }
+    .list-item.dragging { opacity: 0.5; border: 2px dashed var(--primary); }
+    .list-item:last-child { border-bottom: none; }
+    
+    .drag-handle { padding: 0.5rem; color: #9ca3af; font-size: 1.2rem; cursor: grab; margin-right: 0.5rem; }
+    .cert-thumb { width: 80px; height: 60px; object-fit: contain; background: #f9fafb; border: 1px solid var(--border); border-radius: 0.25rem; margin-right: 1.5rem; }
+    
+    .cert-info { flex: 1; }
+    .cert-title { font-weight: 600; margin-bottom: 0.25rem; }
+    .cert-meta { font-size: 0.875rem; color: #6b7280; display: flex; gap: 1rem; align-items: center; }
+    .cert-tag { font-size: 0.75rem; background: #e0e7ff; color: #3730a3; padding: 0.125rem 0.5rem; border-radius: 999px; }
+    
+    .cert-status { font-size: 0.875rem; font-weight: 500; display: inline-flex; align-items: center; gap: 0.25rem; }
+    .status-active { color: #10b981; }
+    .status-inactive { color: #ef4444; }
+    .status-featured { color: #f59e0b; margin-right: 1rem; }
+    
+    .list-actions { display: flex; gap: 0.5rem; margin-left: 1rem; }
 
-    /* Cert grid */
-    .cert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-    .cert-card { border-radius: 12px; overflow: hidden; border: 1.5px solid #e2e8f0; background: white; transition: all 0.2s; }
-    .cert-card:hover { border-color: #667eea; box-shadow: 0 4px 20px rgba(102,126,234,0.1); }
-    .cert-card-logo { height: 140px; display: flex; align-items: center; justify-content: center; background: #f8faff; overflow: hidden; }
-    .cert-card-logo img { max-height: 120px; max-width: 100%; object-fit: contain; }
-    .cert-card-logo .no-logo { font-size: 40px; color: #cbd5e1; }
-    .cert-card-body { padding: 14px 16px; }
-    .cert-card-title { font-size: 14px; font-weight: 700; color: #1a1a2e; }
-    .cert-card-code { font-size: 12px; color: #667eea; font-weight: 600; margin-top: 2px; }
-    .cert-card-tag { font-size: 11px; color: #94a3b8; }
-    .cert-card-badges { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-    .badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
-    .badge-featured { background: #fef9c3; color: #854d0e; }
-    .badge-active { background: #dcfce7; color: #166534; }
-    .badge-inactive { background: #fee2e2; color: #991b1b; }
-    .cert-card-actions { padding: 10px 16px; border-top: 1px solid #f0f2f5; display: flex; gap: 8px; }
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 50; padding: 1rem; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: white; border-radius: 0.5rem; padding: 2rem; width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+    .modal h2 { margin-bottom: 1.5rem; font-size: 1.5rem; }
+    
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-weight: 500; font-size: 0.875rem; margin-bottom: 0.5rem; color: #374151; }
+    .form-group input[type="text"], .form-group input[type="number"], .form-group textarea { width: 100%; padding: 0.625rem; border: 1px solid var(--border); border-radius: 0.375rem; font-family: inherit; }
+    .form-group textarea { resize: vertical; min-height: 60px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .toggle-group { display: flex; align-items: center; gap: 1rem; margin-top: 1rem; padding: 1rem; background: #f9fafb; border-radius: 0.375rem; }
+    .toggle-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; cursor: pointer; }
+    
+    .modal-actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+    
+    /* Toast */
+    .toast-container { position: fixed; bottom: 1rem; right: 1rem; z-index: 100; display: flex; flex-direction: column; gap: 0.5rem; }
+    .toast { padding: 1rem; border-radius: 0.375rem; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); font-size: 0.875rem; opacity: 0; transform: translateY(100%); animation: slideIn 0.3s forwards; min-width: 250px; }
+    .toast.success { background: #10b981; }
+    .toast.error { background: #ef4444; }
+    @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
 
-    .add-form-panel { display: none; }
-    .add-form-panel.open { display: block; }
-    .empty-state { text-align: center; padding: 60px 20px; color: #94a3b8; }
+    @media (max-width: 768px) {
+      .list-item { flex-direction: column; align-items: flex-start; position: relative; }
+      .drag-handle { position: absolute; top: 1rem; right: 1rem; margin: 0; }
+      .cert-thumb { margin-bottom: 1rem; }
+      .list-actions { margin-left: 0; margin-top: 1rem; width: 100%; }
+      .list-actions .btn { flex: 1; }
+    }
   </style>
 </head>
 <body>
-<div class="admin-layout">
-  <%- include('../partials/sidebar', { admin, activePage: 'certifications' }) %>
-
-  <main class="main-content">
-    <div class="page-header">
-      <div>
-        <h1>📜 Certifications Management</h1>
-        <p class="breadcrumb">Admin → Certifications (<%= items.length %> total)</p>
+  <div class="layout">
+    <%- include('../partials/sidebar', { admin: typeof admin !== 'undefined' ? admin : {}, activePage: 'certifications' }) %>
+    
+    <div class="main-content container">
+      <div class="header">
+        <h1>Certifications Management</h1>
+        <button class="btn btn-primary" onclick="openModal()">+ Add Certificate</button>
       </div>
-      <div style="display:flex;gap:10px;">
-        <button class="btn btn-primary" onclick="toggleAddForm()">+ Add Certification</button>
-        <a href="/admin/dashboard" class="btn btn-secondary">← Dashboard</a>
+
+      <div class="filters">
+        <button class="btn btn-secondary" onclick="saveOrder()" id="saveOrderBtn" style="display:none;">💾 Save Order</button>
+      </div>
+
+      <div class="list-container" id="certList">
+        <!-- JS rendered content -->
+        <div style="padding: 2rem; text-align: center; color: #6b7280; font-style: italic;">Loading certifications...</div>
       </div>
     </div>
+  </div>
 
-    <!-- Add Form -->
-    <div class="panel add-form-panel" id="addFormPanel">
-      <div class="panel-title">📋 Add New Certification</div>
-      <form action="/admin/certifications/create" method="POST" enctype="multipart/form-data">
+  <!-- Modal -->
+  <div class="modal-overlay" id="certModal">
+    <div class="modal">
+      <h2 id="modalTitle">Add New Certificate</h2>
+      <form id="certForm" onsubmit="handleSubmit(event)">
+        <input type="hidden" id="itemId">
+        
+        <div class="form-row">
+          <div class="form-group" id="imageInputGroup">
+            <label for="certImage">Certificate Image *</label>
+            <input type="file" id="certImage" name="certImage" accept="image/*">
+          </div>
+          <div class="form-group">
+            <label for="code">Certificate Code (Optional)</label>
+            <input type="text" id="code" name="code" placeholder="e.g., CERT-2024-001">
+          </div>
+        </div>
+
         <div class="form-row">
           <div class="form-group">
-            <label>Title (English) *</label>
-            <input type="text" name="titleEn" class="form-control" placeholder="e.g. IATA Accredited" required>
+            <label for="titleEn">Title (English) *</label>
+            <input type="text" id="titleEn" name="titleEn" required>
           </div>
           <div class="form-group">
-            <label>Title (বাংলা)</label>
-            <input type="text" name="titleBn" class="form-control" placeholder="আইএটিএ স্বীকৃত">
-          </div>
-          <div class="form-group">
-            <label>Tag / Type (English)</label>
-            <input type="text" name="tagEn" class="form-control" placeholder="Aviation & Travel">
-          </div>
-          <div class="form-group">
-            <label>Tag / Type (বাংলা)</label>
-            <input type="text" name="tagBn" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>Certificate Code / Number</label>
-            <input type="text" name="code" class="form-control" placeholder="RL-1429">
-          </div>
-          <div class="form-group">
-            <label>Display Order</label>
-            <input type="number" name="order" value="0" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>Logo / Organization Image</label>
-            <input type="file" name="logo" class="form-control" accept="image/*">
-          </div>
-          <div class="form-group">
-            <label>Certificate Document Image (optional)</label>
-            <input type="file" name="certificate" class="form-control" accept="image/*">
+            <label for="titleBn">Title (Bengali)</label>
+            <input type="text" id="titleBn" name="titleBn">
           </div>
         </div>
-        <div style="display:flex;gap:20px;align-items:center;margin-bottom:16px;">
-          <label style="display:flex;gap:8px;align-items:center;cursor:pointer;font-size:14px;">
-            <input type="checkbox" name="isFeatured" value="on" style="width:16px;height:16px;">
-            ⭐ Show on Homepage (Featured)
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tagEn">Short Tag (English)</label>
+            <input type="text" id="tagEn" name="tagEn" placeholder="e.g., IATA Accredited">
+          </div>
+          <div class="form-group">
+            <label for="tagBn">Short Tag (Bengali)</label>
+            <input type="text" id="tagBn" name="tagBn">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="issuingAuthority">Issuing Authority</label>
+            <input type="text" id="issuingAuthority" name="issuingAuthority">
+          </div>
+          <div class="form-group">
+            <label for="yearAwarded">Year Awarded</label>
+            <input type="number" id="yearAwarded" name="yearAwarded" min="1990" max="2099" value="2024">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="descriptionEn">Description (English)</label>
+            <textarea id="descriptionEn" name="descriptionEn"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="descriptionBn">Description (Bengali)</label>
+            <textarea id="descriptionBn" name="descriptionBn"></textarea>
+          </div>
+        </div>
+
+        <div class="toggle-group">
+          <label class="toggle-label">
+            <input type="checkbox" id="isActive" name="isActive" checked> Active
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="isFeatured" name="isFeatured"> Featured (Show prominently)
           </label>
         </div>
-        <div style="display:flex;gap:10px;">
-          <button type="submit" class="btn btn-primary">💾 Add Certification</button>
-          <button type="button" class="btn btn-secondary" onclick="toggleAddForm()">Cancel</button>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="submitBtn">Save Certificate</button>
         </div>
       </form>
     </div>
+  </div>
 
-    <!-- List -->
-    <div class="panel">
-      <div class="panel-title">
-        <span>All Certifications</span>
-        <span style="font-size:13px;font-weight:400;color:#94a3b8;"><%= items.filter(i => i.isFeatured).length %> featured · <%= items.filter(i => i.isActive !== false).length %> active</span>
-      </div>
+  <div class="toast-container" id="toastContainer"></div>
 
-      <% if (items && items.length > 0) { %>
-      <div class="cert-grid">
-        <% items.forEach(function(item) { %>
-        <div class="cert-card">
-          <div class="cert-card-logo">
-            <% if (item.logoUrl) { %>
-              <img src="<%= item.logoUrl %>" alt="<%= item.title?.en %>">
-            <% } else { %>
-              <div class="no-logo">📜</div>
-            <% } %>
-          </div>
-          <div class="cert-card-body">
-            <div class="cert-card-title"><%= item.title?.en || 'Untitled' %></div>
-            <% if (item.code) { %><div class="cert-card-code"><%= item.code %></div><% } %>
-            <div class="cert-card-tag"><%= item.tag?.en || '' %></div>
-            <div class="cert-card-badges">
-              <% if (item.isFeatured) { %><span class="badge badge-featured">⭐ Featured</span><% } %>
-              <span class="badge <%= item.isActive !== false ? 'badge-active' : 'badge-inactive' %>"><%= item.isActive !== false ? '✓ Active' : '✗ Hidden' %></span>
+  <script>
+    let certItems = [];
+    let draggedItem = null;
+
+    // Fetch and render
+    async function fetchCerts() {
+      try {
+        const res = await fetch('/api/admin/certifications');
+        const data = await res.json();
+        if (data.success) {
+          certItems = data.data;
+          renderCerts();
+        } else throw new Error(data.message);
+      } catch (err) {
+        showToast('Failed to load certifications', 'error');
+      }
+    }
+
+    function renderCerts() {
+      const container = document.getElementById('certList');
+      container.innerHTML = '';
+
+      if (certItems.length === 0) {
+        container.innerHTML = '<div style="padding: 2rem; text-align: center; color: #6b7280;">No certifications found.</div>';
+        return;
+      }
+
+      certItems.forEach((item, index) => {
+        const el = document.createElement('div');
+        el.className = 'list-item';
+        el.draggable = true;
+        el.dataset.id = item._id;
+
+        el.addEventListener('dragstart', handleDragStart);
+        el.addEventListener('dragover', handleDragOver);
+        el.addEventListener('drop', handleDrop);
+        el.addEventListener('dragend', handleDragEnd);
+
+        el.innerHTML = `
+          <div class="drag-handle">≡</div>
+          <img src="${item.imageUrl}" class="cert-thumb" alt="Certificate">
+          <div class="cert-info">
+            <div class="cert-title">${item.title?.en || 'Untitled'}</div>
+            <div class="cert-meta">
+              ${item.tag?.en ? `<span class="cert-tag">${item.tag.en}</span>` : ''}
+              <span>${item.issuingAuthority || 'No Authority Listed'}</span>
+              <span>•</span>
+              <span>${item.yearAwarded || ''}</span>
             </div>
           </div>
-          <div class="cert-card-actions">
-            <button class="btn btn-sm btn-secondary" onclick="openEditModal(
-              '<%= item._id %>',
-              '<%= (item.title?.en || '').replace(/'/g, '\\\'') %>',
-              '<%= (item.title?.bn || '').replace(/'/g, '\\\'') %>',
-              '<%= (item.tag?.en || '').replace(/'/g, '\\\'') %>',
-              '<%= (item.tag?.bn || '').replace(/'/g, '\\\'') %>',
-              '<%= item.code || '' %>',
-              '<%= item.logoUrl || '' %>',
-              '<%= item.certificateImage || '' %>',
-              '<%= item.isFeatured ? 'true' : 'false' %>',
-              '<%= item.isActive !== false ? 'true' : 'false' %>',
-              '<%= item.order || 0 %>'
-            )">✏️ Edit</button>
-            <button class="btn btn-sm btn-warning" onclick="toggleFeatured('<%= item._id %>', this)" title="Toggle Featured">⭐</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteCert('<%= item._id %>')">🗑️</button>
+          <div class="cert-status">
+            ${item.isFeatured ? '<span class="status-featured">⭐ Featured</span>' : ''}
+            <span class="${item.isActive ? 'status-active' : 'status-inactive'}">
+              ${item.isActive ? 'Active' : 'Hidden'}
+            </span>
           </div>
-        </div>
-        <% }); %>
-      </div>
-      <% } else { %>
-      <div class="empty-state">
-        <div style="font-size:48px;margin-bottom:12px;">📜</div>
-        <h3>No certifications yet</h3>
-        <p>Click "Add Certification" to add your first certification.</p>
-      </div>
-      <% } %>
-    </div>
-  </main>
-</div>
+          <div class="list-actions">
+            <button class="btn btn-featured" onclick="toggleFeatured('${item._id}')" title="Toggle Featured">⭐</button>
+            <button class="btn btn-secondary" onclick="openModal('${item._id}')">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem('${item._id}')">Delete</button>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+    }
 
-<!-- Edit Modal -->
-<div id="editModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;">
-  <div style="background:white;border-radius:12px;padding:28px;width:90%;max-width:540px;max-height:90vh;overflow-y:auto;">
-    <h3 style="margin-bottom:20px;">✏️ Edit Certification</h3>
-    <form id="editForm" method="POST" enctype="multipart/form-data">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Title (English)</label>
-          <input type="text" id="eTitleEn" name="titleEn" class="form-control">
-        </div>
-        <div class="form-group">
-          <label>Title (বাংলা)</label>
-          <input type="text" id="eTitleBn" name="titleBn" class="form-control">
-        </div>
-        <div class="form-group">
-          <label>Tag (English)</label>
-          <input type="text" id="eTagEn" name="tagEn" class="form-control">
-        </div>
-        <div class="form-group">
-          <label>Tag (বাংলা)</label>
-          <input type="text" id="eTagBn" name="tagBn" class="form-control">
-        </div>
-        <div class="form-group">
-          <label>Code</label>
-          <input type="text" id="eCode" name="code" class="form-control">
-        </div>
-        <div class="form-group">
-          <label>Order</label>
-          <input type="number" id="eOrder" name="order" class="form-control">
-        </div>
-      </div>
-      <div id="currentLogoWrap" style="margin-bottom:10px;"></div>
-      <input type="hidden" id="eExistingLogo" name="existingLogo">
-      <div class="form-group">
-        <label>Replace Logo (optional)</label>
-        <input type="file" name="logo" class="form-control" accept="image/*">
-      </div>
-      <input type="hidden" id="eExistingCert" name="existingCertificate">
-      <div class="form-group">
-        <label>Replace Certificate Image (optional)</label>
-        <input type="file" name="certificate" class="form-control" accept="image/*">
-      </div>
-      <label style="display:flex;gap:8px;align-items:center;cursor:pointer;font-size:14px;margin-bottom:16px;">
-        <input type="checkbox" id="eIsFeatured" name="isFeatured" value="on" style="width:16px;height:16px;">
-        ⭐ Show on Homepage (Featured)
-      </label>
-      <div style="display:flex;gap:10px;">
-        <button type="submit" class="btn btn-primary">💾 Save Changes</button>
-        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
-      </div>
-    </form>
-  </div>
-</div>
+    // Modal
+    function openModal(id = null) {
+      const modal = document.getElementById('certModal');
+      const form = document.getElementById('certForm');
+      form.reset();
+      
+      const fileInput = document.getElementById('certImage');
+      fileInput.required = !id; // Required for new upload
 
-<script>
-  function toggleAddForm() {
-    const panel = document.getElementById('addFormPanel');
-    panel.classList.toggle('open');
-    if (panel.classList.contains('open')) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+      if (id) {
+        document.getElementById('modalTitle').textContent = 'Edit Certificate';
+        const item = certItems.find(i => i._id === id);
+        if (item) {
+          document.getElementById('itemId').value = item._id;
+          document.getElementById('titleEn').value = item.title?.en || '';
+          document.getElementById('titleBn').value = item.title?.bn || '';
+          document.getElementById('tagEn').value = item.tag?.en || '';
+          document.getElementById('tagBn').value = item.tag?.bn || '';
+          document.getElementById('code').value = item.code || '';
+          document.getElementById('descriptionEn').value = item.description?.en || '';
+          document.getElementById('descriptionBn').value = item.description?.bn || '';
+          document.getElementById('issuingAuthority').value = item.issuingAuthority || '';
+          document.getElementById('yearAwarded').value = item.yearAwarded || new Date().getFullYear();
+          document.getElementById('isActive').checked = item.isActive;
+          document.getElementById('isFeatured').checked = item.isFeatured;
+        }
+      } else {
+        document.getElementById('modalTitle').textContent = 'Add New Certificate';
+        document.getElementById('itemId').value = '';
+        document.getElementById('yearAwarded').value = new Date().getFullYear();
+      }
+      modal.classList.add('active');
+    }
 
-  function openEditModal(id, titleEn, titleBn, tagEn, tagBn, code, logoUrl, certUrl, isFeatured, isActive, order) {
-    document.getElementById('editForm').action = '/admin/certifications/update/' + id;
-    document.getElementById('eTitleEn').value = titleEn;
-    document.getElementById('eTitleBn').value = titleBn;
-    document.getElementById('eTagEn').value = tagEn;
-    document.getElementById('eTagBn').value = tagBn;
-    document.getElementById('eCode').value = code;
-    document.getElementById('eOrder').value = order;
-    document.getElementById('eExistingLogo').value = logoUrl;
-    document.getElementById('eExistingCert').value = certUrl;
-    document.getElementById('eIsFeatured').checked = isFeatured === 'true';
-    document.getElementById('currentLogoWrap').innerHTML = logoUrl
-      ? `<img src="${logoUrl}" style="height:60px;border-radius:6px;object-fit:contain;background:#f8faff;padding:4px;">`
-      : '';
-    document.getElementById('editModal').style.display = 'flex';
-  }
+    function closeModal() {
+      document.getElementById('certModal').classList.remove('active');
+    }
 
-  function closeEditModal() {
-    document.getElementById('editModal').style.display = 'none';
-  }
+    // Submit
+    async function handleSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('itemId').value;
+      const form = document.getElementById('certForm');
+      const formData = new FormData(form);
+      const btn = document.getElementById('submitBtn');
+      
+      // Map checkboxes to explicit boolean strings for form data robustness
+      formData.set('isActive', document.getElementById('isActive').checked);
+      formData.set('isFeatured', document.getElementById('isFeatured').checked);
 
-  function toggleFeatured(id, btn) {
-    fetch('/admin/certifications/toggle-featured/' + id, { method: 'POST' })
-      .then(r => r.json())
-      .then(d => { if (d.success) location.reload(); else alert('Error'); })
-      .catch(() => alert('Network error'));
-  }
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
 
-  function deleteCert(id) {
-    if (!confirm('Delete this certification? This cannot be undone.')) return;
-    fetch('/admin/certifications/delete/' + id, { method: 'POST' })
-      .then(r => r.json())
-      .then(d => { if (d.success) location.reload(); else alert('Error: ' + d.error); })
-      .catch(() => alert('Network error'));
-  }
-</script>
+      const url = id ? '/api/admin/certifications/' + id : '/api/admin/certifications';
+      const method = id ? 'PUT' : 'POST';
+
+      try {
+        const res = await fetch(url, { method, body: formData });
+        const data = await res.json();
+        
+        if (data.success) {
+          showToast(data.message, 'success');
+          closeModal();
+          fetchCerts();
+        } else throw new Error(data.message);
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save Certificate';
+      }
+    }
+
+    // Delete
+    async function deleteItem(id) {
+      if (!confirm('Are you sure you want to delete this certificate?')) return;
+      try {
+        const res = await fetch('/api/admin/certifications/' + id, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message, 'success');
+          fetchCerts();
+        } else throw new Error(data.message);
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    // Toggle Featured
+    async function toggleFeatured(id) {
+      try {
+        const res = await fetch(`/api/admin/certifications/${id}/featured`, { method: 'PATCH' });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Featured status updated', 'success');
+          fetchCerts();
+        } else throw new Error(data.message);
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    // Drag and Drop Logic
+    function handleDragStart() {
+      draggedItem = this;
+      setTimeout(() => this.classList.add('dragging'), 0);
+    }
+    
+    function handleDragOver(e) {
+      e.preventDefault();
+      const container = document.getElementById('certList');
+      const afterElement = getDragAfterElement(container, e.clientY);
+      if (afterElement == null) {
+        container.appendChild(draggedItem);
+      } else {
+        container.insertBefore(draggedItem, afterElement);
+      }
+    }
+    
+    function handleDrop(e) {
+      e.preventDefault();
+      document.getElementById('saveOrderBtn').style.display = 'inline-flex';
+    }
+    
+    function handleDragEnd() {
+      this.classList.remove('dragging');
+      draggedItem = null;
+    }
+
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll('.list-item:not(.dragging)')];
+      return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child }
+        } else {
+          return closest;
+        }
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    // Save Order
+    async function saveOrder() {
+      const items = Array.from(document.querySelectorAll('.list-item')).map((el, idx) => ({
+        _id: el.dataset.id,
+        order: idx
+      }));
+
+      try {
+        document.getElementById('saveOrderBtn').textContent = 'Saving...';
+        const res = await fetch('/api/admin/certifications/reorder', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Order saved', 'success');
+          document.getElementById('saveOrderBtn').style.display = 'none';
+        } else throw new Error(data.message);
+      } catch(err) {
+        showToast('Failed to save order', 'error');
+      } finally {
+        document.getElementById('saveOrderBtn').textContent = '💾 Save Order';
+      }
+    }
+
+    // Toast
+    function showToast(msg, type) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = msg;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchCerts);
+  </script>
 </body>
 </html>
