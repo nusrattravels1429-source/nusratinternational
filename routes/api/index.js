@@ -8,6 +8,7 @@ const certificationController = require('../../src/controllers/certificationCont
 const teamController = require('../../src/controllers/teamController');
 const navigationController = require('../../src/controllers/navigationController');
 const footerController = require('../../src/controllers/footerController');
+const heroController = require('../../src/controllers/heroController');
 
 const navFooterController = require('../../src/controllers/navFooterController');
 
@@ -51,6 +52,9 @@ router.get('/gallery', galleryController.apiGetGallery);
 // Certifications
 router.get('/certifications', certificationController.apiGetCertifications);
 router.patch('/certifications/:id/featured', protectAdmin, certificationController.toggleFeatured);
+
+// Hero Slider - Public API
+router.get('/hero-slider', heroController.getHeroSliderAPI);
 
 // Team
 router.get('/team', teamController.apiGetTeam);
