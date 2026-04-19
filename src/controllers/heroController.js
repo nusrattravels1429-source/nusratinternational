@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb');
-const HeroSlider = require('../models/HeroSlider');
+const heroSliderModel = require('../models/HeroSlider');
 const fs = require('fs');
 const path = require('path');
 
@@ -24,45 +24,21 @@ const DEFAULT_SETTINGS = {
 };
 
 /**
- * Get or create the single hero slider document
- */
-async function getOrCreateHeroSlider(db) {
-  let slider = await HeroSlider.findOne();
-  
-  if (!slider) {
-    // Create default slider with 4 empty slots
-    slider = new HeroSlider({
-      slides: [
-        { imageUrl: '', order: 0, isActive: true },
-        { imageUrl: '', order: 1, isActive: true },
-        { imageUrl: '', order: 2, isActive: true },
-        { imageUrl: '', order: 3, isActive: true }
-      ],
-      content: DEFAULT_CONTENT,
-      settings: DEFAULT_SETTINGS
-    });
-    await slider.save();
-  }
-  
-  return slider;
-}
-
-/**
  * GET /admin/hero-manage - Render admin management page
  */
 exports.getHeroSliderAdmin = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
     
-    // Get hero slider data from MongoDB model
-    let heroSlider = await getOrCreateHeroSlider(db);
+    // Get hero slider data from MongoDB using native driver
+    let heroSlider = await heroSliderModel.getOrCreateHeroSlider(db);
     
     // Also fetch legacy data from sitecontents for backward compatibility
     const heroText = await db.collection('sitecontents').findOne({ section: 'homepage', key: 'homepage-hero-text' }) || {};
     
     // Merge legacy content with new model data (legacy takes precedence during migration)
     const content = {
-      ...heroSlider.content.toObject(),
+      ...heroSlider.content,
       ...(heroText.subtitle_en ? { subtitle_en: heroText.subtitle_en } : {}),
       ...(heroText.subtitle_bn ? { subtitle_bn: heroText.subtitle_bn } : {}),
       ...(heroText.title_en ? { title_en: heroText.title_en } : {}),
@@ -100,8 +76,8 @@ exports.updateHeroSlider = async (req, res) => {
       slideOrders
     } = req.body;
     
-    // Get or create hero slider
-    let heroSlider = await getOrCreateHeroSlider(db);
+    // Get or create hero slider using native driver
+    let heroSlider = await heroSliderModel.getOrCreateHeroSlider(db);
     
     // Update text content with sanitization
     const sanitizeHtml = (str) => {
@@ -171,15 +147,15 @@ exports.updateHeroSlider = async (req, res) => {
       });
     }
     
-    heroSlider.updatedAt = new Date();
-    await heroSlider.save();
+    // Save using native driver
+    heroSlider = await heroSliderModel.saveHeroSlider(db, heroSlider);
     
     // Also update legacy sitecontents collection for backward compatibility
     await db.collection('sitecontents').updateOne(
       { section: 'homepage', key: 'homepage-hero-text' },
       { 
         $set: {
-          ...heroSlider.content.toObject(),
+          ...heroSlider.content,
           section: 'homepage',
           key: 'homepage-hero-text',
           updatedAt: new Date()
@@ -235,13 +211,12 @@ exports.resetHeroSlider = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
     
-    let heroSlider = await getOrCreateHeroSlider(db);
+    let heroSlider = await heroSliderModel.getOrCreateHeroSlider(db);
     
     // Reset content to defaults but keep images
     heroSlider.content = DEFAULT_CONTENT;
     heroSlider.settings = DEFAULT_SETTINGS;
-    heroSlider.updatedAt = new Date();
-    await heroSlider.save();
+    heroSlider = await heroSliderModel.saveHeroSlider(db, heroSlider);
     
     // Also reset legacy data
     await db.collection('sitecontents').updateOne(
@@ -280,8 +255,8 @@ exports.getHeroSliderAPI = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
     
-    // Try to get from new HeroSlider model first
-    let heroSlider = await HeroSlider.findOne();
+    // Try to get from native HeroSlider model first
+    let heroSlider = await heroSliderModel.getHeroSlider(db);
     
     if (!heroSlider) {
       // Fallback to legacy sitecontents collection
@@ -367,7 +342,7 @@ exports.updateSlide = async (req, res) => {
     }
 
     // Also update HeroSlider model
-    let heroSlider = await getOrCreateHeroSlider(db);
+    let heroSlider = await heroSliderModel.getOrCreateHeroSlider(db);
     const slideIndex = parseInt(result.key?.replace('hero-', '')) - 1;
     
     if (slideIndex >= 0 && slideIndex < 4) {
@@ -380,7 +355,7 @@ exports.updateSlide = async (req, res) => {
           isActive: true
         };
       }
-      await heroSlider.save();
+      heroSlider = await heroSliderModel.saveHeroSlider(db, heroSlider);
     }
 
     res.json({ success: true, message: 'Slide image updated successfully', data: result });
