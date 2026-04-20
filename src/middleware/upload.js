@@ -15,6 +15,11 @@ cloudinary.config({
 // Check if Cloudinary is configured
 const isCloudinaryConfigured = process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET;
 
+// Define uploadDir in module scope so it can be exported safely
+const uploadDir = process.env.VERCEL 
+  ? path.join(os.tmpdir(), 'uploads')
+  : path.join(__dirname, '../../public/uploads');
+
 let storage;
 
 if (isCloudinaryConfigured) {
@@ -29,9 +34,6 @@ if (isCloudinaryConfigured) {
   });
 } else {
   // Fallback to local disk for local development testing
-  const uploadDir = process.env.VERCEL 
-    ? path.join(os.tmpdir(), 'uploads')
-    : path.join(__dirname, '../../public/uploads');
 
   try {
     if (!fs.existsSync(uploadDir)) {
