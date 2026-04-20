@@ -108,7 +108,7 @@ exports.updateHeroSlider = async (req, res) => {
         const slotIndex = match ? parseInt(match[1]) : 0;
         
         if (slotIndex >= 0 && slotIndex < 4) {
-          const relativePath = `/uploads/hero/${file.filename}`;
+          const relativePath = file.path || `/uploads/hero/${file.filename}`;
 
           if (heroSlider.slides[slotIndex]) {
             heroSlider.slides[slotIndex].imageUrl = relativePath;
@@ -322,7 +322,7 @@ exports.updateSlide = async (req, res) => {
     };
 
     if (req.file) {
-      updateDoc.imageUrl = `/uploads/hero/${req.file.filename}`;
+      updateDoc.imageUrl = req.file.path || `/uploads/hero/${req.file.filename}`;
     } else {
       return res.status(400).json({ success: false, message: 'No image provided' });
     }

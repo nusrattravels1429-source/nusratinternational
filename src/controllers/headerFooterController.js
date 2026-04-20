@@ -151,7 +151,7 @@ exports.updateHeaderLogo = async (req, res) => {
 
     let finalUrl = logoUrl;
     if (req.file) {
-      finalUrl = `/uploads/${req.file.filename}`;
+      finalUrl = req.file.path || `/uploads/${req.file.filename}`;
     }
 
     const fid = await getFooterId(db);
@@ -230,7 +230,7 @@ exports.updateFooterSettings = async (req, res) => {
     };
 
     if (req.file) {
-      updateData.logoUrl = `/uploads/${req.file.filename}`;
+      updateData.logoUrl = req.file.path || `/uploads/${req.file.filename}`;
     } else if (req.body.logoUrl) {
       // Allow passing URL string if not uploading new file
       updateData.logoUrl = req.body.logoUrl;

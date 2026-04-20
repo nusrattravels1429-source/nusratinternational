@@ -38,7 +38,7 @@ exports.createGalleryItem = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Image file is required' });
     }
 
-    const imageUrl = `/uploads/gallery/${req.file.filename}`;
+    const imageUrl = req.file.path || `/uploads/gallery/${req.file.filename}`;
 
     const galleryItem = {
       title: { en: titleEn || '', bn: titleBn || '' },
@@ -73,7 +73,7 @@ exports.updateGalleryItem = async (req, res) => {
     };
 
     if (req.file) {
-      updateData.imageUrl = `/uploads/gallery/${req.file.filename}`;
+      updateData.imageUrl = req.file.path || `/uploads/gallery/${req.file.filename}`;
     }
 
     const result = await db.collection('galleryitems').findOneAndUpdate(

@@ -62,7 +62,7 @@ exports.createCard = async (req, res) => {
       }
       req.files.forEach((file, index) => {
         images.push({
-          url: '/uploads/' + file.filename,
+          url: file.path || '/uploads/' + file.filename,
           caption: '',
           order: index
         });
@@ -166,7 +166,7 @@ exports.updateCard = async (req, res) => {
       const startOrder = images.length;
       req.files.forEach((file, index) => {
         images.push({
-          url: '/uploads/' + file.filename,
+          url: file.path || '/uploads/' + file.filename,
           caption: '',
           order: startOrder + index
         });
