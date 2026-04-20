@@ -14,10 +14,10 @@
       <% if (typeof galleryItems !== 'undefined' && galleryItems.length > 0) { %>
         <% galleryItems.forEach(item => { %>
           <div class="gallery-item">
-            <img src="<%= item.imageUrl %>" alt="<%= item.title?.en || 'Gallery Image' %>" loading="lazy">
-            <% if (item.caption?.en || item.caption?.bn) { %>
+            <img src="<%= item.imageUrl %>" alt="<%= item.title?.en || item.title || 'Gallery Image' %>" loading="lazy">
+            <% if (item.caption) { %>
               <div class="gallery-caption">
-                <span class="gallery-caption-text"><%= item.caption.en || item.caption.bn %></span>
+                <span class="gallery-caption-text"><%= item.caption?.en || item.caption?.bn || item.caption %></span>
               </div>
             <% } %>
           </div>

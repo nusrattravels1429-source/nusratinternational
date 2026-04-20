@@ -29,21 +29,24 @@
           <% } %>
         </div>
         <div class="founder-info">
-          <h3 class="founder-name"><%= founder.name?.en || 'Founder' %></h3>
-          <p class="founder-title"><%= founder.designation?.en || 'Proprietor & Founder' %></p>
+          <h3 class="founder-name"><%= founder.name?.en || founder.name || 'Founder' %></h3>
+          <p class="founder-title"><%= founder.designation?.en || founder.designation || 'Proprietor & Founder' %></p>
         </div>
       </div>
 
       <div class="founder-bio">
-        <% if (founder.bio?.en) { %>
-          <% founder.bio.en.split('\n').filter(p => p.trim()).forEach(paragraph => { %>
+        <% 
+            const bioText = founder.bio?.en || founder.bio || '';
+            if (bioText) {
+              bioText.split('\n').filter(p => p.trim()).forEach(paragraph => {
+        %>
             <p><%= paragraph %></p>
           <% }) %>
         <% } %>
         
-        <% if (founder.quote?.en) { %>
+        <% if (founder.quote?.en || founder.quote) { %>
         <div class="founder-quote">
-          "<%= founder.quote.en %>"
+          "<%= founder.quote?.en || founder.quote %>"
         </div>
         <% } %>
       </div>
@@ -60,11 +63,11 @@
         <% employees.forEach(emp => { %>
           <div class="employee-card">
             <div class="emp-image-wrap">
-              <img src="<%= emp.photo?.url || 'https://picsum.photos/300/300' %>" alt="<%= emp.name?.en %>">
+              <img src="<%= emp.photo?.url || emp.image || emp.photo || 'https://picsum.photos/300/300' %>" alt="<%= emp.name?.en || emp.name %>">
             </div>
             <div class="emp-info">
-              <h3 class="emp-name"><%= emp.name?.en %></h3>
-              <p class="emp-position"><%= emp.designation?.en %></p>
+              <h3 class="emp-name"><%= emp.name?.en || emp.name %></h3>
+              <p class="emp-position"><%= emp.designation?.en || emp.position || emp.designation %></p>
             </div>
           </div>
         <% }) %>

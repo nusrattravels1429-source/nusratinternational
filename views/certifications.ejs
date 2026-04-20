@@ -46,14 +46,14 @@
       <% if (featuredCerts.length > 0) { %>
         <% featuredCerts.forEach(cert => { %>
           <div class="cert-featured-wrapper">
-            <img src="<%= cert.imageUrl %>" alt="<%= cert.title?.en || 'Certificate' %>" onclick="openLightbox(this.src)">
+            <img src="<%= cert.imageUrl %>" alt="<%= cert.title?.en || cert.title || 'Certificate' %>" onclick="openLightbox(this.src)">
             <div class="cert-caption">
-              <h3><%= cert.title?.en || '' %></h3>
+              <h3><%= cert.title?.en || cert.title || '' %></h3>
               <% if (cert.issuingAuthority) { %>
                 <p><%= cert.issuingAuthority %> &bull; <%= cert.yearAwarded || '' %></p>
               <% } %>
-              <% if (cert.tag?.en) { %>
-                <span class="cert-tag"><%= cert.tag.en %></span>
+              <% if (cert.tag?.en || typeof cert.tag === 'string') { %>
+                <span class="cert-tag"><%= cert.tag?.en || cert.tag %></span>
               <% } %>
             </div>
           </div>
@@ -64,11 +64,11 @@
         <div class="cert-grid">
           <% normalCerts.forEach(cert => { %>
             <div class="cert-card">
-              <img src="<%= cert.imageUrl %>" alt="<%= cert.title?.en || 'Certificate' %>" onclick="openLightbox(this.src)">
+              <img src="<%= cert.imageUrl %>" alt="<%= cert.title?.en || cert.title || 'Certificate' %>" onclick="openLightbox(this.src)">
               <div class="cert-card-body">
-                <h3 style="font-size:1.1rem; margin-bottom:5px;"><%= cert.title?.en || '' %></h3>
-                <% if (cert.tag?.en) { %>
-                  <span class="cert-tag"><%= cert.tag.en %></span>
+                <h3 style="font-size:1.1rem; margin-bottom:5px;"><%= cert.title?.en || cert.title || '' %></h3>
+                <% if (cert.tag?.en || typeof cert.tag === 'string') { %>
+                  <span class="cert-tag"><%= cert.tag?.en || cert.tag %></span>
                 <% } %>
               </div>
             </div>
