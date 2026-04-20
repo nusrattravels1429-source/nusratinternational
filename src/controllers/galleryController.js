@@ -46,7 +46,7 @@ exports.createGalleryItem = async (req, res) => {
       imageUrl,
       category: category || 'general',
       order: Date.now(), // default high order
-      isActive: isActive === 'true' || isActive === true,
+      isActive: isActive === 'on' || isActive === 'true' || isActive === true,
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -68,7 +68,7 @@ exports.updateGalleryItem = async (req, res) => {
       title: { en: titleEn || '', bn: titleBn || '' },
       caption: { en: captionEn || '', bn: captionBn || '' },
       category: category || 'general',
-      isActive: isActive === 'true' || isActive === true,
+      isActive: isActive === 'on' || isActive === 'true' || isActive === true,
       updatedAt: new Date()
     };
 

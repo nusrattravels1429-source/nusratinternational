@@ -36,7 +36,12 @@
 
       <div class="founder-bio">
         <% 
-            const bioText = founder.bio?.en || founder.bio || '';
+            let bioText = '';
+            if (typeof founder.bio === 'string') {
+              bioText = founder.bio;
+            } else if (founder.bio && typeof founder.bio === 'object') {
+              bioText = founder.bio.en || '';
+            }
             if (bioText) {
               bioText.split('\n').filter(p => p.trim()).forEach(paragraph => {
         %>
