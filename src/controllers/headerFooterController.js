@@ -1,5 +1,18 @@
 const { ObjectId } = require('mongodb');
 
+// Helper to ensure we only ever modify ONE specific footer settings document
+async function getFooterId(db) {
+  const f = await db.collection('footersettings').findOne({}, { sort: { _id: 1 } });
+  if (f) return f._id;
+  const res = await db.collection('footersettings').insertOne({
+    companyName: { en: '', bn: '' },
+    logoUrl: '', headerLogoUrl: '',
+    logoText: { en: '', bn: '' },
+    address: { en: '', bn: '' }, phone: '', whatsapp: '', email: '', socialLinks: {}, mapsEmbedUrl: '', businessHours: {}, copyright: { en: '', bn: '' }, quickLinks: []
+  });
+  return res.insertedId;
+}
+
 // ==========================================
 // VIEWS (Admin)
 // ==========================================
@@ -32,6 +45,8 @@ exports.getNavItems = async (req, res) => {
 // POST /api/admin/header/nav
 exports.createNavItem = async (req, res) => {
   try {
+    console.log('--- POST /api/admin/header/nav ---');
+    console.log('req.body:', req.body);
     const db = await req.app.locals.getDb();
     const { labelEn, labelBn, link, isExternal, isActive } = req.body;
 
@@ -56,6 +71,8 @@ exports.createNavItem = async (req, res) => {
 // PUT /api/admin/header/nav/:id
 exports.updateNavItem = async (req, res) => {
   try {
+    console.log('--- PUT /api/admin/header/nav/' + req.params.id + ' ---');
+    console.log('req.body:', req.body);
     const db = await req.app.locals.getDb();
     const { labelEn, labelBn, link, isExternal, isActive } = req.body;
 
@@ -137,10 +154,10 @@ exports.updateHeaderLogo = async (req, res) => {
       finalUrl = `/uploads/${req.file.filename}`;
     }
 
+    const fid = await getFooterId(db);
     await db.collection('footersettings').updateOne(
-      {},
-      { $set: { headerLogoUrl: finalUrl, updatedAt: new Date() } },
-      { upsert: true }
+      { _id: fid },
+      { $set: { headerLogoUrl: finalUrl, updatedAt: new Date() } }
     );
 
     res.json({ success: true, message: 'Header logo updated', data: { headerLogoUrl: finalUrl } });
@@ -155,10 +172,10 @@ exports.updateHeaderText = async (req, res) => {
     const db = await req.app.locals.getDb();
     const { logoTextEn, logoTextBn } = req.body;
 
+    const fid = await getFooterId(db);
     await db.collection('footersettings').updateOne(
-      {},
-      { $set: { logoText: { en: logoTextEn, bn: logoTextBn }, updatedAt: new Date() } },
-      { upsert: true }
+      { _id: fid },
+      { $set: { logoText: { en: logoTextEn, bn: logoTextBn }, updatedAt: new Date() } }
     );
 
     res.json({ success: true, message: 'Header text updated' });
@@ -175,34 +192,8 @@ exports.updateHeaderText = async (req, res) => {
 exports.getFooterSettings = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    let footer = await db.collection('footersettings').findOne({});
-
-    if (!footer) {
-      footer = {
-        companyName: { en: '', bn: '' },
-        logoUrl: '',
-        headerLogoUrl: '',
-        logoText: { en: '', bn: '' },
-        address: { en: '', bn: '' },
-        phone: '',
-        whatsapp: '',
-        email: '',
-        socialLinks: { facebook: '', instagram: '', youtube: '', linkedin: '', twitter: '' },
-        quickLinks: [],
-        businessHours: {
-          mon: { open: '09:00', close: '18:00', closed: false },
-          tue: { open: '09:00', close: '18:00', closed: false },
-          wed: { open: '09:00', close: '18:00', closed: false },
-          thu: { open: '09:00', close: '18:00', closed: false },
-          fri: { open: '09:00', close: '18:00', closed: false },
-          sat: { open: '09:00', close: '18:00', closed: false },
-          sun: { open: '09:00', close: '18:00', closed: true }
-        },
-        mapsEmbedUrl: '',
-        copyright: { en: '', bn: '' }
-      };
-      await db.collection('footersettings').insertOne(footer);
-    }
+    const fid = await getFooterId(db);
+    let footer = await db.collection('footersettings').findOne({ _id: fid });
 
     res.json({ success: true, data: footer });
   } catch (error) {
@@ -213,6 +204,9 @@ exports.getFooterSettings = async (req, res) => {
 // PUT /api/admin/footer/settings
 exports.updateFooterSettings = async (req, res) => {
   try {
+    console.log('--- PUT /api/admin/footer/settings ---');
+    console.log('req.body:', req.body);
+    console.log('req.file:', req.file);
     const db = await req.app.locals.getDb();
     
     // Parse complex JSON objects from form-data if passed as stringified strings
@@ -242,10 +236,11 @@ exports.updateFooterSettings = async (req, res) => {
       updateData.logoUrl = req.body.logoUrl;
     }
 
+    const fid = await getFooterId(db);
     const result = await db.collection('footersettings').findOneAndUpdate(
-      {},
+      { _id: fid },
       { $set: updateData },
-      { upsert: true, returnDocument: 'after' }
+      { returnDocument: 'after' }
     );
 
     res.json({ success: true, message: 'Footer settings updated', data: result || updateData });
@@ -258,17 +253,18 @@ exports.updateFooterSettings = async (req, res) => {
 exports.addQuickLink = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const { labelEn, labelBn, link, order } = req.body;
-
-    const newLink = {
-      label: { en: labelEn || '', bn: labelBn || '' },
-      link: link || '#',
-      order: order ? parseInt(order, 10) : Date.now()
+    const newLink = req.body; // { labelEn, labelBn, link }
+    
+    // Ensure properly formatted
+    const qk = {
+      label: { en: newLink.labelEn, bn: newLink.labelBn },
+      link: newLink.link
     };
 
+    const fid = await getFooterId(db);
     await db.collection('footersettings').updateOne(
-      {},
-      { $push: { quickLinks: newLink }, $set: { updatedAt: new Date() } }
+      { _id: fid },
+      { $push: { quickLinks: qk }, $set: { updatedAt: new Date() } }
     );
 
     res.json({ success: true, message: 'Quick link added', data: newLink });
@@ -281,21 +277,19 @@ exports.addQuickLink = async (req, res) => {
 exports.updateQuickLink = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const index = parseInt(req.params.index, 10);
+    const index = parseInt(req.params.index);
     const { labelEn, labelBn, link } = req.body;
-
-    const footer = await db.collection('footersettings').findOne({});
-    if (!footer || !footer.quickLinks || index < 0 || index >= footer.quickLinks.length) {
-      return res.status(404).json({ success: false, message: 'Quick link not found' });
-    }
-
-    const quickLinks = [...footer.quickLinks];
-    quickLinks[index].label = { en: labelEn || '', bn: labelBn || '' };
-    quickLinks[index].link = link || '#';
+    
+    const fid = await getFooterId(db);
 
     await db.collection('footersettings').updateOne(
-      {},
-      { $set: { quickLinks, updatedAt: new Date() } }
+      { _id: fid },
+      { $set: {
+        [`quickLinks.${index}.label.en`]: labelEn,
+        [`quickLinks.${index}.label.bn`]: labelBn,
+        [`quickLinks.${index}.link`]: link,
+        updatedAt: new Date()
+      }}
     );
 
     res.json({ success: true, message: 'Quick link updated' });
@@ -308,19 +302,17 @@ exports.updateQuickLink = async (req, res) => {
 exports.deleteQuickLink = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const index = parseInt(req.params.index, 10);
+    const index = parseInt(req.params.index);
 
-    const footer = await db.collection('footersettings').findOne({});
-    if (!footer || !footer.quickLinks || index < 0 || index >= footer.quickLinks.length) {
-      return res.status(404).json({ success: false, message: 'Quick link not found' });
+    const fid = await getFooterId(db);
+    const footer = await db.collection('footersettings').findOne({ _id: fid });
+    if (footer && footer.quickLinks) {
+      footer.quickLinks.splice(index, 1);
+      await db.collection('footersettings').updateOne(
+        { _id: fid },
+        { $set: { quickLinks: footer.quickLinks, updatedAt: new Date() } }
+      );
     }
-
-    const quickLinks = footer.quickLinks.filter((_, i) => i !== index);
-
-    await db.collection('footersettings').updateOne(
-      {},
-      { $set: { quickLinks, updatedAt: new Date() } }
-    );
 
     res.json({ success: true, message: 'Quick link deleted' });
   } catch (error) {
@@ -338,8 +330,9 @@ exports.reorderQuickLinks = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid payload' });
     }
 
+    const fid = await getFooterId(db);
     await db.collection('footersettings').updateOne(
-      {},
+      { _id: fid },
       { $set: { quickLinks: items, updatedAt: new Date() } }
     );
 
@@ -358,10 +351,11 @@ exports.reorderQuickLinks = async (req, res) => {
 exports.getPublicNavbar = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
+    const fid = await getFooterId(db);
     // Return BOTH nav items and the header logo/texto
     const [items, settings] = await Promise.all([
       db.collection('navitems').find({ section: 'navbar', isActive: true }).sort({ order: 1 }).toArray(),
-      db.collection('footersettings').findOne({}, { projection: { headerLogoUrl: 1, logoText: 1 } })
+      db.collection('footersettings').findOne({ _id: fid }, { projection: { headerLogoUrl: 1, logoText: 1 } })
     ]);
     res.json({ success: true, data: { items: items || [], headerLogoUrl: settings?.headerLogoUrl, logoText: settings?.logoText } });
   } catch (error) {
@@ -373,8 +367,9 @@ exports.getPublicNavbar = async (req, res) => {
 exports.getPublicFooter = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
-    const footer = await db.collection('footersettings').findOne({});
-    res.json({ success: true, data: footer || null });
+    const fid = await getFooterId(db);
+    const footer = await db.collection('footersettings').findOne({ _id: fid });
+    res.json({ success: true, data: footer || {} });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to fetch footer', error: error.message });
   }
