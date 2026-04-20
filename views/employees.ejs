@@ -18,32 +18,37 @@
       <h2>A Message from Our Founder</h2>
     </div>
     
+    <% if (founder) { %>
     <div class="founder-content-wrapper">
       <div class="founder-profile-card">
         <div class="founder-image-wrapper">
-          <div class="founder-initials">AZH</div>
-          <img src="https://ui-avatars.com/api/?name=Zakir+Hossain&size=400&background=0D8ABC&color=fff" alt="Alhaj Mohammad Zakir Hossain" class="founder-img">
+          <% if (founder.photo?.url) { %>
+            <img src="<%= founder.photo.url %>" alt="<%= founder.name?.en %>" class="founder-img" style="width: 160px; height: 160px; border-radius: 50%; object-fit: cover;">
+          <% } else { %>
+            <div class="founder-initials">FND</div>
+          <% } %>
         </div>
         <div class="founder-info">
-          <h3 class="founder-name">Alhaj Mohammad Zakir Hossain</h3>
-          <p class="founder-title">Proprietor & Founder</p>
+          <h3 class="founder-name"><%= founder.name?.en || 'Founder' %></h3>
+          <p class="founder-title"><%= founder.designation?.en || 'Proprietor & Founder' %></p>
         </div>
       </div>
 
       <div class="founder-bio">
-        <p>Alhaj Mohammad Zakir Hossain is the founder and proprietor of both Nusrat International and Nusrat Travels. A veteran of Bangladesh's travel and recruitment industry, he has built both organizations on a foundation of regulatory compliance, professional integrity, and deep personal dedication to his clients.</p>
+        <% if (founder.bio?.en) { %>
+          <% founder.bio.en.split('\n').filter(p => p.trim()).forEach(paragraph => { %>
+            <p><%= paragraph %></p>
+          <% }) %>
+        <% } %>
         
-        <p>His decision to pursue and maintain memberships in BAIRA and ATAB, alongside achieving IATA accreditation, reflects his belief that legitimacy and transparency are not optional — they are the foundation of any business that deals with people's livelihoods and dreams.</p>
-        
-        <p>Having performed Hajj himself, Alhaj Hossain brings a personal and spiritual understanding to the sacred journeys his company facilitates every year for thousands of Bangladeshi pilgrims. This personal connection gives Nusrat International's pilgrimage services a sincerity that clients immediately feel and trust.</p>
-        
-        <p>Under his leadership, the company has maintained a near-perfect visa approval record while placing thousands of workers in safe, legal, and dignified employment abroad — changing lives and supporting families across Bangladesh.</p>
-        
+        <% if (founder.quote?.en) { %>
         <div class="founder-quote">
-          "Every client who walks through our door is someone's father, mother, or child. We carry that responsibility with the utmost seriousness — every single day."
+          "<%= founder.quote.en %>"
         </div>
+        <% } %>
       </div>
     </div>
+    <% } %>
   </div>
 </section>
 
@@ -55,11 +60,11 @@
         <% employees.forEach(emp => { %>
           <div class="employee-card">
             <div class="emp-image-wrap">
-              <img src="<%= emp.image %>" alt="<%= emp.name %>">
+              <img src="<%= emp.photo?.url || 'https://picsum.photos/300/300' %>" alt="<%= emp.name?.en %>">
             </div>
             <div class="emp-info">
-              <h3 class="emp-name"><%= emp.name %></h3>
-              <p class="emp-position"><%= emp.position %></p>
+              <h3 class="emp-name"><%= emp.name?.en %></h3>
+              <p class="emp-position"><%= emp.designation?.en %></p>
             </div>
           </div>
         <% }) %>
