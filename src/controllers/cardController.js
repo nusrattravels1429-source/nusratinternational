@@ -61,11 +61,15 @@ exports.createCard = async (req, res) => {
         return res.status(400).send('Maximum 4 images allowed per card');
       }
       req.files.forEach((file, index) => {
-        images.push({
-          url: file.path || '/uploads/' + file.filename,
-          caption: '',
-          order: index
-        });
+        let imageUrl;
+        if (file.path && file.path.startsWith('http')) {
+          imageUrl = file.path; // Cloudinary URL
+        } else if (file.filename) {
+          imageUrl = '/uploads/' + file.filename;
+        } else {
+          imageUrl = '/uploads/' + require('path').basename(file.path);
+        }
+        images.push({ url: imageUrl, caption: '', order: index });
       });
     }
     
@@ -82,7 +86,7 @@ exports.createCard = async (req, res) => {
       duration: duration || '',
       features: [],
       images,
-      isActive: isActive === 'on',
+      isActive: isActive !== undefined ? isActive === 'on' : true,
       isPaused: false,
       order: 0,
       createdAt: new Date(),
@@ -165,11 +169,15 @@ exports.updateCard = async (req, res) => {
       }
       const startOrder = images.length;
       req.files.forEach((file, index) => {
-        images.push({
-          url: file.path || '/uploads/' + file.filename,
-          caption: '',
-          order: startOrder + index
-        });
+        let imageUrl;
+        if (file.path && file.path.startsWith('http')) {
+          imageUrl = file.path;
+        } else if (file.filename) {
+          imageUrl = '/uploads/' + file.filename;
+        } else {
+          imageUrl = '/uploads/' + require('path').basename(file.path);
+        }
+        images.push({ url: imageUrl, caption: '', order: startOrder + index });
       });
     }
     

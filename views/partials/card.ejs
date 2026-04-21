@@ -1,28 +1,45 @@
+<%
+  // Support both old schema (title_en) and new schema (title.en / title / images[])
+  const cardTitle = pkg.title?.en || pkg.title_en || pkg.name || 'Package';
+  const cardTitleBn = pkg.title?.bn || pkg.title_bn || '';
+  const cardDesc = pkg.description?.en || pkg.desc_en || pkg.shortDescription_en || '';
+  const cardDescBn = pkg.description?.bn || pkg.desc_bn || pkg.shortDescription_bn || '';
+  const cardImage = (pkg.images && pkg.images.length > 0) ? pkg.images[0].url : (pkg.image || pkg.hero_image_fallback || 'https://picsum.photos/500/350');
+  const cardPrice = pkg.pricing?.amount || pkg.price || '';
+  const cardCurrency = pkg.pricing?.currency || 'BDT';
+  const cardSlug = pkg.slug || pkg._id;
+%>
 <div class="pkg-card">
   <div class="pkg-img-wrap">
-    <img src="<%= pkg.hero_image_fallback || 'https://picsum.photos/500/350' %>" alt="<%= pkg.title_en %>">
-    <% if (pkg.badge) { %>
-      <div class="pkg-badge"><%= pkg.badge %></div>
-    <% } else if (type === 'hajj') { %>
+    <img src="<%= cardImage %>" alt="<%= cardTitle %>">
+    <% if (type === 'hajj') { %>
       <div class="hajj-badge">Hajj</div>
     <% } %>
-    <div class="pkg-price">$<%= pkg.price %></div>
-    <div class="pkg-duration"><%= pkg.duration %></div>
+    <% if (cardPrice) { %>
+      <div class="pkg-price"><%= cardCurrency === 'USD' ? '$' : '৳' %><%= cardPrice %></div>
+    <% } %>
+    <% if (pkg.duration) { %>
+      <div class="pkg-duration"><%= pkg.duration %></div>
+    <% } %>
   </div>
   <div class="pkg-body">
     <div class="pkg-top">
       <div>
-        <h3><%= pkg.title_en %></h3>
-        <% if (pkg.title_bn) { %>
-          <h4><%= pkg.title_bn %></h4>
+        <h3><%= cardTitle %></h3>
+        <% if (cardTitleBn) { %>
+          <h4><%= cardTitleBn %></h4>
         <% } %>
       </div>
-      <% if (pkg.rating) { %>
-        <span class="rating">★ <%= pkg.rating %></span>
-      <% } %>
     </div>
-    <p class="pkg-desc"><%= pkg.shortDescription_en %></p>
-    <p class="pkg-desc bn"><%= pkg.shortDescription_bn %></p>
-    <button class="view-btn" onclick="window.location.href='/<%= type %>/<%= pkg.slug %>'">View Details | বিস্তারিত দেখুন</button>
+    <% if (cardDesc) { %>
+      <p class="pkg-desc"><%= cardDesc.length > 100 ? cardDesc.substring(0, 100) + '...' : cardDesc %></p>
+    <% } %>
+    <% if (cardDescBn) { %>
+      <p class="pkg-desc bn"><%= cardDescBn.length > 80 ? cardDescBn.substring(0, 80) + '...' : cardDescBn %></p>
+    <% } %>
+    <% if (pkg.location?.en || pkg.location) { %>
+      <p class="pkg-location">📍 <%= pkg.location?.en || pkg.location %></p>
+    <% } %>
+    <button class="view-btn" onclick="window.location.href='/<%= type %>/<%= cardSlug %>'">View Details | বিস্তারিত দেখুন</button>
   </div>
 </div>
