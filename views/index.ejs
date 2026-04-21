@@ -7,13 +7,6 @@
     <% sliderSlides.forEach((slide, index) => { %>
       <div class="slide">
         <img src="<%= slide.imageUrl || (slide.images && slide.images.length > 0 ? slide.images[0].url : '') %>" alt="Hero Image" />
-        <div class="overlay" style="pointer-events: none;"></div>
-        <div class="hero-content">
-          <span class="hero-tag"><%= (homepageHero && homepageHero.subtitle_en) || '✦ DISCOVER THE WORLD' %></span>
-          <h1><%- (homepageHero && homepageHero.title_en) || 'Explore Beyond<br/><em>The Horizon</em>' %></h1>
-          <p><%= (homepageHero && homepageHero.description_en) || 'Unforgettable journeys crafted for the curious soul.<br />বিশ্বজুড়ে অসাধারণ অভিজ্ঞতার সন্ধানে।' %></p>
-          <div class="hero-btns"><a href="#travel" class="btn-primary">Start Exploring</a></div>
-        </div>
       </div>
     <% }) %>
   <% } else { %>
@@ -23,7 +16,8 @@
     <div class="slide"><img src="https://picsum.photos/id/1057/1600/900" alt="Forest Path" /></div>
   <% } %>
   </div>
-  <% if (!sliderSlides || sliderSlides.length === 0) { %>
+
+  <!-- Static Overlay and Content (stays in place while images slide behind) -->
   <div class="overlay" style="pointer-events: none;"></div>
   <div class="hero-content">
     <span class="hero-tag"><%= (homepageHero && homepageHero.subtitle_en) || '✦ DISCOVER THE WORLD' %></span>
@@ -31,7 +25,6 @@
     <p><%= (homepageHero && homepageHero.description_en) || 'Unforgettable journeys crafted for the curious soul.<br />বিশ্বজুড়ে অসাধারণ অভিজ্ঞতার সন্ধানে।' %></p>
     <div class="hero-btns"><a href="#travel" class="btn-primary">Start Exploring</a></div>
   </div>
-  <% } %>
   <div class="slider-dots" id="dots"></div>
   <button class="prev" aria-label="Previous">&#10094;</button>
   <button class="next" aria-label="Next">&#10095;</button>
