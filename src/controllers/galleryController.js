@@ -38,7 +38,12 @@ exports.createGalleryItem = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Image file is required' });
     }
 
-    const imageUrl = req.file.path || `/uploads/gallery/${req.file.filename}`;
+    let imageUrl = '';
+    if (req.file.path && req.file.path.startsWith('http')) {
+      imageUrl = req.file.path;
+    } else {
+      imageUrl = `/uploads/${req.file.filename}`;
+    }
 
     const galleryItem = {
       title: { en: titleEn || '', bn: titleBn || '' },
@@ -73,7 +78,11 @@ exports.updateGalleryItem = async (req, res) => {
     };
 
     if (req.file) {
-      updateData.imageUrl = req.file.path || `/uploads/gallery/${req.file.filename}`;
+      if (req.file.path && req.file.path.startsWith('http')) {
+        updateData.imageUrl = req.file.path;
+      } else {
+        updateData.imageUrl = `/uploads/${req.file.filename}`;
+      }
     }
 
     const result = await db.collection('galleryitems').findOneAndUpdate(

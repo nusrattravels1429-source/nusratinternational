@@ -14,9 +14,9 @@
 
     <!-- Left: text -->
     <div class="about-hero-text">
-      <span class="eyebrow">✦ ABOUT US — আমাদের সম্পর্কে</span>
-      <h1>Trusted For<br>Over <em>15 Years</em><br>Of Excellence</h1>
-      <p>From the heart of Banani, Dhaka to destinations across the globe — Nusrat International has been Bangladesh's trusted name in travel, Hajj &amp; Umrah, and international manpower recruitment since 2010.</p>
+      <span class="eyebrow">✦ <%= aboutContent['about-header']?.tagline_en || 'ABOUT US — আমাদের সম্পর্কে' %></span>
+      <h1><%- aboutContent['about-header']?.page_title_en || 'Trusted For<br>Over <em>15 Years</em><br>Of Excellence' %></h1>
+      <p><%= aboutContent['about-header']?.description_en || 'From the heart of Banani, Dhaka to destinations across the globe — Nusrat International has been Bangladesh\'s trusted name in travel, Hajj & Umrah, and international manpower recruitment since 2010.' %></p>
       <div class="hero-cta-row">
         <a href="#story" class="btn-about-primary">Our Story →</a>
         <a href="#contact" class="btn-about-ghost">Get In Touch</a>
@@ -74,20 +74,24 @@
 <!-- ================= STATS STRIP ================= -->
 <div class="about-stats">
   <div class="about-stat">
-    <span class="as-num" data-target="15">0</span><span class="as-plus">+</span>
-    <span class="as-label">Years in Business</span>
+    <% const s1 = aboutContent['about-stats']?.stat1_value || '15+'; %>
+    <span class="as-num" data-target="<%= s1.replace(/[^0-9]/g, '') %>">0</span><span class="as-plus"><%= s1.replace(/[0-9]/g, '') %></span>
+    <span class="as-label"><%= aboutContent['about-stats']?.stat1_label_en || 'Years in Business' %></span>
   </div>
   <div class="about-stat">
-    <span class="as-num" data-target="12000">0</span><span class="as-plus">+</span>
-    <span class="as-label">Clients Served</span>
+    <% const s2 = aboutContent['about-stats']?.stat2_value || '12000+'; %>
+    <span class="as-num" data-target="<%= s2.replace(/[^0-9]/g, '') %>">0</span><span class="as-plus"><%= s2.replace(/[0-9]/g, '') %></span>
+    <span class="as-label"><%= aboutContent['about-stats']?.stat2_label_en || 'Clients Served' %></span>
   </div>
   <div class="about-stat">
-    <span class="as-num" data-target="5000">0</span><span class="as-plus">+</span>
-    <span class="as-label">Workers Placed Abroad</span>
+    <% const s3 = aboutContent['about-stats']?.stat3_value || '5000+'; %>
+    <span class="as-num" data-target="<%= s3.replace(/[^0-9]/g, '') %>">0</span><span class="as-plus"><%= s3.replace(/[0-9]/g, '') %></span>
+    <span class="as-label"><%= aboutContent['about-stats']?.stat3_label_en || 'Workers Placed Abroad' %></span>
   </div>
   <div class="about-stat">
-    <span class="as-num" data-target="98">0</span><span class="as-plus">%</span>
-    <span class="as-label">Visa Success Rate</span>
+    <% const s4 = aboutContent['about-stats']?.stat4_value || '98%'; %>
+    <span class="as-num" data-target="<%= s4.replace(/[^0-9]/g, '') %>">0</span><span class="as-plus"><%= s4.replace(/[0-9]/g, '') %></span>
+    <span class="as-label"><%= aboutContent['about-stats']?.stat4_label_en || 'Visa Success Rate' %></span>
   </div>
 </div>
 
@@ -103,20 +107,20 @@
 
     <!-- Content -->
     <div class="story-content">
-      <h2>A Legacy Built on <em>Trust &amp; Integrity</em></h2>
+      <h2><%- aboutContent['about-story']?.title_en || 'A Legacy Built on <em>Trust &amp; Integrity</em>' %></h2>
 
-      <p class="story-lead">Nusrat International was founded with a singular vision — to provide Bangladeshi families with safe, legal, and dignified pathways to opportunity abroad.</p>
-
-      <p>What began as a humble travel agency in the commercial heart of Banani, Dhaka has grown into one of Bangladesh's most recognized names in two critical sectors: international manpower recruitment and travel services. Under the steady leadership of <strong>Alhaj Mohammad Zakir Hossain</strong>, the company has maintained an unwavering commitment to ethical practice, regulatory compliance, and genuine care for every client.</p>
-
-      <p>Today, Nusrat International operates two distinct but complementary divisions — <strong>Nusrat International</strong> for manpower recruiting and <strong>Nusrat Travels</strong> for aviation and tour services — both operating from the same Banani address and guided by the same values that have defined the organization from day one.</p>
-
-      <p>Our membership in BAIRA and ATAB, combined with IATA accreditation, reflects not just credentials on paper, but a lived commitment to operating with transparency, dignity, and care for every person who walks through our door.</p>
-
-      <div class="story-quote">
-        <blockquote>"Our mission has always been simple: to serve our clients as if they were our own family — with honesty, care, and full accountability."</blockquote>
-        <cite>— Alhaj Mohammad Zakir Hossain, Proprietor</cite>
-      </div>
+      <% if (aboutContent['about-story']?.content_en) { %>
+        <%- aboutContent['about-story'].content_en %>
+      <% } else { %>
+        <p class="story-lead">Nusrat International was founded with a singular vision — to provide Bangladeshi families with safe, legal, and dignified pathways to opportunity abroad.</p>
+        <p>What began as a humble travel agency in the commercial heart of Banani, Dhaka has grown into one of Bangladesh's most recognized names in two critical sectors: international manpower recruitment and travel services. Under the steady leadership of <strong>Alhaj Mohammad Zakir Hossain</strong>, the company has maintained an unwavering commitment to ethical practice, regulatory compliance, and genuine care for every client.</p>
+        <p>Today, Nusrat International operates two distinct but complementary divisions — <strong>Nusrat International</strong> for manpower recruiting and <strong>Nusrat Travels</strong> for aviation and tour services — both operating from the same Banani address and guided by the same values that have defined the organization from day one.</p>
+        <p>Our membership in BAIRA and ATAB, combined with IATA accreditation, reflects not just credentials on paper, but a lived commitment to operating with transparency, dignity, and care for every person who walks through our door.</p>
+        <div class="story-quote">
+          <blockquote>"Our mission has always been simple: to serve our clients as if they were our own family — with honesty, care, and full accountability."</blockquote>
+          <cite>— Alhaj Mohammad Zakir Hossain, Proprietor</cite>
+        </div>
+      <% } %>
     </div>
 
   </div>
@@ -132,7 +136,25 @@
     </div>
 
     <div class="divisions-grid">
-
+      <% 
+        let divisions = [];
+        if (aboutContent['about-divisions']?.divisions_json) {
+          try { divisions = JSON.parse(aboutContent['about-divisions'].divisions_json); } catch(e) {}
+        }
+        if (divisions.length > 0) {
+          divisions.forEach(div => {
+      %>
+      <div class="division-card">
+        <div class="div-icon-row">
+          <span class="div-icon"><%- div.icon && div.icon.includes('fa-') ? `<i class="${div.icon}"></i>` : div.icon || '📌' %></span>
+        </div>
+        <h3><%= div.titleEn %></h3>
+        <p><%= div.descEn %></p>
+      </div>
+      <% 
+          });
+        } else { 
+      %>
       <!-- Division 1: Manpower -->
       <div class="division-card manpower">
         <div class="div-icon-row">
@@ -170,7 +192,7 @@
         </ul>
         <a href="/travel" class="div-btn travel-btn">View Travel Packages →</a>
       </div>
-
+      <% } %>
     </div>
   </div>
 </section>
@@ -179,21 +201,23 @@
 <section class="leadership-section">
   <div class="leadership-inner">
 
+    <% if (founder) { %>
     <!-- Left: visual card -->
     <div class="leadership-visual">
       <div class="leader-photo-frame">
-        <div class="leader-photo-bg">
-          <div class="leader-initials">AZH</div>
-        </div>
+        <% if (founder.photo?.url || founder.photo || founder.imageUrl) { %>
+          <img src="<%= founder.photo?.url || founder.photo || founder.imageUrl %>" alt="<%= founder.name?.en || founder.name %>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; position: absolute; top: 0; left: 0;">
+        <% } else { %>
+          <div class="leader-photo-bg">
+            <div class="leader-initials">FND</div>
+          </div>
+        <% } %>
         <div class="leader-name-plate">
-          <strong>Alhaj Mohammad Zakir Hossain</strong>
-          <span>Proprietor &amp; Founder</span>
+          <strong><%= founder.name?.en || founder.name || 'Founder' %></strong>
+          <span><%= founder.designation?.en || founder.designation || 'Proprietor & Founder' %></span>
         </div>
       </div>
-
-      <div class="leader-credentials">
-        
-      </div>
+      <div class="leader-credentials"></div>
     </div>
 
     <!-- Right: biography -->
@@ -201,19 +225,39 @@
       <div class="section-side-tag">LEADERSHIP</div>
       <h2>The Man Behind<br><em>The Mission</em></h2>
 
-      <p class="leader-lead">Alhaj Mohammad Zakir Hossain is the founder and proprietor of both Nusrat International and Nusrat Travels. A veteran of Bangladesh's travel and recruitment industry, he has built both organizations on a foundation of regulatory compliance, professional integrity, and deep personal dedication to his clients.</p>
+      <% 
+        let bioText = '';
+        if (typeof founder.bio === 'string') {
+          bioText = founder.bio;
+        } else if (founder.bio && typeof founder.bio === 'object') {
+          bioText = founder.bio.en || '';
+        }
+        if (bioText) {
+          bioText.split('\n').filter(p => p.trim()).forEach((paragraph, idx) => {
+            if (idx === 0) {
+      %>
+          <p class="leader-lead"><%= paragraph %></p>
+      <%    } else { %>
+          <p><%= paragraph %></p>
+      <%    }
+          })
+        } else {
+      %>
+        <p class="leader-lead">Founder bio information goes here.</p>
+      <% } %>
 
-      <p>His decision to pursue and maintain memberships in BAIRA and ATAB, alongside achieving IATA accreditation, reflects his belief that legitimacy and transparency are not optional — they are the foundation of any business that deals with people's livelihoods and dreams.</p>
-
-      <p>Having performed Hajj himself, Alhaj Hossain brings a personal and spiritual understanding to the sacred journeys his company facilitates every year for thousands of Bangladeshi pilgrims. This personal connection gives Nusrat International's pilgrimage services a sincerity that clients immediately feel and trust.</p>
-
-      <p>Under his leadership, the company has maintained a near-perfect visa approval record while placing thousands of workers in safe, legal, and dignified employment abroad — changing lives and supporting families across Bangladesh.</p>
-
+      <% if (founder.quote?.en || founder.quote) { %>
       <div class="leader-quote">
         <span class="lq-mark">"</span>
-        <p>Every client who walks through our door is someone's father, mother, or child. We carry that responsibility with the utmost seriousness — every single day.</p>
+        <p><%= founder.quote?.en || founder.quote %></p>
       </div>
+      <% } %>
     </div>
+    <% } else { %>
+      <div class="leadership-text">
+        <p>Founder profile is not currently available.</p>
+      </div>
+    <% } %>
 
   </div>
 </section>

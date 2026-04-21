@@ -124,11 +124,15 @@ router.get('/contact', async (req, res) => {
 router.get('/about', async (req, res) => {
   try {
     const db = await getDb(req);
-    const [aboutContent, founder, teamMembers] = await Promise.all([
-      db.collection('sitecontents').findOne({ section: 'about', key: 'about-header' }),
+    const [contentDocs, founder, teamMembers] = await Promise.all([
+      db.collection('sitecontents').find({ section: 'about' }).toArray(),
       db.collection('teammembers').findOne({ isFounder: true, isActive: true }),
       db.collection('teammembers').find({ isFounder: { $ne: true }, isActive: true }).sort({ order: 1 }).toArray()
     ]);
+    
+    const aboutContent = {};
+    contentDocs.forEach(doc => { aboutContent[doc.key] = doc; });
+
     res.render('about', { aboutContent, founder, teamMembers, activePage: 'about', cssFiles: ['common.css', 'About_us.css'] });
   } catch (error) {
     console.error('Error rendering about page:', error);
