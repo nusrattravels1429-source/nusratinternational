@@ -74,23 +74,39 @@
 <!-- ================= STATS STRIP ================= -->
 <div class="about-stats">
   <div class="about-stat">
-    <% const s1 = aboutContent['about-stats']?.stat1_value || '15+'; %>
-    <span class="as-num" data-target="<%= s1.replace(/[^0-9]/g, '') %>">0</span><span class="as-plus"><%= s1.replace(/[0-9]/g, '') %></span>
+    <% 
+      const raw1 = aboutContent['about-stats']?.stat1_value || '15+';
+      const num1 = raw1.replace(/[^0-9]/g, '') || '0';
+      const plus1 = raw1.replace(/[0-9]/g, '');
+    %>
+    <span class="as-num" data-target="<%= num1 %>">0</span><span class="as-plus"><%= plus1 %></span>
     <span class="as-label"><%= aboutContent['about-stats']?.stat1_label_en || 'Years in Business' %></span>
   </div>
   <div class="about-stat">
-    <% const s2 = aboutContent['about-stats']?.stat2_value || '12000+'; %>
-    <span class="as-num" data-target="<%= s2.replace(/[^0-9]/g, '') %>">0</span><span class="as-plus"><%= s2.replace(/[0-9]/g, '') %></span>
+    <% 
+      const raw2 = aboutContent['about-stats']?.stat2_value || '12000+';
+      const num2 = raw2.replace(/[^0-9]/g, '') || '0';
+      const plus2 = raw2.replace(/[0-9]/g, '');
+    %>
+    <span class="as-num" data-target="<%= num2 %>">0</span><span class="as-plus"><%= plus2 %></span>
     <span class="as-label"><%= aboutContent['about-stats']?.stat2_label_en || 'Clients Served' %></span>
   </div>
   <div class="about-stat">
-    <% const s3 = aboutContent['about-stats']?.stat3_value || '5000+'; %>
-    <span class="as-num" data-target="<%= s3.replace(/[^0-9]/g, '') %>">0</span><span class="as-plus"><%= s3.replace(/[0-9]/g, '') %></span>
+    <% 
+      const raw3 = aboutContent['about-stats']?.stat3_value || '5000+';
+      const num3 = raw3.replace(/[^0-9]/g, '') || '0';
+      const plus3 = raw3.replace(/[0-9]/g, '');
+    %>
+    <span class="as-num" data-target="<%= num3 %>">0</span><span class="as-plus"><%= plus3 %></span>
     <span class="as-label"><%= aboutContent['about-stats']?.stat3_label_en || 'Workers Placed Abroad' %></span>
   </div>
   <div class="about-stat">
-    <% const s4 = aboutContent['about-stats']?.stat4_value || '98%'; %>
-    <span class="as-num" data-target="<%= s4.replace(/[^0-9]/g, '') %>">0</span><span class="as-plus"><%= s4.replace(/[0-9]/g, '') %></span>
+    <% 
+      const raw4 = aboutContent['about-stats']?.stat4_value || '98%';
+      const num4 = raw4.replace(/[^0-9]/g, '') || '0';
+      const plus4 = raw4.replace(/[0-9]/g, '');
+    %>
+    <span class="as-num" data-target="<%= num4 %>">0</span><span class="as-plus"><%= plus4 %></span>
     <span class="as-label"><%= aboutContent['about-stats']?.stat4_label_en || 'Visa Success Rate' %></span>
   </div>
 </div>
@@ -136,9 +152,6 @@
   </div>
 </section>
 
-  </div>
-</section>
-
 <!-- ================= TWO DIVISIONS ================= -->
 <section class="divisions-section">
   <div class="divisions-inner">
@@ -149,25 +162,6 @@
     </div>
 
     <div class="divisions-grid">
-      <% 
-        let divisions = [];
-        if (aboutContent['about-divisions']?.divisions_json) {
-          try { divisions = JSON.parse(aboutContent['about-divisions'].divisions_json); } catch(e) {}
-        }
-        if (divisions.length > 0) {
-          divisions.forEach(div => {
-      %>
-      <div class="division-card">
-        <div class="div-icon-row">
-          <span class="div-icon"><%- div.icon && div.icon.includes('fa-') ? `<i class="${div.icon}"></i>` : div.icon || '📌' %></span>
-        </div>
-        <h3><%= div.titleEn %></h3>
-        <p><%= div.descEn %></p>
-      </div>
-      <% 
-          });
-        } else { 
-      %>
       <!-- Division 1: Manpower -->
       <div class="division-card manpower">
         <div class="div-icon-row">
@@ -205,7 +199,6 @@
         </ul>
         <a href="/travel" class="div-btn travel-btn">View Travel Packages →</a>
       </div>
-      <% } %>
     </div>
   </div>
 </section>

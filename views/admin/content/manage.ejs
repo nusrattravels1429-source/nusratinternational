@@ -452,53 +452,6 @@
       </form>
     </div>
 
-    <!-- Company Registration Section -->
-    <div class="panel">
-      <div class="panel-title">🔢 Company Registration Code</div>
-      <form action="/admin/content/update" method="POST">
-        <input type="hidden" name="section" value="about">
-        <input type="hidden" name="key" value="about-registration">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Registration Number</label>
-            <input type="text" name="registrationNumber" value="<%= content['about-registration']?.registrationNumber || '' %>" class="form-control" placeholder="RL-1429">
-          </div>
-          <div class="form-group">
-            <label>License / Certification Code</label>
-            <input type="text" name="licenseCode" value="<%= content['about-registration']?.licenseCode || '' %>" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>Issuing Authority (English)</label>
-            <input type="text" name="issuingAuthority_en" value="<%= content['about-registration']?.issuingAuthority_en || '' %>" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>Issuing Authority (বাংলা)</label>
-            <input type="text" name="issuingAuthority_bn" value="<%= content['about-registration']?.issuingAuthority_bn || '' %>" class="form-control">
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary">💾 Save Registration Info</button>
-      </form>
-    </div>
-
-    <!-- Our Divisions Section -->
-    <div class="panel">
-      <div class="panel-title" style="display:flex; justify-content:space-between; align-items:center;">
-        <span>🗂️ Our Divisions</span>
-        <button class="btn btn-primary btn-sm" onclick="addDivision()">+ Add Division</button>
-      </div>
-      <form action="/admin/content/update" method="POST" id="divisionsForm">
-        <input type="hidden" name="section" value="about">
-        <input type="hidden" name="key" value="about-divisions">
-        <input type="hidden" name="divisions_json" id="divisionsJson">
-        
-        <div id="divisionsContainer" style="display: flex; flex-direction: column; gap: 16px;">
-          <!-- Dynamically populated -->
-        </div>
-
-        <button type="button" class="btn btn-primary" style="margin-top:20px;" onclick="saveDivisions()">💾 Save Divisions</button>
-      </form>
-    </div>
-
     <% } %>
 
   </main>
@@ -520,69 +473,6 @@
     document.getElementById('storyForm').submit();
   }
 
-  // Divisions logic
-  let divisions = <%- JSON.stringify(content['about-divisions']?.divisions_json ? JSON.parse(content['about-divisions'].divisions_json) : []) %>;
-  if (typeof divisions === 'string') {
-    try { divisions = JSON.parse(divisions); } catch(e) { divisions = []; }
-  }
-
-  function renderDivisions() {
-    const container = document.getElementById('divisionsContainer');
-    container.innerHTML = '';
-    divisions.forEach(function(div, idx) {
-      container.innerHTML += `
-        <div style="background:#f8faff; border:1px solid #e2e8f0; padding:16px; border-radius:8px; position:relative;">
-          <button type="button" class="btn btn-sm btn-danger" style="position:absolute; right:16px; top:16px;" onclick="removeDivision(${idx})">🗑️</button>
-          <div class="form-grid">
-            <div class="form-group full">
-              <label>Icon (FontAwesome class e.g., 'fa-solid fa-plane' or emoji)</label>
-              <input type="text" class="form-control d-icon" value="${div.icon || ''}" onchange="updateDiv(${idx}, 'icon', this.value)">
-            </div>
-            <div class="form-group">
-              <label>Title (English)</label>
-              <input type="text" class="form-control d-titleEn" value="${div.titleEn || ''}" onchange="updateDiv(${idx}, 'titleEn', this.value)">
-            </div>
-            <div class="form-group">
-              <label>Title (বাংলা)</label>
-              <input type="text" class="form-control d-titleBn" value="${div.titleBn || ''}" onchange="updateDiv(${idx}, 'titleBn', this.value)">
-            </div>
-            <div class="form-group">
-              <label>Description (English)</label>
-              <textarea class="form-control" onchange="updateDiv(${idx}, 'descEn', this.value)">${div.descEn || ''}</textarea>
-            </div>
-            <div class="form-group">
-              <label>Description (বাংলা)</label>
-              <textarea class="form-control" onchange="updateDiv(${idx}, 'descBn', this.value)">${div.descBn || ''}</textarea>
-            </div>
-          </div>
-        </div>
-      `;
-    });
-  }
-
-  function addDivision() {
-    divisions.push({ icon: '', titleEn: '', titleBn: '', descEn: '', descBn: '' });
-    renderDivisions();
-  }
-
-  function removeDivision(idx) {
-    if(confirm('Remove this division?')) {
-      divisions.splice(idx, 1);
-      renderDivisions();
-    }
-  }
-
-  function updateDiv(idx, field, value) {
-    divisions[idx][field] = value;
-  }
-
-  function saveDivisions() {
-    document.getElementById('divisionsJson').value = JSON.stringify(divisions);
-    document.getElementById('divisionsForm').submit();
-  }
-
-  // Initial render
-  if (document.getElementById('divisionsContainer')) renderDivisions();
   <% } %>
 </script>
 </body>
