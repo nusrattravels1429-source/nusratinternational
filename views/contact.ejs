@@ -21,35 +21,59 @@
         <div class="contact-item">
           <h3>📞 Phone</h3>
           <div id="contact-phone-content">
-            <p>Loading...</p>
+            <% if (pageContent?.phone_primary) { %>
+              <p><a href="tel:<%= pageContent.phone_primary %>"><%= pageContent.phone_primary %></a></p>
+            <% } %>
+            <% if (pageContent?.phone_secondary) { %>
+              <p><a href="tel:<%= pageContent.phone_secondary %>"><%= pageContent.phone_secondary %></a></p>
+            <% } %>
+            <% if (!pageContent?.phone_primary && !pageContent?.phone_secondary) { %>
+              <p>Not available</p>
+            <% } %>
           </div>
         </div>
 
         <div class="contact-item">
           <h3>💬 WhatsApp</h3>
           <div id="contact-whatsapp-content">
-            <p>Loading...</p>
+            <% if (pageContent?.whatsapp_link) { %>
+              <p><a href="<%= pageContent.whatsapp_link %>" target="_blank" rel="noopener">Chat on WhatsApp</a></p>
+            <% } else { %>
+              <p>Not available</p>
+            <% } %>
           </div>
         </div>
 
         <div class="contact-item">
           <h3>📧 Email</h3>
           <div id="contact-email-content">
-            <p>Loading...</p>
+            <% if (pageContent?.email_address) { %>
+              <p><a href="mailto:<%= pageContent.email_address %>"><%= pageContent.email_address %></a></p>
+            <% } else { %>
+              <p>Not available</p>
+            <% } %>
           </div>
         </div>
 
         <div class="contact-item">
           <h3>📍 Address</h3>
           <div id="contact-address-content">
-            <p>Loading...</p>
+            <% if (pageContent?.address_en) { %>
+              <p><%- pageContent.address_en.replace(/\n/g, '<br>') %></p>
+            <% } else { %>
+              <p>Banani Super Market,<br>Banani, Dhaka 1213<br>Bangladesh</p>
+            <% } %>
           </div>
         </div>
 
         <div class="contact-item">
           <h3>⏰ Business Hours</h3>
           <div id="contact-hours-content">
-            <p>Loading...</p>
+            <% if (pageContent?.hours_en) { %>
+              <p><%- pageContent.hours_en.replace(/\n/g, '<br>') %></p>
+            <% } else { %>
+              <p>Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday: 9:00 AM - 2:00 PM<br>Sunday: Closed</p>
+            <% } %>
           </div>
         </div>
       </div>
@@ -116,94 +140,10 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     this.reset();
     submitBtn.disabled = false;
 
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-
-  const formMessage = document.getElementById('formMessage');
-  const submitBtn = this.querySelector('button[type="submit"]');
-
-  formMessage.textContent = 'Sending...';
-  formMessage.style.color = '#0d9f6e';
-  submitBtn.disabled = true;
-
-  setTimeout(() => {
-    formMessage.textContent = 'Thank you! We will contact you soon.';
-    formMessage.style.color = '#0d9f6e';
-    this.reset();
-    submitBtn.disabled = false;
-
     setTimeout(() => {
       formMessage.textContent = '';
     }, 5000);
   }, 1000);
-});
-
-// Dynamically load contact info from admin settings
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    const res = await window.fetch('/api/public/footer');
-    const json = await res.json();
-    if(json.success && json.data) {
-      const d = json.data;
-      
-      // Update Phone (split by comma if multiple)
-      if (d.phone) {
-        const phones = d.phone.split(',').map(p => p.trim()).filter(p => p);
-        if (phones.length > 0) {
-          document.getElementById('contact-phone-content').innerHTML = phones.map(p => `<p><a href="tel:${p}">${p}</a></p>`).join('');
-        } else {
-          document.getElementById('contact-phone-content').innerHTML = '<p>Not available</p>';
-        }
-      } else {
-        document.getElementById('contact-phone-content').innerHTML = '<p>Not available</p>';
-      }
-
-      // Update WhatsApp
-      if (d.whatsapp) {
-        // Strip everything but numbers and '+'
-        const waClean = d.whatsapp.replace(/[^\d+]/g, '');
-        document.getElementById('contact-whatsapp-content').innerHTML = `<p><a href="https://wa.me/${waClean}" target="_blank" rel="noopener">${d.whatsapp}</a></p>`;
-      } else {
-        document.getElementById('contact-whatsapp-content').innerHTML = '<p>Not available</p>';
-      }
-
-      // Update Email
-      if (d.email) {
-        document.getElementById('contact-email-content').innerHTML = `<p><a href="mailto:${d.email}">${d.email}</a></p>`;
-      } else {
-        document.getElementById('contact-email-content').innerHTML = '<p>Not available</p>';
-      }
-
-      // Update Address
-      if (d.address && (d.address.en || d.address.bn)) {
-        document.getElementById('contact-address-content').innerHTML = `<p>${(d.address.en || d.address.bn).replace(/\n/g, '<br>')}</p>`;
-      } else {
-        document.getElementById('contact-address-content').innerHTML = '<p>Not available</p>';
-      }
-
-      // Update Business Hours
-      if (d.businessHours) {
-        const days = ['mon','tue','wed','thu','fri','sat','sun'];
-        const labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-        let hoursHtml = '';
-        days.forEach((day, index) => {
-          const bh = d.businessHours[day];
-          if (bh) {
-            if (bh.closed) {
-              hoursHtml += `<p>${labels[index]}: Closed</p>`;
-            } else {
-              hoursHtml += `<p>${labels[index]}: ${bh.open} - ${bh.close}</p>`;
-            }
-          }
-        });
-        document.getElementById('contact-hours-content').innerHTML = hoursHtml;
-      } else {
-        document.getElementById('contact-hours-content').innerHTML = '<p>Not available</p>';
-      }
-    }
-  } catch(err) {
-    console.error('Failed to load dynamic contact details:', err);
-  }
 });
 </script>
 

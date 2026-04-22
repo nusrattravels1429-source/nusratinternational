@@ -301,6 +301,14 @@
             <input type="text" name="google_maps_url" value="<%= content['contact-info']?.google_maps_url || '' %>" class="form-control" placeholder="https://maps.google.com/maps?...">
             <small>Paste the URL from the Google Maps &lt;iframe src="..."&gt; attribute</small>
           </div>
+          <div class="form-group full">
+            <label>Business Hours (English)</label>
+            <textarea name="hours_en" class="form-control" placeholder="Monday - Friday: 9:00 AM - 6:00 PM&#10;Saturday: 9:00 AM - 2:00 PM&#10;Sunday: Closed"><%= content['contact-info']?.hours_en || '' %></textarea>
+          </div>
+          <div class="form-group full">
+            <label>Business Hours (বাংলা)</label>
+            <textarea name="hours_bn" class="form-control"><%= content['contact-info']?.hours_bn || '' %></textarea>
+          </div>
         </div>
         <button type="submit" class="btn btn-primary">💾 Save Contact Information</button>
       </form>
@@ -407,12 +415,24 @@
             <label>Section Title (বাংলা)</label>
             <input type="text" name="title_bn" value="<%= content['about-story']?.title_bn || 'আমাদের গল্প' %>" class="form-control">
           </div>
+          <div class="form-group">
+            <label>Section Tag (e.g., OUR STORY)</label>
+            <input type="text" name="tag_en" value="<%= content['about-story']?.tag_en || 'OUR STORY' %>" class="form-control">
+          </div>
           <div class="form-group full">
             <label>Featured Image</label>
             <% if (content['about-story']?.imageUrl) { %>
               <img src="<%= content['about-story'].imageUrl %>" style="max-height:100px; display:block; margin-bottom:10px; border-radius:6px;">
             <% } %>
             <input type="file" name="imageUrl" class="form-control" accept="image/*">
+          </div>
+          <div class="form-group full">
+            <label>Story Quote (English)</label>
+            <textarea name="quote_en" class="form-control"><%= content['about-story']?.quote_en || '' %></textarea>
+          </div>
+          <div class="form-group full">
+            <label>Quote Citation (EN) - e.g. Name, Title</label>
+            <input type="text" name="citation_en" value="<%= content['about-story']?.citation_en || '' %>" class="form-control">
           </div>
         </div>
 

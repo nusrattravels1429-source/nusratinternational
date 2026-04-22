@@ -98,30 +98,43 @@
 <!-- ================= STORY SECTION ================= -->
 <section class="story-section" id="story">
   <div class="story-inner">
-
     <!-- Side label column -->
     <div class="story-label-col">
-      <div class="section-side-tag">OUR STORY</div>
+      <div class="section-side-tag"><%= aboutContent['about-story']?.tag_en || 'OUR STORY' %></div>
       <div class="story-line"></div>
     </div>
-
+ 
     <!-- Content -->
     <div class="story-content">
       <h2><%- aboutContent['about-story']?.title_en || 'A Legacy Built on <em>Trust &amp; Integrity</em>' %></h2>
-
+ 
       <% if (aboutContent['about-story']?.content_en) { %>
-        <%- aboutContent['about-story'].content_en %>
+        <div class="dynamic-story-content">
+          <%- aboutContent['about-story'].content_en %>
+        </div>
       <% } else { %>
         <p class="story-lead">Nusrat International was founded with a singular vision — to provide Bangladeshi families with safe, legal, and dignified pathways to opportunity abroad.</p>
         <p>What began as a humble travel agency in the commercial heart of Banani, Dhaka has grown into one of Bangladesh's most recognized names in two critical sectors: international manpower recruitment and travel services. Under the steady leadership of <strong>Alhaj Mohammad Zakir Hossain</strong>, the company has maintained an unwavering commitment to ethical practice, regulatory compliance, and genuine care for every client.</p>
         <p>Today, Nusrat International operates two distinct but complementary divisions — <strong>Nusrat International</strong> for manpower recruiting and <strong>Nusrat Travels</strong> for aviation and tour services — both operating from the same Banani address and guided by the same values that have defined the organization from day one.</p>
         <p>Our membership in BAIRA and ATAB, combined with IATA accreditation, reflects not just credentials on paper, but a lived commitment to operating with transparency, dignity, and care for every person who walks through our door.</p>
+      <% } %>
+ 
+      <% if (aboutContent['about-story']?.quote_en) { %>
+        <div class="story-quote">
+          <blockquote>"<%= aboutContent['about-story'].quote_en %>"</blockquote>
+          <% if (aboutContent['about-story']?.citation_en) { %>
+            <cite>— <%= aboutContent['about-story'].citation_en %></cite>
+          <% } %>
+        </div>
+      <% } else if (!aboutContent['about-story']?.content_en) { %>
         <div class="story-quote">
           <blockquote>"Our mission has always been simple: to serve our clients as if they were our own family — with honesty, care, and full accountability."</blockquote>
           <cite>— Alhaj Mohammad Zakir Hossain, Proprietor</cite>
         </div>
       <% } %>
     </div>
+  </div>
+</section>
 
   </div>
 </section>
