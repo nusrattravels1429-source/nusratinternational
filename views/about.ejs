@@ -328,7 +328,11 @@ document.addEventListener('click', (e) => {
 
 // ---- COUNTER ANIMATION ----
 function animateCounter(el) {
-  const target = +el.dataset.target;
+  const target = parseInt(el.dataset.target) || 0;
+  if (target === 0) {
+    el.textContent = "0";
+    return;
+  }
   const duration = 2000;
   const steps = 60;
   const increment = target / steps;
@@ -338,20 +342,36 @@ function animateCounter(el) {
     el.textContent = target >= 1000
       ? Math.floor(current).toLocaleString()
       : Math.floor(current);
-    if (current >= target) clearInterval(timer);
+    if (current >= target) {
+      el.textContent = target.toLocaleString(); // Ensure final value is exact
+      clearInterval(timer);
+    }
   }, duration / steps);
 }
 
 const statsSection = document.querySelector('.about-stats');
 let countersRan = false;
-const statsObserver = new IntersectionObserver(entries => {
-  if (entries[0].isIntersecting && !countersRan) {
-    countersRan = true;
-    document.querySelectorAll('.as-num').forEach(animateCounter);
-    statsObserver.disconnect();
-  }
-}, { threshold: 0.3 });
-if (statsSection) statsObserver.observe(statsSection);
+
+if (statsSection) {
+  const statsObserver = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !countersRan) {
+      countersRan = true;
+      document.querySelectorAll('.as-num').forEach(animateCounter);
+    }
+  }, { threshold: 0.1 }); // Lower threshold to trigger earlier
+  statsObserver.observe(statsSection);
+
+  // Fallback: If after 3 seconds it hasn't run (e.g. observer issue), run it anyway if visible
+  setTimeout(() => {
+    if (!countersRan) {
+      const rect = statsSection.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        countersRan = true;
+        document.querySelectorAll('.as-num').forEach(animateCounter);
+      }
+    }
+  }, 3000);
+}
 
 // ---- TIMELINE REVEAL ----
 const revealObserver = new IntersectionObserver(entries => {
