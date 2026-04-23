@@ -1,4 +1,4 @@
-<%- include('partials/header', { pageTitle: 'Hajj & Umrah Packages', activePage: 'hajj', bodyClass: '' }) %>
+<%- include('partials/header', { pageTitle: 'Hajj & Umrah Packages — Nusrat International', activePage: 'hajj', bodyClass: '', cssFiles: ['Hajj.css', 'common.css', 'cards.css', 'contact.css'] }) %>
 
 <div class="page-hero hajj-hero">
   <div class="hero-badge">☪ SACRED JOURNEY</div>
@@ -12,30 +12,29 @@
 </div>
 
 <main>
-  <div class="container" id="packagesGrid">
-    <% if (packages && packages.length > 0) { %>
-      <% packages.forEach(pkg => { %>
-        <div class="pkg-card hajj-card">
-          <div class="pkg-img-wrap">
-            <img src="<%= pkg.image %>" alt="<%= pkg.title_en %>" />
-            <div class="pkg-price">$<%= pkg.price %></div>
-            <div class="pkg-duration"><%= pkg.duration %></div>
-            <div class="hajj-badge"><%= pkg.type || 'Hajj' %></div>
-          </div>
-          <div class="pkg-body">
-            <div class="pkg-top">
-              <div><h3><%= pkg.title_en %></h3><h4><%= pkg.title_bn || '' %></h4></div>
-              <span class="rating">★ <%= pkg.rating || 0 %></span>
-            </div>
-            <p class="pkg-desc"><%= pkg.desc_en %></p>
-            <a href="/hajj/<%= pkg._id %>"><button class="view-btn gold">View Details | বিস্তারিত দেখুন</button></a>
-          </div>
+  <section class="package-section hajj-bg" id="hajj">
+    <div class="section-intro">
+      <div>
+        <span class="section-tag gold">☪ HAJJ PACKAGES</span>
+        <h2>Sacred Journey Packages<br /><span class="bn-sub">পবিত্র হজ প্যাকেজসমূহ</span></h2>
+        <p>Embark on the most sacred journey of your life. We take care of every detail.</p>
+      </div>
+    </div>
+
+    <div class="cards-slider-wrap">
+      <div class="cards-viewport">
+        <div class="cards-track cards-grid">
+          <% if (packages && packages.length > 0) { %>
+            <% packages.forEach(pkg => { %>
+              <%- include('partials/card', { pkg: pkg, type: 'hajj' }) %>
+            <% }); %>
+          <% } else { %>
+            <p class="no-packages">No Hajj/Umrah packages are available at the moment.</p>
+          <% } %>
         </div>
-      <% }); %>
-    <% } else { %>
-      <p>No Hajj/Umrah packages are available at the moment.</p>
-    <% } %>
-  </div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <%- include('partials/footer') %>

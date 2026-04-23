@@ -389,3 +389,60 @@
 #navbar.scrolled .logo span {
   color: var(--text);
 }
+
+/* ---- GRID MODE (standalone pages: travel / hajj / work) ---- */
+.cards-track.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  flex-wrap: unset;
+  transform: none !important;  /* disable slider transform */
+  gap: 28px;
+  padding: 10px 4px 30px;
+}
+
+.cards-track.cards-grid .pkg-card {
+  min-width: unset;
+  width: 100%;
+}
+
+/* Location badge inside card */
+.pkg-location {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+/* Hajj badge on card image */
+.hajj-badge {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  background: #c9a227;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Empty state */
+.no-packages {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #6b7280;
+  font-size: 15px;
+  padding: 60px 20px;
+}
+
+/* ---- RESPONSIVE grid ---- */
+@media (max-width: 900px) {
+  .cards-track.cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .cards-track.cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
