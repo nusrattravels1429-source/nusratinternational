@@ -1,4 +1,5 @@
 const { protectAdmin } = require('../middleware/auth');
+const { getImageUrl } = require('../config/cloudinary');
 
 // GET /admin/cards - List all cards
 exports.getCards = async (req, res) => {
@@ -61,14 +62,7 @@ exports.createCard = async (req, res) => {
         return res.status(400).send('Maximum 4 images allowed per card');
       }
       req.files.forEach((file, index) => {
-        let imageUrl;
-        if (file.path && file.path.startsWith('http')) {
-          imageUrl = file.path; // Cloudinary URL
-        } else if (file.filename) {
-          imageUrl = '/uploads/' + file.filename;
-        } else {
-          imageUrl = '/uploads/' + require('path').basename(file.path);
-        }
+        const imageUrl = getImageUrl(file, 'packages');
         images.push({ url: imageUrl, caption: '', order: index });
       });
     }
@@ -169,14 +163,7 @@ exports.updateCard = async (req, res) => {
       }
       const startOrder = images.length;
       req.files.forEach((file, index) => {
-        let imageUrl;
-        if (file.path && file.path.startsWith('http')) {
-          imageUrl = file.path;
-        } else if (file.filename) {
-          imageUrl = '/uploads/' + file.filename;
-        } else {
-          imageUrl = '/uploads/' + require('path').basename(file.path);
-        }
+        const imageUrl = getImageUrl(file, 'packages');
         images.push({ url: imageUrl, caption: '', order: startOrder + index });
       });
     }

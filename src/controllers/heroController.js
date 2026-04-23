@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb');
 const heroSliderModel = require('../models/HeroSlider');
+const { getImageUrl } = require('../config/cloudinary');
 const fs = require('fs');
 const path = require('path');
 
@@ -100,24 +101,19 @@ exports.updateHeroSlider = async (req, res) => {
 
     // Process uploaded images
     if (req.files && req.files.length > 0) {
-      const uploadOrder = JSON.parse(req.body.slideOrders || '[]');
       // Update slides with new images into their specific slots
       req.files.forEach((file) => {
-        // Extract the slot index from the uploaded file's originalname (which was injected by frontend)
+        // Extract the slot index from the uploaded file's originalname (injected by frontend)
         const match = file.originalname.match(/\[(\d+)\]/);
         const slotIndex = match ? parseInt(match[1]) : 0;
-        
+
         if (slotIndex >= 0 && slotIndex < 4) {
-          const relativePath = file.path || `/uploads/hero/${file.filename}`;
+          const imageUrl = getImageUrl(file, 'hero');
 
           if (heroSlider.slides[slotIndex]) {
-            heroSlider.slides[slotIndex].imageUrl = relativePath;
+            heroSlider.slides[slotIndex].imageUrl = imageUrl;
           } else {
-            heroSlider.slides.push({
-              imageUrl: relativePath,
-              order: slotIndex,
-              isActive: true
-            });
+            heroSlider.slides.push({ imageUrl, order: slotIndex, isActive: true });
           }
         }
       });
@@ -322,7 +318,7 @@ exports.updateSlide = async (req, res) => {
     };
 
     if (req.file) {
-      updateDoc.imageUrl = req.file.path || `/uploads/hero/${req.file.filename}`;
+      updateDoc.imageUrl = getImageUrl(req.file, 'hero');
     } else {
       return res.status(400).json({ success: false, message: 'No image provided' });
     }

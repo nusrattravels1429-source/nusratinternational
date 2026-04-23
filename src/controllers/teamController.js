@@ -1,4 +1,5 @@
-// GET /admin/team - List all team members
+const { getImageUrl } = require('../config/cloudinary');
+
 exports.getTeam = async (req, res) => {
   try {
     const db = await req.app.locals.getDb();
@@ -27,7 +28,7 @@ exports.updateFounder = async (req, res) => {
 
     let photoUrl = req.body.existingPhoto || '';
     if (req.file) {
-      photoUrl = req.file.path || ('/uploads/' + req.file.filename);
+      photoUrl = getImageUrl(req.file, 'team');
     }
 
     const founderData = {
@@ -64,7 +65,7 @@ exports.createMember = async (req, res) => {
 
     let photoUrl = '';
     if (req.file) {
-      photoUrl = req.file.path || ('/uploads/' + req.file.filename);
+      photoUrl = getImageUrl(req.file, 'team');
     }
 
     const member = {
@@ -95,7 +96,7 @@ exports.updateMember = async (req, res) => {
 
     let photoUrl = req.body.existingPhoto || '';
     if (req.file) {
-      photoUrl = req.file.path || ('/uploads/' + req.file.filename);
+      photoUrl = getImageUrl(req.file, 'team');
     }
 
     const updateData = {

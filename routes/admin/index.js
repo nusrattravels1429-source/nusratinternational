@@ -71,14 +71,8 @@ router.post('/team/delete/:id', protectAdmin, teamController.deleteMember);
 // CERTIFICATIONS MANAGEMENT
 // =============================================================================
 router.get('/certifications', protectAdmin, certificationController.manageCertifications);
-router.post('/certifications/create', protectAdmin,
-  upload.fields([{ name: 'logo', maxCount: 1 }, { name: 'certificate', maxCount: 1 }]),
-  certificationController.createCertification
-);
-router.post('/certifications/update/:id', protectAdmin,
-  upload.fields([{ name: 'logo', maxCount: 1 }, { name: 'certificate', maxCount: 1 }]),
-  certificationController.updateCertification
-);
+router.post('/certifications/create', protectAdmin, upload.single('certImage'), certificationController.createCertification);
+router.post('/certifications/update/:id', protectAdmin, upload.single('certImage'), certificationController.updateCertification);
 router.post('/certifications/delete/:id', protectAdmin, certificationController.deleteCertification);
 router.post('/certifications/toggle-featured/:id', protectAdmin, certificationController.toggleFeatured);
 

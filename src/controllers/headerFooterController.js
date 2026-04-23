@@ -1,4 +1,5 @@
 const { ObjectId } = require('mongodb');
+const { getImageUrl } = require('../config/cloudinary');
 
 // Helper to ensure we only ever modify ONE specific footer settings document
 async function getFooterId(db) {
@@ -151,7 +152,7 @@ exports.updateHeaderLogo = async (req, res) => {
 
     let finalUrl = logoUrl;
     if (req.file) {
-      finalUrl = req.file.path || `/uploads/${req.file.filename}`;
+      finalUrl = getImageUrl(req.file, 'admin');
     }
 
     const fid = await getFooterId(db);
@@ -230,7 +231,7 @@ exports.updateFooterSettings = async (req, res) => {
     };
 
     if (req.file) {
-      updateData.logoUrl = req.file.path || `/uploads/${req.file.filename}`;
+      updateData.logoUrl = getImageUrl(req.file, 'admin');
     } else if (req.body.logoUrl) {
       // Allow passing URL string if not uploading new file
       updateData.logoUrl = req.body.logoUrl;

@@ -1,11 +1,28 @@
+require('dotenv').config(); // Load .env FIRST before anything else
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const { handleMulterError } = require('./src/middleware/upload');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const hasCloudinaryEnv = Boolean(
+  process.env.CLOUDINARY_CLOUD_NAME &&
+  process.env.CLOUDINARY_API_KEY &&
+  process.env.CLOUDINARY_API_SECRET
+);
+
+if (hasCloudinaryEnv) {
+  console.log('☁️  Cloudinary env vars detected; uploads will use cloud storage.');
+} else {
+  console.warn('⚠️  Cloudinary env vars are missing; uploads will fall back to local disk.');
+  if (process.env.VERCEL) {
+    console.warn('⚠️  Running on Vercel without Cloudinary can break persistent uploads.');
+  }
+}
 
 // Middleware
 app.use(cors());
@@ -105,6 +122,9 @@ try {
   console.error('Route load error:', e.message);
   app.get('/', (req, res) => res.send('Route Error: ' + e.message));
 }
+
+// Normalize Multer errors into JSON responses across all upload routes.
+app.use(handleMulterError);
 
 // Health check API with detailed diagnostics
 app.get('/api/health', async (req, res) => {

@@ -1,2 +1,21 @@
-Nothing should be ignored based on the provided file changes. The modification of 'src/controllers/heroController.js' is a source code file that should not be added to .gitignore. Since there are no build artifacts, dependencies, or temporary files in the changes, no additional ignore rules are needed.
+# Dependencies
+node_modules/
+
+# Environment variables - NEVER commit this!
+.env
+.env.local
+.env.production
+
+# Vercel
 .vercel
+
+# Uploads (local dev only - production uses Cloudinary)
+public/uploads/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db

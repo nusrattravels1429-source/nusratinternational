@@ -1,4 +1,5 @@
 const { ObjectId } = require('mongodb');
+const { getImageUrl } = require('../config/cloudinary');
 
 // GET /admin/content/manage/:section - Render the manage page for a section
 exports.manageContent = async (req, res) => {
@@ -53,13 +54,12 @@ exports.updateContent = async (req, res) => {
     if (req.files) {
       Object.entries(req.files).forEach(([fieldName, files]) => {
         if (files && files[0]) {
-          const f = files[0];
-          updateDoc[fieldName] = f.path || ('/uploads/' + f.filename);
+          updateDoc[fieldName] = getImageUrl(files[0]);
         }
       });
     }
     if (req.file) {
-      updateDoc.imageUrl = req.file.path || ('/uploads/' + req.file.filename);
+      updateDoc.imageUrl = getImageUrl(req.file);
     }
 
     // Upsert: update existing or create new
@@ -88,7 +88,7 @@ exports.createHeroSlide = async (req, res) => {
 
     let imageUrl = '';
     if (req.file) {
-      imageUrl = req.file.path || ('/uploads/' + req.file.filename);
+      imageUrl = getImageUrl(req.file);
     }
 
     const doc = {
@@ -121,7 +121,7 @@ exports.updateHeroSlide = async (req, res) => {
 
     let imageUrl = existingImage || '';
     if (req.file) {
-      imageUrl = req.file.path || ('/uploads/' + req.file.filename);
+      imageUrl = getImageUrl(req.file);
     }
 
     const updateDoc = {

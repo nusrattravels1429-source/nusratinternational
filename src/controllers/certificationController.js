@@ -1,4 +1,5 @@
 const { ObjectId } = require('mongodb');
+const { getImageUrl } = require('../config/cloudinary');
 
 // ==========================================
 // VIEWS (Admin)
@@ -48,7 +49,7 @@ exports.createCertification = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Certificate image is required' });
     }
 
-    const imageUrl = req.file.path || `/uploads/certifications/${req.file.filename}`;
+    const imageUrl = getImageUrl(req.file, 'certifications');
 
     const certification = {
       title: { en: titleEn || '', bn: titleBn || '' },
@@ -100,7 +101,7 @@ exports.updateCertification = async (req, res) => {
     };
 
     if (req.file) {
-      updateData.imageUrl = req.file.path || `/uploads/certifications/${req.file.filename}`;
+      updateData.imageUrl = getImageUrl(req.file, 'certifications');
     }
 
     const result = await db.collection('certifications').findOneAndUpdate(

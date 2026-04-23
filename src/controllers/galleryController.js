@@ -1,4 +1,5 @@
 const { ObjectId } = require('mongodb');
+const { getImageUrl } = require('../config/cloudinary');
 
 // ==========================================
 // VIEWS (Admin)
@@ -38,12 +39,7 @@ exports.createGalleryItem = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Image file is required' });
     }
 
-    let imageUrl = '';
-    if (req.file.path && req.file.path.startsWith('http')) {
-      imageUrl = req.file.path;
-    } else {
-      imageUrl = `/uploads/${req.file.filename}`;
-    }
+    const imageUrl = getImageUrl(req.file, 'gallery');
 
     const galleryItem = {
       title: { en: titleEn || '', bn: titleBn || '' },
@@ -78,11 +74,7 @@ exports.updateGalleryItem = async (req, res) => {
     };
 
     if (req.file) {
-      if (req.file.path && req.file.path.startsWith('http')) {
-        updateData.imageUrl = req.file.path;
-      } else {
-        updateData.imageUrl = `/uploads/${req.file.filename}`;
-      }
+      updateData.imageUrl = getImageUrl(req.file, 'gallery');
     }
 
     const result = await db.collection('galleryitems').findOneAndUpdate(
