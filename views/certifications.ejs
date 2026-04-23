@@ -1,6 +1,84 @@
 <%- include('partials/header', { pageTitle: 'Approvals & Certifications | Nusrat International', activePage: 'about', bodyClass: '' }) %>
 
 <style>
+  /* ---- PAGE HERO ---- */
+  .cert-hero {
+    background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 50%, #c9a22715 100%);
+    padding: 140px 40px 90px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cert-hero::before {
+    content: '📜';
+    position: absolute;
+    right: 6%;
+    top: 12%;
+    font-size: 200px;
+    opacity: 0.05;
+    pointer-events: none;
+    filter: grayscale(1);
+  }
+
+  .cert-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: #f5f7fa;
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+
+  .cert-hero .section-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #f8c640;
+    margin-bottom: 16px;
+    padding: 8px 20px;
+    background: rgba(248,198,64,0.12);
+    border-radius: 50px;
+    border: 1px solid rgba(248,198,64,0.2);
+    position: relative;
+    z-index: 1;
+  }
+
+  .cert-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cert-hero h1 em {
+    font-style: italic;
+    color: #f8c640;
+  }
+
+  .cert-hero p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.9;
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (max-width: 768px) {
+    .cert-hero { padding: 110px 20px 70px; }
+  }
+
+  /* ---- REST OF PAGE ---- */
   .cert-page-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
   .cert-title-main { text-align: center; font-size: 2.5rem; font-weight: 700; color: #1a1a2e; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 3px solid #c9a227; }
   
@@ -31,7 +109,7 @@
 
 <section class="page-hero cert-hero">
   <span class="section-tag">📜 OFFICIAL LICENSES</span>
-  <h1>Approvals &amp; Certifications</h1>
+  <h1>Approvals &amp; <em>Certifications</em></h1>
   <p>Every license we hold is a commitment to the highest standards of integrity and professionalism.</p>
 </section>
 

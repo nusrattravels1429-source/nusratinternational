@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Nusrat International</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="logo">
+      <a href="index.html">
+        <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Nusrat International Logo" id="header-logo-img" onerror="this.style.display='none'" />
+        <div class="logo-text"><span id="header-logo-text">Nusrat International <br /> Nusrat Travels</span></div>
+      </a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home | হোম</a></li>
+      <li><a href="#">Ticketing | ভ্রমণ</a></li>
+      <li><a href="travel-detail.html">Travel | ভ্রমণ</a></li>
+      <li><a href="hajj-detail.html">Hajj | হাজ্জ</a></li>
+      <li><a href="work-detail.html">Work | কাজ</a></li>
+      <li><a href="#">Contact | যোগাযোগ</a></li>
+
+      <!-- ABOUT DROPDOWN -->
+      <li class="has-dropdown" id="aboutDropdown">
+        <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">About | আমাদের সম্পর্কে <span class="drop-arrow">▾</span></button>
+        <ul class="dropdown-menu" role="menu">
+          <li role="none"><a href="#"><span class="dm-text"><strong>About Us</strong><small>Our story & leadership</small></span></a></li>
+          <li role="none"><a href="gallery.html"><span class="dm-text"><strong>Gallery</strong><small>Photos & memories</small></span></a></li>
+          <li role="none"><a href="employees.html"><span class="dm-text"><strong>Our Team</strong><small>Meet our employees</small></span></a></li>
+          <li role="none"><a href="#"><span class="dm-text"><strong>Approvals & Certifications</strong><small>BAIRA · IATA · ATAB · RL-1429</small></span></a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero gallery-hero">
+  <span class="ptag">📸 MEMORIES & MOMENTS</span>
+  <h1>Our <em>Gallery</em></h1>
+  <p>Capturing moments from journeys, pilgrimages, and celebrations with our valued clients.</p>
+</section>
+
+<!-- FILTER BUTTONS -->
+<section class="container">
+  <div class="gallery-filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="hajj">Hajj</button>
+    <button class="filter-btn" data-filter="umrah">Umrah</button>
+    <button class="filter-btn" data-filter="travel">Travel</button>
+    <button class="filter-btn" data-filter="work">Work</button>
+    <button class="filter-btn" data-filter="events">Events</button>
+  </div>
+</section>
+
+<!-- GALLERY GRID -->
+<main class="container">
+  <div class="gallery-wrap">
+    <div class="gallery-grid">
+
+      <!-- Gallery Item 1 - Hajj -->
+      <div class="gallery-item" data-category="hajj">
+        <img src="https://images.unsplash.com/photo-1565552629477-cdcbca1e9147?w=600&h=400&fit=crop" alt="Hajj Pilgrims at Kaaba" loading="lazy">
+        <div class="gallery-caption">
+          <span class="gallery-caption-text">📸 Hajj 2025 - Pilgrims performing Tawaf at the Holy Kaaba</span>
+        </div>
+      </div>
+
+      <!-- Gallery Item 2 - Umrah -->
+      <div class="gallery-item" data-category="umrah">
+        <img src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=600&h=400&fit=crop" alt="Umrah Pilgrims" loading="lazy">
+        <div class="gallery-caption">
+          <span class="gallery-caption-text">📸 Umrah 2025 - Spiritual moments at Masjid al-Haram</span>
+        </div>
+      </div>
+
+      <!-- Gallery Item 3 - Travel -->
+      <div class="gallery-item" data-category="travel">
+        <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&h=400&fit=crop" alt="Singapore Trip" loading="lazy">
+        <div class="gallery-caption">
+          <span class="gallery-caption-text">📸 Singapore Tour 2025 - Our happy travelers at Marina Bay</span>
+        </div>
+      </div>
+
+      <!-- Gallery Item 4 - Work -->
+      <div class="gallery-item" data-category="work">
+        <img src="https://images.unsplash.com/photo-1589217157232-4da7e643042c?w=600&h=400&fit=crop" alt="Work Visa Success" loading="lazy">
+        <div class="gallery-caption">
+          <span class="gallery-caption-text">📸 Visa Success - Happy clients departing for UAE employment</span>
+        </div>
+      </div>
+
+      <!-- Gallery Item 5 - Events -->
+      <div class="gallery-item" data-category="events">
+        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&h=400&fit=crop" alt="Office Opening" loading="lazy">
+        <div class="gallery-caption">
+          <span class="gallery-caption-text">📸 Office Inauguration - Celebrating our new Banani branch</span>
+        </div>
+      </div>
+
+      <!-- Gallery Item 6 - Hajj -->
+      <div class="gallery-item" data-category="hajj">
+        <img src="https://images.unsplash.com/photo-1542456485-64b1eeb571ee?w=600&h=400&fit=crop" alt="Hajj Group Photo" loading="lazy">
+        <div class="gallery-caption">
+          <span class="gallery-caption-text">📸 Hajj Group 2024 - Blessed group at Mount Arafat</span>
+        </div>
+      </div>
+
+      <!-- Gallery Item 7 - Travel -->
+      <div class="gallery-item" data-category="travel">
+        <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&h=400&fit=crop" alt="Paris Tour" loading="lazy">
+        <div class="gallery-caption">
+          <span class="gallery-caption-text">📸 Paris Package - Eiffel Tower visit with our tour group</span>
+        </div>
+      </div>
+
+      <!-- Gallery Item 8 - Umrah -->
+      <div class="gallery-item" data-category="umrah">
+        <img src="https://images.unsplash.com/photo-1580418827493-f2b22c4385d1?w=600&h=400&fit=crop" alt="Madinah Visit" loading="lazy">
+        <div class="gallery-caption">
+          <span class="gallery-caption-text">📸 Madinah Ziyarat - Peaceful moments at Prophet's Mosque</span>
+        </div>
+      </div>
+
+      <!-- Gallery Item 9 - Work -->
+      <div class="gallery-item" data-category="work">
+        <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&h=400&fit=crop" alt="Medical Workers" loading="lazy">
+        <div class="gallery-caption">
+          <span class="gallery-caption-text">📸 Healthcare Placement - Nurses departing for UK positions</span>
+        </div>
+      </div>
+
+      <!-- Gallery Item 10 - Events -->
+      <div class="gallery-item" data-category="events">
+        <img src="https://images.unsplash.com/photo-1551818255-e6e10975bc17?w=600&h=400&fit=crop" alt="Team Building" loading="lazy">
+        <div class="gallery-caption">
+          <span class="gallery-caption-text">📸 Team Building 2025 - Our staff annual retreat</span>
+        </div>
+      </div>
+
+      <!-- Gallery Item 11 - Travel -->
+      <div class="gallery-item" data-category="travel">
+        <img src="https://images.unsplash.com/photo-1528127269322-539801943592?w=600&h=400&fit=crop" alt="Thailand Beach" loading="lazy">
+        <div class="gallery-caption">
+          <span class="gallery-caption-text">📸 Thailand Getaway - Beautiful beaches of Phuket</span>
+        </div>
+      </div>
+
+      <!-- Gallery Item 12 - Hajj -->
+      <div class="gallery-item" data-category="hajj">
+        <img src="https://images.unsplash.com/photo-1537181534424-5c6e6e5f0e6b?w=600&h=400&fit=crop" alt="Hajj Ceremony" loading="lazy">
+        <div class="gallery-caption">
+          <span class="gallery-caption-text">📸 Hajj Farewell - Emotional goodbye ceremony at airport</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- LIGHTBOX MODAL -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose">&times;</button>
+  <button class="lb-arrow lb-prev" id="lbPrev">&#10094;</button>
+  <img src="" alt="Lightbox Image" id="lightboxImg">
+  <button class="lb-arrow lb-next" id="lbNext">&#10095;</button>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner" id="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo-container">
+        <a href="index.html" class="footer-logo-link">
+          <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Logo" class="footer-logo-img" id="footer-main-logo" onerror="this.style.display='none'" />
+          <span class="footer-logo-text" id="footer-company-name">Nusrat International</span>
+        </a>
+      </div>
+      <p id="footer-address">Your trusted partner for Hajj, Umrah, travel & work. Serving Bangladesh since 2010.</p>
+      <div class="social-links" id="footer-social-links">
+        <a href="#">FB</a>
+        <a href="#">YT</a>
+        <a href="#">IG</a>
+        <a href="#">WA</a>
+      </div>
+      <div class="mt-4" id="footer-contact-info">
+        <div><strong>Phone:</strong> +880-XXX-XXXXXX</div>
+        <div><strong>WhatsApp:</strong> +880-XXX-XXXXXX</div>
+        <div><strong>Email:</strong> info@nusratintl.com</div>
+      </div>
+    </div>
+
+    <div class="footer-links" id="footer-quick-links-container">
+      <h4>Quick Links</h4>
+      <a href="travel-detail.html">Travel Packages</a>
+      <a href="hajj-detail.html">Hajj Packages</a>
+      <a href="work-detail.html">Work Visas</a>
+      <a href="#">About Us</a>
+      <a href="#">Contact</a>
+    </div>
+
+    <div class="footer-links" id="footer-biz-hours-container">
+      <h4>Business Hours</h4>
+      <table style="width:100%; font-size:14px; opacity: 0.8;">
+        <tr><td style="padding-bottom: 4px;"><strong>Mon</strong></td><td style="text-align: right; padding-bottom: 4px;">09:00 - 18:00</td></tr>
+        <tr><td style="padding-bottom: 4px;"><strong>Tue</strong></td><td style="text-align: right; padding-bottom: 4px;">09:00 - 18:00</td></tr>
+        <tr><td style="padding-bottom: 4px;"><strong>Wed</strong></td><td style="text-align: right; padding-bottom: 4px;">09:00 - 18:00</td></tr>
+        <tr><td style="padding-bottom: 4px;"><strong>Thu</strong></td><td style="text-align: right; padding-bottom: 4px;">09:00 - 18:00</td></tr>
+        <tr><td style="padding-bottom: 4px;"><strong>Fri</strong></td><td style="text-align: right; padding-bottom: 4px;">Closed</td></tr>
+        <tr><td style="padding-bottom: 4px;"><strong>Sat</strong></td><td style="text-align: right; padding-bottom: 4px;">09:00 - 18:00</td></tr>
+        <tr><td style="padding-bottom: 4px;"><strong>Sun</strong></td><td style="text-align: right; padding-bottom: 4px;">09:00 - 14:00</td></tr>
+      </table>
+    </div>
+
+    <div class="footer-links">
+      <h4>Our Location</h4>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.7194346099836!2d90.4049653103119!3d23.79300323072133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c70e90bb671d%3A0x7eab77d0896252c0!2sBanani%20Super%20Market!5e0!3m2!1sen!2sbd!4v1771968108612!5m2!1sen!2sbd" width="100%" height="200" id="footer-maps-iframe" class="footer-iframe" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+  <div class="footer-bottom"><p id="footer-copyright">© 2026 Nusrat International Bangladesh. All rights reserved. | সর্বস্বত্ব সংরক্ষিত।</p></div>
+</footer>
+
+<script src="js/gallery.js"></script>
+<script>
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
+
+// Mobile menu toggle
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('nav-links');
+
+hamburger.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  hamburger.classList.toggle('open');
+
+  const items = navLinks.querySelectorAll('li');
+  items.forEach((item, index) => {
+    setTimeout(() => {
+      item.classList.toggle('revealed');
+    }, index * 50);
+  });
+});
+
+// Dropdown toggle for mobile
+const aboutDropdown = document.getElementById('aboutDropdown');
+if (window.innerWidth <= 768) {
+  aboutDropdown.querySelector('.dropdown-trigger').addEventListener('click', (e) => {
+    e.preventDefault();
+    aboutDropdown.classList.toggle('mobile-open');
+  });
+}
+</script>
+</body>
+</html>
