@@ -212,7 +212,9 @@
     <div class="leadership-visual">
       <div class="leader-photo-frame">
         <% if (founder.photo?.url || founder.photo || founder.imageUrl) { %>
-          <img src="<%= founder.photo?.url || founder.photo || founder.imageUrl %>" alt="<%= founder.name?.en || founder.name %>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; position: absolute; top: 0; left: 0;">
+          <img src="<%= founder.photo?.url || founder.photo || founder.imageUrl %>"
+               alt="<%= founder.name?.en || founder.name %>"
+               style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; display: block;">
         <% } else { %>
           <div class="leader-photo-bg">
             <div class="leader-initials">FND</div>
