@@ -256,6 +256,8 @@
           const badge = document.getElementById('unread-badge');
           badge.textContent = data.count;
           badge.style.display = 'inline-block';
+        } else {
+          document.getElementById('unread-badge').style.display = 'none';
         }
       })
       .catch(err => console.error('Error fetching unread count:', err));

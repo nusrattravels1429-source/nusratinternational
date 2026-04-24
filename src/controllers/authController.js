@@ -102,6 +102,7 @@ exports.getDashboard = async (req, res) => {
     const galleryCount = await db.collection('galleryitems').countDocuments({ isActive: true });
     const certificationCount = await db.collection('certifications').countDocuments({ isActive: true });
     const teamCount = await db.collection('teammembers').countDocuments({ isActive: true });
+    const unreadMessages = await db.collection('inbox').countDocuments({ isRead: false });
 
     res.render('admin/dashboard', {
       admin: req.admin,
@@ -111,7 +112,8 @@ exports.getDashboard = async (req, res) => {
         work: workCount,
         gallery: galleryCount,
         certifications: certificationCount,
-        team: teamCount
+        team: teamCount,
+        unreadMessages: unreadMessages
       }
     });
   } catch (error) {

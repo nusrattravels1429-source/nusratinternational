@@ -124,7 +124,10 @@
             <tbody>
               <% if (messages.length > 0) { %>
                 <% messages.forEach(msg => { %>
-                  <tr class="msg-item <%= msg.isRead ? '' : 'unread' %>" id="msg-row-<%= msg._id %>" onclick="viewMessage('<%= JSON.stringify(msg).replace(/'/g, "\\'") %>')">
+                  <tr class="msg-item <%= msg.isRead ? '' : 'unread' %>" 
+                      id="msg-row-<%= msg._id %>" 
+                      data-msg='<%= JSON.stringify(msg).replace(/'/g, "&#39;") %>'
+                      onclick="viewMessage(this)">
                     <td>
                       <div class="user-info">
                         <span class="user-name"><%= msg.name %></span>
@@ -223,8 +226,8 @@
   <script>
     let currentMsgId = null;
 
-    function viewMessage(msgJson) {
-      const msg = JSON.parse(msgJson);
+    function viewMessage(row) {
+      const msg = JSON.parse(row.dataset.msg);
       currentMsgId = msg._id;
 
       // Update Modal content
