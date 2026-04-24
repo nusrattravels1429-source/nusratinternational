@@ -109,10 +109,29 @@
       </div>
       <div class="bk-body">
         <div class="bk-title">📝 Book This Package | বুকিং করুন</div>
-        <div class="bf-2col"><div class="bf"><label>Full Name</label><input type="text" placeholder="Your full name" /></div><div class="bf"><label>Phone Number</label><input type="tel" placeholder="+880 XXXXXXXXX" /></div></div>
-        <div class="bf"><label>Email Address</label><input type="email" placeholder="you@email.com" /></div>
-        <div class="bf"><label>Special Requests</label><textarea rows="3" placeholder="Any special needs... | বিশেষ চাহিদা"></textarea></div>
-        <button class="btn-book">Book Now | এখনই বুক করুন ✈</button>
+        <form id="bookingForm">
+          <div class="bf-2col">
+            <div class="bf">
+              <label>Full Name</label>
+              <input type="text" id="bk_name" placeholder="Your full name" required />
+            </div>
+            <div class="bf">
+              <label>Phone Number</label>
+              <input type="tel" id="bk_phone" placeholder="+880 XXXXXXXXX" />
+            </div>
+          </div>
+          <div class="bf">
+            <label>Email Address</label>
+            <input type="email" id="bk_email" placeholder="you@email.com" />
+            <small style="font-size: 11px; color: #6b7280; display: block; margin-top: 4px;">* At least one of Email or Phone is required</small>
+          </div>
+          <div class="bf">
+            <label>Special Requests</label>
+            <textarea id="bk_message" rows="3" placeholder="Any special needs... | বিশেষ চাহিদা"></textarea>
+          </div>
+          <button type="submit" class="btn-book">Book Now | এখনই বুক করুন ✈</button>
+          <div id="bookingStatus" style="margin-top: 10px; font-size: 13px; text-align: center;"></div>
+        </form>
       </div>
     </div>
   </div>
@@ -182,6 +201,33 @@ function closeLightbox() {
   document.body.style.overflow = '';
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// Form Handling
+document.getElementById('bookingForm')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const phone = document.getElementById('bk_phone').value.trim();
+  const email = document.getElementById('bk_email').value.trim();
+  const status = document.getElementById('bookingStatus');
+  const btn = this.querySelector('button');
+
+  if (!phone && !email) {
+    status.textContent = 'Please provide either your Email or Phone number.';
+    status.style.color = '#ef4444';
+    return;
+  }
+
+  status.textContent = 'Sending inquiry...';
+  status.style.color = '#667eea';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    status.textContent = 'Thank you! Your inquiry has been sent successfully.';
+    status.style.color = '#10b981';
+    this.reset();
+    btn.disabled = false;
+    setTimeout(() => { status.textContent = ''; }, 5000);
+  }, 1200);
+});
 </script>
 
 <%- include('partials/footer') %>

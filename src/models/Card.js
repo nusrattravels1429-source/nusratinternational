@@ -29,7 +29,7 @@ const cardSchema = new mongoose.Schema({
     bn: String
   },
   pricing: {
-    amount: Number,
+    amount: String,
     currency: { type: String, default: 'BDT' },
     displayText: {
       en: String,

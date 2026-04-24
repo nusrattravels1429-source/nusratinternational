@@ -73,7 +73,7 @@ exports.createCard = async (req, res) => {
       description: { en: descriptionEn, bn: descriptionBn },
       location: { en: locationEn, bn: locationBn },
       pricing: {
-        amount: priceAmount ? parseFloat(priceAmount) : 0,
+        amount: priceAmount || '',
         currency: priceCurrency || 'BDT',
         displayText: { en: '', bn: '' }
       },
@@ -174,7 +174,7 @@ exports.updateCard = async (req, res) => {
       description: { en: descriptionEn, bn: descriptionBn },
       location: { en: locationEn, bn: locationBn },
       pricing: {
-        amount: priceAmount ? parseFloat(priceAmount) : 0,
+        amount: priceAmount || '',
         currency: priceCurrency || 'BDT',
         displayText: { en: '', bn: '' }
       },
