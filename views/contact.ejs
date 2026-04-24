@@ -143,16 +143,39 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
   formMessage.style.color = '#0d9f6e';
   submitBtn.disabled = true;
 
-  setTimeout(() => {
-    formMessage.textContent = 'Thank you! We will contact you soon.';
-    formMessage.style.color = '#0d9f6e';
-    this.reset();
-    submitBtn.disabled = false;
+  const data = {
+    name: document.getElementById('name').value,
+    email: email,
+    phone: phone,
+    service: document.getElementById('service').value,
+    message: document.getElementById('message').value,
+    source: 'Contact Page'
+  };
 
-    setTimeout(() => {
-      formMessage.textContent = '';
-    }, 5000);
-  }, 1000);
+  fetch('/api/public/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    if (res.success) {
+      formMessage.textContent = 'Thank you! Your message has been sent successfully.';
+      formMessage.style.color = '#0d9f6e';
+      this.reset();
+    } else {
+      formMessage.textContent = res.message || 'Error sending message.';
+      formMessage.style.color = '#ef4444';
+    }
+  })
+  .catch(err => {
+    formMessage.textContent = 'An error occurred. Please try again.';
+    formMessage.style.color = '#ef4444';
+  })
+  .finally(() => {
+    submitBtn.disabled = false;
+    setTimeout(() => { formMessage.textContent = ''; }, 5000);
+  });
 });
 </script>
 

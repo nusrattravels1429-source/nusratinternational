@@ -210,6 +210,11 @@
   </div>
   <ul class="sidebar-menu">
     <li><a href="/admin/dashboard" class="<%= (typeof activePage !== 'undefined' && activePage === 'dashboard') ? 'active' : '' %>">📊 Dashboard</a></li>
+    <li>
+      <a href="/admin/inbox" class="<%= (typeof activePage !== 'undefined' && activePage === 'inbox') ? 'active' : '' %>">
+        📥 Inbox <span id="unread-badge" class="badge" style="display:none; background: #ef4444; color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin-left: 5px;">0</span>
+      </a>
+    </li>
 
     <li class="menu-label">CONTENT</li>
     <li><a href="/admin/hero-manage" class="<%= (typeof activePage !== 'undefined' && activePage === 'hero-manage') ? 'active' : '' %>">🎬 Hero Slider</a></li>
@@ -240,5 +245,25 @@
   function toggleAdminSidebar() {
     document.querySelector('.admin-sidebar').classList.toggle('open');
     document.querySelector('.admin-overlay').classList.toggle('open');
+  }
+
+  // Update unread count badge
+  function updateUnreadCount() {
+    fetch('/api/admin/unread-count')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.count > 0) {
+          const badge = document.getElementById('unread-badge');
+          badge.textContent = data.count;
+          badge.style.display = 'inline-block';
+        }
+      })
+      .catch(err => console.error('Error fetching unread count:', err));
+  }
+  
+  if (window.location.pathname.startsWith('/admin')) {
+    updateUnreadCount();
+    // Refresh every minute
+    setInterval(updateUnreadCount, 60000);
   }
 </script>

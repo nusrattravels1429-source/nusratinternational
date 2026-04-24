@@ -10,6 +10,7 @@ const galleryController = require('../../src/controllers/galleryController');
 const teamController = require('../../src/controllers/teamController');
 const certificationController = require('../../src/controllers/certificationController');
 const headerFooterController = require('../../src/controllers/headerFooterController');
+const inboxController = require('../../src/controllers/inboxController');
 
 // --- Removed legacy Nav/Footer Module links ---
 
@@ -100,5 +101,12 @@ router.post('/hero-slider/reset', protectAdmin, heroController.resetHeroSlider);
 
 
 router.get('/hero-manage', protectAdmin, heroController.getHeroSliderAdmin);
+
+// =============================================================================
+// INBOX MANAGEMENT
+// =============================================================================
+router.get('/inbox', protectAdmin, inboxController.getInbox);
+router.post('/inbox/read/:id', protectAdmin, inboxController.markAsRead);
+router.post('/inbox/delete/:id', protectAdmin, inboxController.deleteMessage);
 
 module.exports = router;

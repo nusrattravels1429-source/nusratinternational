@@ -8,6 +8,7 @@ const certificationController = require('../../src/controllers/certificationCont
 const teamController = require('../../src/controllers/teamController');
 const heroController = require('../../src/controllers/heroController');
 const headerFooterController = require('../../src/controllers/headerFooterController');
+const inboxController = require('../../src/controllers/inboxController');
 
 const { protectAdmin } = require('../../src/middleware/auth');
 const { upload } = require('../../src/middleware/upload');
@@ -19,6 +20,7 @@ router.get('/public/navbar', headerFooterController.getPublicNavbar);
 router.get('/public/footer', headerFooterController.getPublicFooter);
 router.get('/public/gallery', galleryController.getPublicGallery);
 router.get('/public/certifications', certificationController.getPublicCertifications);
+router.post('/public/messages', inboxController.submitMessage);
 
 // ==========================================
 // HEADER/NAVBAR ADMIN APIs (Protected)
@@ -68,5 +70,6 @@ router.get('/cards', cardController.getCards);
 router.patch('/cards/:id/status', protectAdmin, cardController.toggleStatus);
 router.get('/hero-slider', heroController.getHeroSliderAPI);
 router.get('/team', teamController.apiGetTeam);
+router.get('/admin/unread-count', protectAdmin, inboxController.getUnreadCount);
 
 module.exports = router;

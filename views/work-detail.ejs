@@ -209,13 +209,41 @@ document.getElementById('bookingForm')?.addEventListener('submit', function(e) {
   status.style.color = '#0d9f6e';
   btn.disabled = true;
 
-  setTimeout(() => {
-    status.textContent = 'Thank you! Your application has been sent successfully.';
-    status.style.color = '#10b981';
-    this.reset();
+  const data = {
+    name: document.getElementById('bk_name').value,
+    phone: phone,
+    email: email,
+    message: document.getElementById('bk_message').value,
+    service: 'Work Package',
+    source: 'Work Page',
+    packageId: '<%= pkg._id %>',
+    packageName: '<%= pkgTitle %>'
+  };
+
+  fetch('/api/public/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    if (res.success) {
+      status.textContent = 'Thank you! Your application has been sent successfully.';
+      status.style.color = '#10b981';
+      this.reset();
+    } else {
+      status.textContent = res.message || 'Error sending application.';
+      status.style.color = '#ef4444';
+    }
+  })
+  .catch(err => {
+    status.textContent = 'An error occurred. Please try again.';
+    status.style.color = '#ef4444';
+  })
+  .finally(() => {
     btn.disabled = false;
     setTimeout(() => { status.textContent = ''; }, 5000);
-  }, 1200);
+  });
 });
 </script>
 
