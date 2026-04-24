@@ -1,9 +1,28 @@
-<%- include('partials/header', { pageTitle: '404 - Not Found', activePage: '', bodyClass: '' }) %>
+<%- include('partials/header', { 
+  pageTitle: '404 - Journey Interrupted', 
+  activePage: '', 
+  bodyClass: 'error-page',
+  cssFiles: ['common.css', '404.css'] 
+}) %>
 
-<section style="padding: 4rem; text-align: center;">
-  <h1>404</h1>
-  <p>Sorry, the page <strong><%= url %></strong> could not be found.</p>
-  <a href="/" class="btn-primary">Return to Home</a>
-</section>
+<main class="error-page-wrapper">
+  <div class="error-container">
+    <div class="compass-icon">🧭</div>
+    <h1 class="error-code">404</h1>
+    <h2 class="error-title">Destination Not Found</h2>
+    <p class="error-message">
+      It seems you've wandered off the map. The page <strong><%= typeof url !== 'undefined' ? url : 'you are looking for' %></strong> doesn't exist or has been moved to a new destination.
+    </p>
+    
+    <div class="error-actions">
+      <a href="/" class="error-btn btn-home">
+        <span>🏠</span> Back to Home
+      </a>
+      <a href="javascript:history.back()" class="error-btn btn-back">
+        <span>⬅️</span> Go Back
+      </a>
+    </div>
+  </div>
+</main>
 
 <%- include('partials/footer') %>

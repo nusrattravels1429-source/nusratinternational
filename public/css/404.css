@@ -1,0 +1,178 @@
+/* ===========================
+   404.css
+   Premium Error Page Styles
+   =========================== */
+
+.error-page-wrapper {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background: linear-gradient(rgba(13, 17, 23, 0.6), rgba(13, 17, 23, 0.8)),
+              url('/images/404-bg.png') center/cover no-repeat fixed;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative Elements */
+.error-page-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  right: -10%;
+  width: 40%;
+  height: 60%;
+  background: radial-gradient(circle, rgba(26, 86, 219, 0.2) 0%, transparent 70%);
+  filter: blur(80px);
+  z-index: 1;
+}
+
+.error-page-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  left: -10%;
+  width: 40%;
+  height: 60%;
+  background: radial-gradient(circle, rgba(201, 162, 39, 0.1) 0%, transparent 70%);
+  filter: blur(80px);
+  z-index: 1;
+}
+
+.error-container {
+  max-width: 800px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  padding: 80px 40px;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.error-code {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(120px, 15vw, 220px);
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, #fff 0%, #c9a227 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0;
+  letter-spacing: -5px;
+  position: relative;
+}
+
+.error-code::after {
+  content: '404';
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.1;
+  filter: blur(10px);
+  z-index: -1;
+}
+
+.error-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(24px, 4vw, 42px);
+  color: #fff;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.error-message {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 500px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+
+.error-message strong {
+  color: #c9a227;
+}
+
+.error-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.error-btn {
+  padding: 16px 35px;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-home {
+  background: #1a56db;
+  color: white;
+  box-shadow: 0 10px 25px rgba(26, 86, 219, 0.3);
+}
+
+.btn-home:hover {
+  background: #2563eb;
+  transform: scale(1.05) translateY(-3px);
+  box-shadow: 0 15px 30px rgba(26, 86, 219, 0.4);
+}
+
+.btn-back {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-back:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05) translateY(-3px);
+}
+
+/* Floating Compass Icon Animation */
+.compass-icon {
+  font-size: 60px;
+  color: #c9a227;
+  margin-bottom: 20px;
+  display: inline-block;
+  animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .error-container {
+    padding: 60px 20px;
+    margin: 20px;
+  }
+  
+  .error-actions {
+    flex-direction: column;
+  }
+  
+  .error-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
