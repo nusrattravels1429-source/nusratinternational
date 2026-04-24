@@ -23,7 +23,7 @@
       <div class="founder-profile-card">
         <div class="founder-image-wrapper">
           <% if (founder.photo?.url) { %>
-            <img src="<%= founder.photo.url %>" alt="<%= founder.name?.en %>" class="founder-img" style="width: 160px; height: 160px; border-radius: 50%; object-fit: cover;">
+            <img src="<%= founder.photo.url %>" alt="<%= founder.name?.en %>" class="founder-img">
           <% } else { %>
             <div class="founder-initials">FND</div>
           <% } %>

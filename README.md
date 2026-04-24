@@ -78,6 +78,10 @@ nusrat-international/
    Create `.env` file:
    ```env
    MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/nusrat_travels
+   CLOUDINARY_CLOUD_NAME=your-cloud-name
+   CLOUDINARY_API_KEY=your-api-key
+   CLOUDINARY_API_SECRET=your-api-secret
+   SESSION_SECRET=replace-with-a-long-random-secret
    PORT=3000
    NODE_ENV=development
    ```
@@ -112,6 +116,10 @@ nusrat-international/
    - **Output Directory**: `public`
 5. Add Environment Variables:
    - `MONGODB_URI`: Your MongoDB connection string
+   - `CLOUDINARY_CLOUD_NAME`: Your Cloudinary cloud name
+   - `CLOUDINARY_API_KEY`: Your Cloudinary API key
+   - `CLOUDINARY_API_SECRET`: Your Cloudinary API secret
+   - `SESSION_SECRET`: Long random session secret
    - `NODE_ENV`: `production`
 6. Deploy!
 
@@ -159,6 +167,10 @@ GET /work/:slug                     # Work package detail
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `MONGODB_URI` | MongoDB Atlas connection string | ✅ Yes |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name for image uploads | ✅ Yes (production) |
+| `CLOUDINARY_API_KEY` | Cloudinary API key for image uploads | ✅ Yes (production) |
+| `CLOUDINARY_API_SECRET` | Cloudinary API secret for image uploads | ✅ Yes (production) |
+| `SESSION_SECRET` | Session signing secret | ✅ Yes (production) |
 | `NODE_ENV` | Environment (development/production) | ❌ No (default: development) |
 | `PORT` | Local development port | ❌ No (default: 3000) |
 
