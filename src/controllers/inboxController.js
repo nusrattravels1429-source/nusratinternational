@@ -1,8 +1,9 @@
-const Message = require('../models/Message');
+const { ObjectId } = require('mongodb');
 
 // Public: Submit a message
 exports.submitMessage = async (req, res) => {
   try {
+    const db = await req.app.locals.getDb();
     const { name, email, phone, service, message, source, packageId, packageName } = req.body;
 
     // Validate that at least email or phone is provided
@@ -13,21 +14,23 @@ exports.submitMessage = async (req, res) => {
       });
     }
 
-    const newMessage = new Message({
+    const newMessage = {
       name,
-      email,
-      phone,
+      email: (email || '').toLowerCase(),
+      phone: phone || '',
       service: service || 'General Inquiry',
-      message,
+      message: message || '',
       source: source || 'Other',
+      isRead: false,
       metadata: {
-        packageId,
-        packageName,
-        url: req.get('referer')
-      }
-    });
+        packageId: packageId && ObjectId.isValid(packageId) ? new ObjectId(packageId) : null,
+        packageName: packageName || null,
+        url: req.get('referer') || null
+      },
+      createdAt: new Date()
+    };
 
-    await newMessage.save();
+    await db.collection('inbox').insertOne(newMessage);
 
     res.status(201).json({
       success: true,
@@ -45,7 +48,8 @@ exports.submitMessage = async (req, res) => {
 // Admin: Get all messages
 exports.getInbox = async (req, res) => {
   try {
-    const messages = await Message.find().sort({ createdAt: -1 });
+    const db = await req.app.locals.getDb();
+    const messages = await db.collection('inbox').find().sort({ createdAt: -1 }).toArray();
     
     res.render('admin/inbox/list', {
       admin: req.admin,
@@ -62,8 +66,18 @@ exports.getInbox = async (req, res) => {
 // Admin: Mark as read
 exports.markAsRead = async (req, res) => {
   try {
+    const db = await req.app.locals.getDb();
     const { id } = req.params;
-    await Message.findByIdAndUpdate(id, { isRead: true });
+    
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ success: false, error: 'Invalid ID' });
+    }
+
+    await db.collection('inbox').updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { isRead: true } }
+    );
+    
     res.json({ success: true });
   } catch (error) {
     console.error('Mark read error:', error);
@@ -74,8 +88,14 @@ exports.markAsRead = async (req, res) => {
 // Admin: Delete message
 exports.deleteMessage = async (req, res) => {
   try {
+    const db = await req.app.locals.getDb();
     const { id } = req.params;
-    await Message.findByIdAndDelete(id);
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ success: false, error: 'Invalid ID' });
+    }
+
+    await db.collection('inbox').deleteOne({ _id: new ObjectId(id) });
     res.json({ success: true });
   } catch (error) {
     console.error('Delete message error:', error);
@@ -86,7 +106,8 @@ exports.deleteMessage = async (req, res) => {
 // API: Get unread count (for badge)
 exports.getUnreadCount = async (req, res) => {
   try {
-    const count = await Message.countDocuments({ isRead: false });
+    const db = await req.app.locals.getDb();
+    const count = await db.collection('inbox').countDocuments({ isRead: false });
     res.json({ success: true, count });
   } catch (error) {
     res.status(500).json({ success: false });
