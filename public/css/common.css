@@ -44,6 +44,13 @@ img {
   max-width: 100%;
 }
 
+/* Standalone Page specific layout adjustments */
+.standalone-page {
+  padding-top: 40px !important;
+  padding-bottom: 80px !important;
+  min-height: 60vh;
+}
+
 a {
   text-decoration: none;
   color: inherit;

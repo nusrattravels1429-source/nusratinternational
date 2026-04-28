@@ -94,7 +94,7 @@ main {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   gap: 28px;
-  padding: 50px 40px;
+  padding: 20px 40px 80px;
   max-width: 1380px;
   margin: 0 auto;
 }

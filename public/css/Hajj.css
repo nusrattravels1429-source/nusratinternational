@@ -105,7 +105,7 @@ main { flex:1; }
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 28px; padding: 50px 40px;
+  gap: 28px; padding: 20px 40px 80px;
   max-width: 1380px; margin: 0 auto;
 }
 .container .pkg-card { min-width:unset; width:100%; }
