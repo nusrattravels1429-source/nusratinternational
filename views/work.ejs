@@ -4,35 +4,20 @@
   <div class="hero-badge">💼 WORK ABROAD</div>
   <h1>International Work<br /><em>Packages</em></h1>
   <p>বিদেশে কর্মসংস্থানের সুযোগ — Build your future with our trusted overseas job placements.</p>
-  <div class="hero-stats">
-    <div class="h-stat"><span>5,000+</span><small>Workers Placed</small></div>
-    <div class="h-stat"><span>15+</span><small>Countries</small></div>
-    <div class="h-stat"><span>98%</span><small>Visa Success</small></div>
   </div>
-</div>
 
 <main>
   <section class="package-section" id="work">
-    <div class="section-intro">
-      <div>
-        <span class="section-tag green">💼 WORK PACKAGES</span>
-        <h2>Work Abroad Programs<br /><span class="bn-sub">বিদেশে কাজের সুযোগ</span></h2>
-        <p>Secure job placements in high-demand countries with visa support.</p>
-      </div>
-    </div>
+    
 
-    <div class="cards-slider-wrap">
-      <div class="cards-viewport">
-        <div class="cards-track cards-grid">
-          <% if (packages && packages.length > 0) { %>
-            <% packages.forEach(pkg => { %>
-              <%- include('partials/card', { pkg: pkg, type: 'work' }) %>
-            <% }); %>
-          <% } else { %>
-            <p class="no-packages">No work packages are available at the moment.</p>
-          <% } %>
-        </div>
-      </div>
+    <div class="container">
+      <% if (packages && packages.length > 0) { %>
+        <% packages.forEach(pkg => { %>
+          <%- include('partials/card', { pkg: pkg, type: 'work' }) %>
+        <% }); %>
+      <% } else { %>
+        <p class="no-packages">No work packages are available at the moment.</p>
+      <% } %>
     </div>
   </section>
 </main>

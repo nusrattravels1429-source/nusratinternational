@@ -4,35 +4,21 @@
   <div class="hero-badge">☪ SACRED JOURNEY</div>
   <h1>Hajj &amp; Umrah<br /><em>Packages</em></h1>
   <p>পবিত্র হজ ও উমরাহ প্যাকেজ — Journey to the house of Allah with complete peace of mind.</p>
-  <div class="hero-stats">
-    <div class="h-stat"><span>10,000+</span><small>Pilgrims Served</small></div>
-    <div class="h-stat"><span>15+</span><small>Years Experience</small></div>
-    <div class="h-stat"><span>100%</span><small>Visa Success</small></div>
-  </div>
+  
 </div>
 
 <main>
   <section class="package-section hajj-bg" id="hajj">
-    <div class="section-intro">
-      <div>
-        <span class="section-tag gold">☪ HAJJ PACKAGES</span>
-        <h2>Sacred Journey Packages<br /><span class="bn-sub">পবিত্র হজ প্যাকেজসমূহ</span></h2>
-        <p>Embark on the most sacred journey of your life. We take care of every detail.</p>
-      </div>
-    </div>
+   
 
-    <div class="cards-slider-wrap">
-      <div class="cards-viewport">
-        <div class="cards-track cards-grid">
-          <% if (packages && packages.length > 0) { %>
-            <% packages.forEach(pkg => { %>
-              <%- include('partials/card', { pkg: pkg, type: 'hajj' }) %>
-            <% }); %>
-          <% } else { %>
-            <p class="no-packages">No Hajj/Umrah packages are available at the moment.</p>
-          <% } %>
-        </div>
-      </div>
+    <div class="container">
+      <% if (packages && packages.length > 0) { %>
+        <% packages.forEach(pkg => { %>
+          <%- include('partials/card', { pkg: pkg, type: 'hajj' }) %>
+        <% }); %>
+      <% } else { %>
+        <p class="no-packages">No Hajj/Umrah packages are available at the moment.</p>
+      <% } %>
     </div>
   </section>
 </main>

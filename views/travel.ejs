@@ -8,26 +8,15 @@
 
 <main>
   <section class="package-section" id="travel">
-    <div class="section-intro">
-      <div>
-        <span class="section-tag">✈ TRAVEL PACKAGES</span>
-        <h2>Popular Destinations<br /><span class="bn-sub">জনপ্রিয় গন্তব্যসমূহ</span></h2>
-        <p>Hand-picked destinations for the modern explorer. Adventure awaits at every turn.</p>
-      </div>
-    </div>
-
-    <div class="cards-slider-wrap">
-      <div class="cards-viewport">
-        <div class="cards-track cards-grid">
-          <% if (packages && packages.length > 0) { %>
-            <% packages.forEach(pkg => { %>
-              <%- include('partials/card', { pkg: pkg, type: 'travel' }) %>
-            <% }); %>
-          <% } else { %>
-            <p class="no-packages">No travel packages are available at the moment.</p>
-          <% } %>
-        </div>
-      </div>
+    
+    <div class="container">
+      <% if (packages && packages.length > 0) { %>
+        <% packages.forEach(pkg => { %>
+          <%- include('partials/card', { pkg: pkg, type: 'travel' }) %>
+        <% }); %>
+      <% } else { %>
+        <p class="no-packages">No travel packages are available at the moment.</p>
+      <% } %>
     </div>
   </section>
 </main>
