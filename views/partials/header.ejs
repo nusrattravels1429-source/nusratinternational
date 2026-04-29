@@ -3,7 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= pageTitle || 'Nusrat International' %></title>
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Nusrat International | Travel, Hajj & Manpower Recruitment' %></title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'Nusrat International is a leading travel agency in Bangladesh specializing in International Ticketing, Hajj & Umrah packages, and Global Manpower Recruitment.' %>" />
+  <meta name="keywords" content="<%= typeof metaKeywords !== 'undefined' ? metaKeywords : 'Nusrat International, Travel Agency Bangladesh, Hajj Package 2024, Umrah Package, Manpower Recruitment, BAIRA RL-1429, Work Visa, Flight Booking' %>" />
+  <meta name="author" content="Nusrat International" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://nusratinternational.com<%= typeof activePath !== 'undefined' ? activePath : '' %>" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nusratinternational.com" />
+  <meta property="og:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'Nusrat International | Travel, Hajj & Manpower Recruitment' %>" />
+  <meta property="og:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'Nusrat International is a leading travel agency in Bangladesh specializing in International Ticketing, Hajj & Umrah packages, and Global Manpower Recruitment.' %>" />
+  <meta property="og:image" content="https://nusratinternational.com/images/og-image.jpg" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://nusratinternational.com" />
+  <meta property="twitter:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'Nusrat International | Travel, Hajj & Manpower Recruitment' %>" />
+  <meta property="twitter:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'Nusrat International is a leading travel agency in Bangladesh specializing in International Ticketing, Hajj & Umrah packages, and Global Manpower Recruitment.' %>" />
+  <meta property="twitter:image" content="https://nusratinternational.com/images/og-image.jpg" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <% cssFiles.forEach(file => { %>
