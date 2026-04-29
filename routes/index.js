@@ -289,10 +289,13 @@ function buildDetailRoute(collection, view, activePageKey, cssFiles) {
         return res.status(404).render('404', { url: req.originalUrl, pageTitle: '404 - Not Found', activePage: '', bodyClass: '', cssFiles: ['common.css'] });
       }
 
+      const displayTitle = (typeof pkg.title === 'object' ? pkg.title.en : pkg.title) || 'Package';
+      const displayDesc = (typeof pkg.description === 'object' ? pkg.description.en : pkg.description) || pkg.shortDescription || '';
+
       res.render(view, { 
-        pageTitle: `${pkg.title || 'Package'} | Nusrat International`,
-        metaDescription: pkg.shortDescription || pkg.description?.substring(0, 160) || `Check out our ${pkg.title} package at Nusrat International.`,
-        metaKeywords: `${pkg.title}, ${activePageKey} Package, Nusrat International`,
+        pageTitle: `${displayTitle} | Nusrat International`,
+        metaDescription: displayDesc.substring(0, 160) || `Check out our ${displayTitle} package at Nusrat International.`,
+        metaKeywords: `${displayTitle}, ${activePageKey} Package, Nusrat International`,
         activePath: `/${activePageKey}/${pkg.slug}`,
         pkg, 
         activePage: activePageKey, 
