@@ -44,10 +44,10 @@
     <!-- ===== HOMEPAGE ===== -->
     <% if (section === 'homepage') { %>
 
-    <div class="panel" style="background:#eff6ff;border:1px solid #bfdbfe;">
+    <div class="panel glass-card">
       <div class="panel-title">🎬 Hero Slider & Global Text</div>
-      <p style="font-size:14px; margin-bottom:12px;">The hero slider images and its global text are managed in a dedicated section.</p>
-      <a href="/admin/hero-manage" class="btn btn-primary" style="display:inline-block; text-decoration:none;">Go to Manage Hero Slider</a>
+      <p style="font-size:14px; margin-bottom:12px; color: var(--text-muted);">The hero slider images and its global text are managed in a dedicated section.</p>
+      <a href="/admin/hero-manage" class="btn btn-primary">Go to Manage Hero Slider</a>
     </div>
 
     <!-- ===== TICKETING ===== -->
@@ -325,9 +325,9 @@
       </form>
     </div>
 
-    <div class="panel" style="background:#fef9c3;border:1px solid #fde68a;">
+    <div class="panel glass-card" style="border-left: 4px solid var(--primary-color);">
       <div class="panel-title">💡 Team/Founder management</div>
-      <p style="font-size:14px;">Go to the <a href="/admin/team" style="color:#667eea;font-weight:600;">Team Members</a> section to manage the founder photo, Leadership team, and employee cards.</p>
+      <p style="font-size:14px; color: var(--text-muted);">Go to the <a href="/admin/team" style="color:var(--primary-color);font-weight:600;">Team Members</a> section to manage the founder photo, Leadership team, and employee cards.</p>
     </div>
 
     <!-- Our Story Section -->
@@ -367,14 +367,14 @@
         </div>
 
         <div style="margin-top: 16px;">
-          <label style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block;">Content (English)</label>
-          <div id="quillEn" style="min-height: 200px; background: white;"><%- content['about-story']?.content_en || '' %></div>
+          <label style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; display: block;">Content (English)</label>
+          <div id="quillEn" style="min-height: 200px;"><%- content['about-story']?.content_en || '' %></div>
           <textarea name="content_en" id="storyContentEn" style="display:none;"></textarea>
         </div>
 
         <div style="margin-top: 24px;">
-          <label style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block;">Content (বাংলা)</label>
-          <div id="quillBn" style="min-height: 200px; background: white;"><%- content['about-story']?.content_bn || '' %></div>
+          <label style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; display: block;">Content (বাংলা)</label>
+          <div id="quillBn" style="min-height: 200px;"><%- content['about-story']?.content_bn || '' %></div>
           <textarea name="content_bn" id="storyContentBn" style="display:none;"></textarea>
         </div>
 

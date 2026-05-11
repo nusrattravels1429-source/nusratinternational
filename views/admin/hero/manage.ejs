@@ -25,7 +25,7 @@
   </style>
 </head>
 <body>
-<div class="flex">
+<div class="admin-layout">
     <%- include('../partials/sidebar', { admin: admin || {username:'Admin'}, activePage: activePage || 'hero-manage' }) %>
 
     <div class="main-content">
@@ -408,14 +408,12 @@
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
-        const color = type === 'success' ? 'bg-green-500' : 'bg-red-500';
-        toast.className = `${color} text-white px-6 py-3 rounded shadow-lg mb-2 opacity-0 transition-opacity duration-300`;
+        toast.className = `toast ${type}`;
         toast.innerText = message;
         
         container.appendChild(toast);
-        setTimeout(() => toast.classList.remove('opacity-0'), 10);
         setTimeout(() => {
-            toast.classList.add('opacity-0');
+            toast.style.opacity = '0';
             setTimeout(() => toast.remove(), 300);
         }, 3000);
     }

@@ -6,30 +6,12 @@
   <title>Manage Cards - Admin Panel</title>
   <link rel="stylesheet" href="/css/admin.css">
   <style>
-    .btn-add { background: white; color: #667eea; box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
-    .btn-add:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-    .btn-edit { background: #667eea; color: white; }
-    .btn-delete { background: #ef4444; color: white; }
-    .btn-toggle-pause { background: #f59e0b; color: white; }
-    .btn-toggle-resume { background: #10b981; color: white; }
-
-    .filters-bar {
-      background: white;
-      border-radius: 12px;
-      padding: 20px 24px;
-      margin-bottom: 24px;
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      align-items: center;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
     .card-item.paused::before {
       content: 'PAUSED';
       position: absolute;
       top: 12px;
       left: 12px;
-      background: #f59e0b;
+      background: var(--warning-color);
       color: white;
       font-size: 10px;
       font-weight: 800;
@@ -43,7 +25,7 @@
       position: absolute;
       top: 12px;
       left: 12px;
-      background: #ef4444;
+      background: var(--error-color);
       color: white;
       font-size: 10px;
       font-weight: 800;
@@ -56,17 +38,14 @@
       height: 180px;
       position: relative;
       overflow: hidden;
-      background: #f3f4f6;
+      background: rgba(255,255,255,0.05);
     }
     .empty-state {
       grid-column: 1 / -1;
       text-align: center;
       padding: 80px 40px;
-      color: #9ca3af;
     }
     .empty-state .icon { font-size: 60px; margin-bottom: 20px; }
-    .empty-state h3 { font-size: 20px; color: #6b7280; margin-bottom: 12px; }
-    .empty-state a { color: #667eea; font-weight: 600; text-decoration: underline; }
   </style>
 </head>
 <body>
