@@ -110,6 +110,23 @@ async function getDb() {
 // Make getDb available to routes
 app.locals.getDb = getDb;
 
+// Branding Middleware
+app.use(async (req, res, next) => {
+  try {
+    const db = await getDb();
+    const settings = await db.collection('footersettings').findOne({}, { 
+      projection: { headerLogoUrl: 1, logoText: 1 },
+      sort: { _id: 1 } 
+    });
+    res.locals.headerLogoUrl = settings?.headerLogoUrl || '/images/logo.png';
+    res.locals.logoText = settings?.logoText || { en: 'Nusrat International', bn: '' };
+  } catch (err) {
+    res.locals.headerLogoUrl = '/images/logo.png';
+    res.locals.logoText = { en: 'Nusrat International', bn: '' };
+  }
+  next();
+});
+
 // Routes
 try {
   const routes = require('./routes/index');

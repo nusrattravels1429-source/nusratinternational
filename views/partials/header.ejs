@@ -18,14 +18,14 @@
   <meta property="og:url" content="https://nusratinternational.com" />
   <meta property="og:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'Nusrat International | Travel, Hajj & Manpower Recruitment' %>" />
   <meta property="og:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'Nusrat International is a leading travel agency in Bangladesh specializing in International Ticketing, Hajj & Umrah packages, and Global Manpower Recruitment.' %>" />
-  <meta property="og:image" content="/images/logo-og.png" />
+  <meta property="og:image" content="<%= headerLogoUrl %>" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://nusratinternational.com" />
   <meta property="twitter:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'Nusrat International | Travel, Hajj & Manpower Recruitment' %>" />
   <meta property="twitter:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'Nusrat International is a leading travel agency in Bangladesh specializing in International Ticketing, Hajj & Umrah packages, and Global Manpower Recruitment.' %>" />
-  <meta property="twitter:image" content="/images/logo-og.png" />
+  <meta property="twitter:image" content="<%= headerLogoUrl %>" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -38,8 +38,13 @@
   <div class="nav-inner">
     <div class="logo">
       <a href="/">
-        <img src="/images/logo.png" alt="Nusrat International Logo" id="header-logo-img" onerror="this.src='https://res.cloudinary.com/dvu3r51tb/image/upload/v1778520719/nusrat-international/wipb2zpgdlsdgs7p9seu.jpg'" />
-        <div class="logo-text"><span id="header-logo-text">Nusrat International</span></div>
+        <img src="<%= headerLogoUrl %>" alt="Nusrat International Logo" id="header-logo-img" onerror="this.src='https://res.cloudinary.com/dvu3r51tb/image/upload/v1778520719/nusrat-international/wipb2zpgdlsdgs7p9seu.jpg'" />
+        <div class="logo-text">
+          <span id="header-logo-text">
+            <%= logoText.en %>
+            <% if (logoText.bn) { %><br /><%= logoText.bn %><% } %>
+          </span>
+        </div>
       </a>
     </div>
     <button class="hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
@@ -77,12 +82,7 @@
       const json = await res.json();
       if(json.success && json.data) {
         // Update Branding
-        if (json.data.headerLogoUrl) {
-          document.getElementById('header-logo-img').src = json.data.headerLogoUrl;
-        }
-        if (json.data.logoText) {
-          document.getElementById('header-logo-text').innerHTML = (json.data.logoText.en || '') + (json.data.logoText.bn ? `<br />${json.data.logoText.bn}` : '');
-        }
+        // (Removing redundant client-side branding update to prevent flicker, already handled via SSR)
 
         // Update Links
         if (json.data.items && json.data.items.length > 0) {
