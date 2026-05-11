@@ -4,70 +4,58 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Team Management - Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f2f5; color: #333; }
-    .admin-layout { display: flex; min-height: 100vh; }
-    .main-content { padding: 28px; }
-    .page-header { background: white; padding: 20px 28px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-    .page-header h1 { font-size: 22px; font-weight: 700; color: #1a1a2e; }
-    .breadcrumb { font-size: 13px; color: #94a3b8; }
-    .panel { background: white; border-radius: 12px; padding: 28px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-    .panel-title { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #f0f2f5; display: flex; justify-content: space-between; align-items: center; }
-    .btn { padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; transition: all 0.2s; }
-    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-secondary { background: #f1f5f9; color: #475569; }
-    .btn-danger { background: #fee2e2; color: #dc2626; }
-    .btn-sm { padding: 7px 14px; font-size: 12px; }
-    .form-control { width: 100%; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 14px; font-family: inherit; transition: border-color 0.2s; background: #fafafa; }
-    .form-control:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.12); background: white; }
-    textarea.form-control { min-height: 90px; resize: vertical; }
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
+    .panel { padding: 32px; margin-bottom: 32px; }
+    .panel-title { font-size: 18px; font-weight: 800; color: white; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; letter-spacing: -0.5px; }
+    
     /* Founder section */
-    .founder-layout { display: grid; grid-template-columns: 180px 1fr; gap: 28px; }
+    .founder-layout { display: grid; grid-template-columns: 200px 1fr; gap: 40px; }
     .founder-photo-col { text-align: center; }
-    .founder-photo { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 4px solid #667eea; display: block; margin: 0 auto 12px; }
-    .founder-photo-placeholder { width: 160px; height: 160px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 48px; margin: 0 auto 12px; color: white; }
-    .founder-tag { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #78350f; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+    .founder-photo { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 4px solid var(--primary-color); display: block; margin: 0 auto 20px; box-shadow: 0 0 20px var(--primary-glow); }
+    .founder-photo-placeholder { width: 180px; height: 180px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); display: flex; align-items: center; justify-content: center; font-size: 56px; margin: 0 auto 20px; color: white; box-shadow: 0 0 20px var(--primary-glow); }
+    .founder-tag { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; font-size: 11px; font-weight: 800; padding: 6px 14px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; }
 
     /* Employees grid */
-    .employees-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
-    .employee-card { background: #f8faff; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 20px; text-align: center; transition: all 0.2s; }
-    .employee-card:hover { border-color: #667eea; box-shadow: 0 4px 16px rgba(102,126,234,0.12); }
-    .employee-photo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #e2e8f0; display: block; margin: 0 auto 12px; }
-    .employee-photo-placeholder { width: 80px; height: 80px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 12px; }
-    .employee-name { font-size: 14px; font-weight: 700; color: #1a1a2e; }
-    .employee-designation { font-size: 12px; color: #667eea; margin-top: 4px; }
-    .employee-actions { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }
+    .employees-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px; }
+    .employee-card { border-radius: 24px; padding: 32px; text-align: center; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid var(--glass-border); }
+    .employee-card:hover { transform: translateY(-10px); border-color: var(--primary-color); box-shadow: 0 20px 40px -15px var(--primary-glow); }
+    .employee-photo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--glass-border); display: block; margin: 0 auto 16px; transition: all 0.4s; }
+    .employee-card:hover .employee-photo { border-color: var(--primary-color); transform: scale(1.1); }
+    .employee-photo-placeholder { width: 100px; height: 100px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 16px; color: var(--text-muted); }
+    .employee-name { font-size: 16px; font-weight: 800; color: white; }
+    .employee-designation { font-size: 13px; color: var(--primary-color); margin-top: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .employee-actions { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
+    .employee-actions .btn { padding: 8px 16px; font-size: 12px; }
 
-    .add-form-panel { display: none; }
-    .add-form-panel.open { display: block; }
-    .empty-state { text-align: center; padding: 40px 20px; color: #94a3b8; }
+    .add-form-panel { display: none; margin-bottom: 32px; }
+    .add-form-panel.open { display: block; animation: slideDown 0.4s ease; }
+    @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* Edit Modal Premium Styles */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal { background: #1e293b; width: 100%; max-width: 550px; max-height: 90vh; border-radius: 30px; border: 1px solid var(--glass-border); box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5); overflow-y: auto; padding: 40px; animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
   </style>
 </head>
 <body>
 <div class="admin-layout">
   <%- include('../partials/sidebar', { admin, activePage: 'team' }) %>
 
-  <main class="main-content">
-    <div class="page-header">
-      <div>
-        <h1>👥 Team Management</h1>
-        <p class="breadcrumb">Admin → Team (<%= employees.length %> employees)</p>
+    <div class="main-content">
+      <div class="page-header">
+        <div>
+          <h1>Team Management</h1>
+          <p>Manage your company's leadership and team members.</p>
+        </div>
+        <a href="/admin/dashboard" class="btn btn-primary">← Dashboard</a>
       </div>
-      <a href="/admin/dashboard" class="btn btn-secondary">← Dashboard</a>
-    </div>
 
-    <!-- ===== FOUNDER SECTION ===== -->
-    <div class="panel">
-      <div class="panel-title">
-        <span>👑 Founder / Leadership</span>
-        <span class="founder-tag">Protected Record</span>
-      </div>
+      <!-- ===== FOUNDER SECTION ===== -->
+      <div class="panel glass-card">
+        <div class="panel-title">
+          <span>Leadership / Founder</span>
+          <span class="founder-tag">Protected</span>
+        </div>
       <form action="/admin/team/founder" method="POST" enctype="multipart/form-data">
         <div class="founder-layout">
           <div class="founder-photo-col">
@@ -139,12 +127,12 @@
       </form>
     </div>
 
-    <!-- ===== EMPLOYEES SECTION ===== -->
-    <div class="panel">
-      <div class="panel-title">
-        <span>👨‍💼 Employees (<%= employees.length %>)</span>
-        <button class="btn btn-primary btn-sm" onclick="toggleAddForm()">+ Add Employee</button>
-      </div>
+      <!-- ===== EMPLOYEES SECTION ===== -->
+      <div class="panel glass-card">
+        <div class="panel-title">
+          <span>Our Team Members (<%= employees.length %>)</span>
+          <button class="btn btn-primary btn-sm" onclick="toggleAddForm()">+ Add New Member</button>
+        </div>
 
       <!-- Add Form -->
       <div class="add-form-panel" id="addFormPanel">
@@ -187,23 +175,23 @@
 
       <!-- List -->
       <% if (employees && employees.length > 0) { %>
-      <div class="employees-grid">
-        <% employees.forEach(function(emp) { %>
-        <div class="employee-card">
-          <% if (emp.photo?.url) { %>
-            <img src="<%= emp.photo.url %>" alt="<%= emp.name?.en %>" class="employee-photo">
-          <% } else { %>
-            <div class="employee-photo-placeholder">👤</div>
-          <% } %>
-          <div class="employee-name"><%= emp.name?.en || 'Unnamed' %></div>
-          <div class="employee-designation"><%= emp.designation?.en || '—' %></div>
-          <div class="employee-actions">
-            <button class="btn btn-sm btn-secondary" onclick="openEditModal('<%= emp._id %>', '<%= (emp.name?.en || '').replace(/'/g, '\\\'') %>', '<%= (emp.name?.bn || '').replace(/'/g, '\\\'') %>', '<%= (emp.designation?.en || '').replace(/'/g, '\\\'') %>', '<%= (emp.designation?.bn || '').replace(/'/g, '\\\'') %>', '<%= emp.photo?.url || '' %>', <%= emp.order || 0 %>)">✏️ Edit</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteMember('<%= emp._id %>')">🗑️</button>
+        <div class="employees-grid">
+          <% employees.forEach(function(emp) { %>
+          <div class="employee-card glass-card">
+            <% if (emp.photo?.url) { %>
+              <img src="<%= emp.photo.url %>" alt="<%= emp.name?.en %>" class="employee-photo">
+            <% } else { %>
+              <div class="employee-photo-placeholder">👤</div>
+            <% } %>
+            <div class="employee-name"><%= emp.name?.en || 'Unnamed' %></div>
+            <div class="employee-designation"><%= emp.designation?.en || '—' %></div>
+            <div class="employee-actions">
+              <button class="btn btn-sm btn-secondary" onclick="openEditModal('<%= emp._id %>', '<%= (emp.name?.en || '').replace(/'/g, '\\\'') %>', '<%= (emp.name?.bn || '').replace(/'/g, '\\\'') %>', '<%= (emp.designation?.en || '').replace(/'/g, '\\\'') %>', '<%= (emp.designation?.bn || '').replace(/'/g, '\\\'') %>', '<%= emp.photo?.url || '' %>', <%= emp.order || 0 %>)">Edit</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteMember('<%= emp._id %>')">Delete</button>
+            </div>
           </div>
+          <% }); %>
         </div>
-        <% }); %>
-      </div>
       <% } else { %>
       <div class="empty-state">
         <div style="font-size:32px;">👨‍💼</div>

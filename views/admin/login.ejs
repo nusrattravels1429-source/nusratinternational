@@ -4,120 +4,73 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Login - Nusrat International</title>
+  <link rel="stylesheet" href="/css/admin.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: radial-gradient(circle at top right, #4f46e5, transparent),
+                  radial-gradient(circle at bottom left, #764ba2, transparent),
+                  #0f172a;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 20px;
     }
     .login-container {
-      background: white;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
       width: 100%;
-      max-width: 400px;
+      max-width: 440px;
+      padding: 48px;
+      position: relative;
+      z-index: 1;
     }
-    .logo {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .logo img {
-      width: 80px;
-      height: 80px;
-      object-fit: contain;
-    }
-    .logo h1 {
-      margin-top: 10px;
-      color: #333;
-      font-size: 24px;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      color: #555;
-      font-weight: 500;
-    }
-    .form-group input {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid #e0e0e0;
-      border-radius: 5px;
-      font-size: 16px;
-      transition: border-color 0.3s;
-    }
-    .form-group input:focus {
-      outline: none;
-      border-color: #667eea;
-    }
-    .btn {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-    .error {
-      background: #fee;
-      color: #c33;
-      padding: 12px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    .success {
-      background: #efe;
-      color: #3c3;
-      padding: 12px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
+    .logo { text-align: center; margin-bottom: 40px; }
+    .logo img { width: 80px; height: 80px; margin-bottom: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .logo h1 { font-size: 28px; font-weight: 800; color: white; letter-spacing: -1px; }
+    .logo p { color: var(--text-muted); margin-top: 8px; font-size: 15px; }
+
+    .form-group label { color: white; font-weight: 700; font-size: 14px; }
+    
+    .error-box { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--error-color); color: #fca5a5; padding: 16px; border-radius: 12px; margin-bottom: 24px; font-size: 14px; text-align: center; }
+    .success-box { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success-color); color: #6ee7b7; padding: 16px; border-radius: 12px; margin-bottom: 24px; font-size: 14px; text-align: center; }
+
+    .login-footer { text-align: center; margin-top: 32px; color: var(--text-muted); font-size: 13px; }
+    .login-footer a { color: var(--primary-color); text-decoration: none; font-weight: 700; }
   </style>
 </head>
 <body>
-  <div class="login-container">
+  <div class="login-container glass-card">
     <div class="logo">
-      <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Logo" onerror="this.style.display='none'" />
-      <h1>Admin Panel</h1>
+      <img src="https://image2url.com/r2/default/images/1771964863151-2518979a-0fe0-4990-9a1a-9175b88e5ac8.jpg" alt="Logo" />
+      <h1>Admin Portal</h1>
+      <p>Sign in to manage Nusrat International</p>
     </div>
     
     <% if (error) { %>
-      <div class="error"><%= error %></div>
+      <div class="error-box">⚠️ <%= error %></div>
     <% } %>
     
     <% if (success) { %>
-      <div class="success"><%= success %></div>
+      <div class="success-box">✅ <%= success %></div>
     <% } %>
     
     <form action="/admin/login" method="POST">
       <div class="form-group">
         <label for="username">Username or Email</label>
-        <input type="text" id="username" name="username" required autofocus>
+        <input type="text" id="username" name="username" required autofocus class="form-control" placeholder="admin@example.com">
       </div>
       
-      <div class="form-group">
+      <div class="form-group" style="margin-bottom: 32px;">
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" required class="form-control" placeholder="••••••••">
       </div>
       
-      <button type="submit" class="btn">Login</button>
+      <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 16px;">Sign In</button>
     </form>
+
+    <div class="login-footer">
+      <p>&copy; 2024 Nusrat International. All rights reserved.</p>
+      <p style="margin-top: 8px;"><a href="/">← Return to Website</a></p>
+    </div>
   </div>
 </body>
 </html>

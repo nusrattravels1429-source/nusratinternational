@@ -4,46 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manage Cards - Admin Panel</title>
+  <link rel="stylesheet" href="/css/admin.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'DM Sans', sans-serif; background: #f0f2f8; color: #1a1f2e; }
-    .admin-layout { display: flex; min-height: 100vh; }
-    .main-content { padding: 30px; }
-
-    .page-header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 16px;
-      padding: 28px 32px;
-      margin-bottom: 28px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: white;
-      box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
-    }
-    .page-header h1 { font-size: 26px; font-weight: 700; }
-    .page-header p { font-size: 14px; opacity: 0.8; margin-top: 4px; }
-
-    .btn {
-      padding: 10px 22px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
     .btn-add { background: white; color: #667eea; box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
     .btn-add:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
     .btn-edit { background: #667eea; color: white; }
     .btn-delete { background: #ef4444; color: white; }
     .btn-toggle-pause { background: #f59e0b; color: white; }
     .btn-toggle-resume { background: #10b981; color: white; }
-    .btn:hover { opacity: 0.88; transform: translateY(-1px); }
 
     .filters-bar {
       background: white;
@@ -56,46 +24,6 @@
       align-items: center;
       box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     }
-    .filter-group { display: flex; align-items: center; gap: 10px; }
-    .filter-group label { font-weight: 600; font-size: 13px; color: #555; white-space: nowrap; }
-    .filter-group select {
-      padding: 8px 14px;
-      border: 2px solid #e5e7eb;
-      border-radius: 8px;
-      font-size: 14px;
-      background: white;
-      cursor: pointer;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .filter-group select:focus { border-color: #667eea; }
-    .stats-row { margin-left: auto; display: flex; gap: 16px; }
-    .stat-pill {
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .stat-total { background: #e0e7ff; color: #4338ca; }
-    .stat-active { background: #d1fae5; color: #065f46; }
-    .stat-paused { background: #fef3c7; color: #92400e; }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
-    .card-item {
-      background: white;
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-      transition: transform 0.2s, box-shadow 0.2s;
-      position: relative;
-    }
-    .card-item:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-    .card-item.paused { opacity: 0.72; }
     .card-item.paused::before {
       content: 'PAUSED';
       position: absolute;
@@ -112,7 +40,17 @@
     }
     .card-item.inactive::before {
       content: 'INACTIVE';
+      position: absolute;
+      top: 12px;
+      left: 12px;
       background: #ef4444;
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      z-index: 2;
     }
     .card-img-wrap {
       height: 180px;
@@ -120,48 +58,6 @@
       overflow: hidden;
       background: #f3f4f6;
     }
-    .card-img-wrap img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s;
-    }
-    .card-item:hover .card-img-wrap img { transform: scale(1.04); }
-    .card-img-placeholder {
-      width: 100%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 48px; background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
-    }
-    .card-type-badge {
-      position: absolute; bottom: 10px; right: 10px;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .badge-travel { background: rgba(26,86,219,0.9); color: white; }
-    .badge-hajj { background: rgba(124,58,237,0.9); color: white; }
-    .badge-work { background: rgba(5,150,105,0.9); color: white; }
-    .img-count {
-      position: absolute; top: 10px; right: 10px;
-      background: rgba(0,0,0,0.6);
-      color: white;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 12px;
-    }
-
-    .card-body { padding: 18px; }
-    .card-title { font-size: 16px; font-weight: 700; color: #1a1f2e; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-title-bn { font-size: 13px; color: #6b7280; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-meta { display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
-    .card-meta span { font-size: 12px; color: #6b7280; display: flex; align-items: center; gap: 4px; }
-    .card-meta strong { color: #374151; }
-    .card-actions { display: flex; gap: 8px; }
-    .card-actions .btn { flex: 1; justify-content: center; font-size: 13px; padding: 8px 12px; }
-
     .empty-state {
       grid-column: 1 / -1;
       text-align: center;
@@ -171,19 +67,6 @@
     .empty-state .icon { font-size: 60px; margin-bottom: 20px; }
     .empty-state h3 { font-size: 20px; color: #6b7280; margin-bottom: 12px; }
     .empty-state a { color: #667eea; font-weight: 600; text-decoration: underline; }
-
-    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-    .toast { padding: 14px 20px; border-radius: 10px; color: white; font-size: 14px; font-weight: 500; min-width: 260px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); animation: slideInToast 0.3s ease; }
-    .toast.success { background: #10b981; }
-    .toast.error { background: #ef4444; }
-    @keyframes slideInToast { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
-
-    @media (max-width: 768px) {
-      .main-content { padding: 20px 15px; }
-      .page-header { flex-direction: column; gap: 16px; text-align: center; }
-      .cards-grid { grid-template-columns: 1fr; }
-      .stats-row { margin-left: 0; }
-    }
   </style>
 </head>
 <body>
@@ -193,79 +76,68 @@
     <main class="main-content">
       <div class="page-header">
         <div>
-          <h1>📦 Package Cards Management</h1>
-          <p>Manage Travel, Hajj &amp; Work package cards shown on the public site</p>
+          <h1>Package Cards</h1>
+          <p>Manage your travel, hajj, and work packages. Currently viewing <strong><%= type === 'all' ? 'All' : type.charAt(0).toUpperCase() + type.slice(1) %></strong>.</p>
         </div>
-        <a href="/admin/cards/create" class="btn btn-add">+ Add New Card</a>
+        <a href="/admin/cards/create" class="btn btn-primary">+ Add New Package</a>
       </div>
 
-      <div class="filters-bar">
+      <div class="filters-bar glass-card">
         <div class="filter-group">
-          <label>Type:</label>
-          <select onchange="window.location.href='/admin/cards?type='+this.value+'&status=<%= currentStatus %>'">
-            <option value="all" <%= currentType === 'all' ? 'selected' : '' %>>All Types</option>
-            <option value="travel" <%= currentType === 'travel' ? 'selected' : '' %>>✈ Travel</option>
-            <option value="hajj" <%= currentType === 'hajj' ? 'selected' : '' %>>☪ Hajj</option>
-            <option value="work" <%= currentType === 'work' ? 'selected' : '' %>>💼 Work</option>
+          <label>Filter Type:</label>
+          <select onchange="location.href='/admin/cards?type=' + this.value">
+            <option value="all" <%= type==='all' ? 'selected' : '' %>>All Packages</option>
+            <option value="travel" <%= type==='travel' ? 'selected' : '' %>>Travel Packages</option>
+            <option value="hajj" <%= type==='hajj' ? 'selected' : '' %>>Hajj Packages</option>
+            <option value="work" <%= type==='work' ? 'selected' : '' %>>Work Packages</option>
           </select>
         </div>
-        <div class="filter-group">
-          <label>Status:</label>
-          <select onchange="window.location.href='/admin/cards?type=<%= currentType %>&status='+this.value">
-            <option value="all" <%= currentStatus === 'all' ? 'selected' : '' %>>All Status</option>
-            <option value="active" <%= currentStatus === 'active' ? 'selected' : '' %>>✅ Active</option>
-            <option value="paused" <%= currentStatus === 'paused' ? 'selected' : '' %>>⏸ Paused</option>
-            <option value="inactive" <%= currentStatus === 'inactive' ? 'selected' : '' %>>❌ Inactive</option>
-          </select>
-        </div>
+        
         <div class="stats-row">
-          <span class="stat-pill stat-total"><%= cards.length %> Total</span>
-          <span class="stat-pill stat-active"><%= cards.filter(c => c.isActive && !c.isPaused).length %> Active</span>
-          <span class="stat-pill stat-paused"><%= cards.filter(c => c.isPaused).length %> Paused</span>
+          <span class="stat-pill stat-total">Total: <%= cards.length %></span>
+          <span class="stat-pill stat-active">Active: <%= cards.filter(c => !c.isPaused).length %></span>
+          <span class="stat-pill stat-paused">Paused: <%= cards.filter(c => c.isPaused).length %></span>
         </div>
       </div>
 
       <div class="cards-grid">
         <% if (cards.length === 0) { %>
-          <div class="empty-state">
-            <div class="icon">📭</div>
-            <h3>No cards found</h3>
-            <p><a href="/admin/cards/create">Create your first card</a> to get started</p>
+          <div class="empty-state glass-card">
+            <div class="icon">🎴</div>
+            <h3>No packages found</h3>
+            <p>Try changing the filter or <a href="/admin/cards/create">create a new one</a>.</p>
           </div>
         <% } else { %>
           <% cards.forEach(card => { %>
-            <div class="card-item <%= !card.isActive ? 'inactive' : card.isPaused ? 'paused' : '' %>">
+            <div class="card-item glass-card <%= card.isPaused ? 'paused' : '' %> <%= !card.isActive ? 'inactive' : '' %>" id="card-<%= card._id %>">
               <div class="card-img-wrap">
                 <% if (card.images && card.images.length > 0) { %>
-                  <img src="<%= card.images[0].url %>" alt="<%= card.title?.en %>" onerror="this.parentElement.innerHTML='<div class=\'card-img-placeholder\'>📷</div>'" />
+                  <img src="<%= card.images[0].url %>" alt="<%= card.title.en %>" loading="lazy" />
                   <% if (card.images.length > 1) { %>
-                    <span class="img-count">📷 <%= card.images.length %></span>
+                    <span class="img-count">1 / <%= card.images.length %></span>
                   <% } %>
                 <% } else { %>
-                  <div class="card-img-placeholder"><%= card.type === 'travel' ? '✈️' : card.type === 'hajj' ? '🕋' : '💼' %></div>
+                  <div class="card-img-placeholder">🏝️</div>
                 <% } %>
                 <span class="card-type-badge badge-<%= card.type %>"><%= card.type %></span>
               </div>
+
               <div class="card-body">
-                <div class="card-title"><%= card.title?.en || 'Untitled' %></div>
-                <div class="card-title-bn"><%= card.title?.bn || '' %></div>
+                <h3 class="card-title" title="<%= card.title.en %>"><%= card.title.en %></h3>
+                <p class="card-title-bn" title="<%= card.title.bn %>"><%= card.title.bn %></p>
+                
                 <div class="card-meta">
-                  <% if (card.pricing?.amount) { %>
-                    <span>💰 <strong><%= card.pricing.currency === 'USD' ? '$' : '৳' %><%= card.pricing.amount %></strong></span>
-                  <% } %>
-                  <% if (card.duration) { %>
-                    <span>⏱ <strong><%= card.duration %></strong></span>
-                  <% } %>
-                  <% if (card.location?.en) { %>
-                    <span>📍 <%= card.location.en %></span>
-                  <% } %>
+                  <span>💰 <strong><%= card.price || 'Contact' %></strong></span>
+                  <span>📍 <strong><%= card.location || 'Global' %></strong></span>
+                  <span>🗓️ <strong><%= card.duration || 'Flexible' %></strong></span>
                 </div>
+
                 <div class="card-actions">
-                  <a href="/admin/cards/edit/<%= card._id %>" class="btn btn-edit">✏️ Edit</a>
-                  <button onclick="toggleStatus('<%= card._id %>', <%= card.isPaused %>)" class="btn <%= card.isPaused ? 'btn-toggle-resume' : 'btn-toggle-pause' %>">
-                    <%= card.isPaused ? '▶ Resume' : '⏸ Pause' %>
+                  <a href="/admin/cards/edit/<%= card._id %>" class="btn btn-edit">Edit</a>
+                  <button onclick="toggleStatus('<%= card._id %>')" class="btn <%= card.isPaused ? 'btn-toggle-resume' : 'btn-toggle-pause' %>">
+                    <%= card.isPaused ? 'Resume' : 'Pause' %>
                   </button>
-                  <button onclick="deleteCard('<%= card._id %>')" class="btn btn-delete">🗑</button>
+                  <button onclick="deleteCard('<%= card._id %>')" class="btn btn-delete">Delete</button>
                 </div>
               </div>
             </div>

@@ -4,81 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Header & Footer Settings - Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
   <style>
-    :root {
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --bg: #f3f4f6;
-      --text: #1f2937;
-      --border: #e5e7eb;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); }
-    .layout { display: flex; min-height: 100vh; }
+    .card { padding: 32px; margin-bottom: 32px; }
+    .card-title { font-size: 20px; font-weight: 800; color: white; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 10px; }
     
-    .main-content { padding: 2rem; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-    .header h1 { font-size: 1.8rem; font-weight: 700; }
+    .current-logo-preview { max-height: 80px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 12px; margin-bottom: 16px; display: block; }
     
-    .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 2rem; }
-    .tab { padding: 1rem 2rem; cursor: pointer; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; margin-bottom: -2px; }
-    .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; animation: fadeIn 0.3s; }
-    
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .hours-grid { display: grid; grid-template-columns: 120px 1fr 1fr auto; gap: 16px; align-items: center; padding: 16px; background: rgba(255,255,255,0.02); border-radius: 16px; border: 1px solid var(--glass-border); margin-bottom: 12px; }
+    .hours-grid label { font-weight: 700; color: white; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
 
-    .card { background: white; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; }
-    .card-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
-    
-    .form-group { margin-bottom: 1rem; }
-    .form-group label { display: block; font-weight: 500; font-size: 0.875rem; margin-bottom: 0.5rem; color: #374151; }
-    .form-group input[type="text"], .form-group input[type="url"], .form-group input[type="email"], .form-group input[type="time"], .form-group textarea { width: 100%; padding: 0.625rem; border: 1px solid var(--border); border-radius: 0.375rem; font-family: inherit; }
-    .form-group textarea { resize: vertical; min-height: 80px; }
-    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
-    
-    .btn { padding: 0.625rem 1.25rem; border-radius: 0.375rem; border: none; cursor: pointer; font-weight: 500; font-size: 0.875rem; transition: background 0.2s; color: white; display: inline-flex; align-items: center; gap: 0.5rem; justify-content: center; }
-    .btn-primary { background: var(--primary); }
-    .btn-primary:hover { background: var(--primary-hover); }
-    .btn-danger { background: #ef4444; }
-    .btn-danger:hover { background: #dc2626; }
-    .btn-secondary { background: #6b7280; }
-    .btn-secondary:hover { background: #4b5563; }
-    .btn-success { background: #10b981; }
-    .btn-success:hover { background: #059669; }
-
-    /* Lists and Tables */
-    .table-wrapper { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
-    th { font-weight: 600; color: #4b5563; background: #f9fafb; }
-    tr.dragging { opacity: 0.5; background: #f3f4f6; }
-    tr:hover { background: #f9fafb; }
-    .drag-handle { cursor: grab; color: #9ca3af; font-size: 1.2rem; padding: 0 0.5rem; }
-    .drag-handle:active { cursor: grabbing; }
-
-    .status-badge { padding: 0.25rem 0.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
-    .status-active { background: #d1fae5; color: #065f46; }
-    .status-inactive { background: #fee2e2; color: #991b1b; }
-
-    /* Business Hours */
-    .hours-grid { display: grid; grid-template-columns: 100px 1fr 1fr auto; gap: 1rem; align-items: center; margin-bottom: 0.5rem; padding: 0.5rem; background: #f9fafb; border-radius: 0.375rem; }
-    .hours-grid label { text-transform: capitalize; font-weight: 600; margin: 0; }
-
-    /* Modals */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 50; padding: 1rem; }
-    .modal-overlay.active { display: flex; }
-    .modal { background: white; border-radius: 0.5rem; padding: 2rem; width: 100%; max-width: 500px; }
-    .modal h2 { margin-bottom: 1.5rem; }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; }
-    
-    .current-logo-preview { max-height: 60px; margin-bottom: 1rem; max-width: 100%; object-fit: contain; background: #f9fafb; border: 1px solid var(--border); padding: 0.5rem; border-radius: 0.375rem; }
-    
-    /* Toast */
-    .toast-container { position: fixed; bottom: 1rem; right: 1rem; z-index: 100; display: flex; flex-direction: column; gap: 0.5rem; }
-    .toast { padding: 1rem; border-radius: 0.375rem; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); font-size: 0.875rem; opacity: 0; transform: translateY(100%); animation: slideIn 0.3s forwards; min-width: 250px; }
-    .toast.success { background: #10b981; }
-    .toast.error { background: #ef4444; }
+    .tabs-container { margin-bottom: 32px; }
+    .tab-btn { padding: 12px 24px; border-radius: 12px 12px 0 0; cursor: pointer; transition: all 0.3s; font-weight: 700; font-size: 14px; border: 1px solid var(--glass-border); border-bottom: none; background: rgba(255,255,255,0.05); color: var(--text-muted); }
+    .tab-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); box-shadow: 0 -4px 15px var(--primary-glow); }
   </style>
 </head>
 <body>
@@ -86,13 +24,17 @@
     <%- include('../partials/sidebar', { admin: typeof admin !== 'undefined' ? admin : {}, activePage: 'header-footer' }) %>
     
     <div class="main-content container">
-      <div class="header">
-        <h1>Header & Footer Settings</h1>
+      <div class="page-header">
+        <div>
+          <h1>Global Navigation & Footer</h1>
+          <p>Manage logos, social links, and navigation menus across the entire site.</p>
+        </div>
+        <a href="/admin/dashboard" class="btn btn-secondary">← Back</a>
       </div>
 
-      <div class="tabs">
-        <div class="tab active" onclick="switchTab(event, 'header')">Header / Navbar</div>
-        <div class="tab" onclick="switchTab(event, 'footer')">Footer Settings</div>
+      <div class="tabs-container">
+        <div class="tab-btn active" onclick="switchTab(event, 'header')">Header / Navbar</div>
+        <div class="tab-btn" onclick="switchTab(event, 'footer')">Footer Settings</div>
       </div>
 
       <!-- HEADER TAB -->
@@ -106,17 +48,17 @@
               <div class="form-group">
                 <label>Current Logo</label>
                 <img id="navLogoPreview" src="" class="current-logo-preview" alt="Header Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDBwJSIgaGVpZ2h0PSIxMDBwJSI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gTG9nbyBwb3N0ZWQ8L3RleHQ+PC9zdmc+';">
-                <input type="file" id="navLogoFile" name="headerLogo" accept="image/*">
-                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">OR paste URL (Fallback):</div>
-                <input type="url" id="navLogoUrl" name="logoUrl" placeholder="https://...">
+                <input type="file" id="navLogoFile" name="headerLogo" accept="image/*" class="form-control">
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-muted);">OR paste URL (Fallback):</div>
+                <input type="url" id="navLogoUrl" name="logoUrl" placeholder="https://..." class="form-control">
               </div>
               <div class="form-group">
                 <label>Logo Text (English)</label>
-                <input type="text" id="navLogoTextEn" placeholder="e.g. Nusrat International">
+                <input type="text" id="navLogoTextEn" placeholder="e.g. Nusrat International" class="form-control">
               </div>
               <div class="form-group">
                 <label>Logo Text (Bengali)</label>
-                <input type="text" id="navLogoTextBn" placeholder="নুসরাত ইন্টারন্যাশনাল">
+                <input type="text" id="navLogoTextBn" placeholder="নুসরাত ইন্টারন্যাশনাল" class="form-control">
               </div>
             </div>
             <button type="submit" class="btn btn-primary" id="btnSaveHeaderBrand">Save Header Branding</button>
@@ -124,7 +66,7 @@
         </div>
 
         <!-- Navigation Links -->
-        <div class="card">
+        <div class="card glass-card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h2 class="card-title" style="margin: 0; border: none;">Navigation Links</h2>
             <div>
@@ -157,66 +99,66 @@
       <!-- FOOTER TAB -->
       <div id="tab-footer" class="tab-content">
         <form id="footerSettingsForm" onsubmit="saveFooterSettings(event)">
-          <div class="card" style="position: sticky; top: 0; z-index: 10; display:flex; justify-content: space-between; padding: 1rem 1.5rem; background: #e0e7ff; margin-bottom: 1rem;">
+          <div class="card glass-card" style="position: sticky; top: 0; z-index: 10; display:flex; justify-content: space-between; padding: 1.5rem 1.5rem; background: rgba(99, 102, 241, 0.1); backdrop-filter: blur(10px); margin-bottom: 2rem;">
             <h2 style="font-size: 1.25rem; font-weight: 600; color: #3730a3; margin:0; line-height: 38px;">Footer Configuration</h2>
             <button type="submit" class="btn btn-primary" id="btnSaveFooter">Save All Footer Changes</button>
           </div>
 
           <!-- Footer Branding -->
-          <div class="card">
+          <div class="card glass-card">
             <h2 class="card-title">Footer Branding</h2>
             <div class="form-row">
               <div class="form-group">
                 <label>Company Name (EN)</label>
-                <input type="text" id="fcNameEn" required>
+                <input type="text" id="fcNameEn" required class="form-control">
               </div>
               <div class="form-group">
                 <label>Company Name (BN)</label>
-                <input type="text" id="fcNameBn" required>
+                <input type="text" id="fcNameBn" required class="form-control">
               </div>
             </div>
             <div class="form-row" style="align-items: flex-end;">
               <div class="form-group">
                 <label>Footer Logo</label>
                 <img id="footerLogoPreview" src="" class="current-logo-preview" alt="Footer Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDBwJSIgaGVpZ2h0PSIxMDBwJSI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gTG9nbyBwb3N0ZWQ8L3RleHQ+PC9zdmc+';">
-                <input type="file" id="fLogoFile" name="footerLogo" accept="image/*">
-                <input type="url" id="fLogoUrl" name="logoUrl" placeholder="Image URL Fallback" style="margin-top:0.5rem">
+                <input type="file" id="fLogoFile" name="footerLogo" accept="image/*" class="form-control">
+                <input type="url" id="fLogoUrl" name="logoUrl" placeholder="Image URL Fallback" style="margin-top:0.5rem" class="form-control">
               </div>
               <div class="form-group">
                 <label>Copyright Text (EN)</label>
-                <input type="text" id="fCopyEn" placeholder="© 2024 Nusrat International. All rights reserved.">
+                <input type="text" id="fCopyEn" placeholder="© 2024 Nusrat International. All rights reserved." class="form-control">
               </div>
             </div>
             <div class="form-group">
               <label>Copyright Text (BN)</label>
-              <input type="text" id="fCopyBn">
+              <input type="text" id="fCopyBn" class="form-control">
             </div>
           </div>
 
           <!-- Contact & Social -->
-          <div class="card">
+          <div class="card glass-card">
             <h2 class="card-title">Contact & Social Links</h2>
             <div class="form-row">
               <div class="form-group">
                 <label>Address (EN)</label>
-                <textarea id="fAddrEn"></textarea>
+                <textarea id="fAddrEn" class="form-control"></textarea>
               </div>
               <div class="form-group">
                 <label>Address (BN)</label>
-                <textarea id="fAddrBn"></textarea>
+                <textarea id="fAddrBn" class="form-control"></textarea>
               </div>
             </div>
             <div class="form-row">
-              <div class="form-group"><label>Phone</label><input type="text" id="fPhone"></div>
-              <div class="form-group"><label>WhatsApp</label><input type="text" id="fWhatsapp"></div>
-              <div class="form-group"><label>Email</label><input type="email" id="fEmail"></div>
+              <div class="form-group"><label>Phone</label><input type="text" id="fPhone" class="form-control"></div>
+              <div class="form-group"><label>WhatsApp</label><input type="text" id="fWhatsapp" class="form-control"></div>
+              <div class="form-group"><label>Email</label><input type="email" id="fEmail" class="form-control"></div>
             </div>
             <div class="form-row">
-              <div class="form-group"><label>Facebook URL</label><input type="url" id="fbLink"></div>
-              <div class="form-group"><label>Instagram URL</label><input type="url" id="igLink"></div>
-              <div class="form-group"><label>YouTube URL</label><input type="url" id="ytLink"></div>
-              <div class="form-group"><label>LinkedIn URL</label><input type="url" id="liLink"></div>
-              <div class="form-group"><label>Twitter/X URL</label><input type="url" id="twLink"></div>
+              <div class="form-group"><label>Facebook URL</label><input type="url" id="fbLink" class="form-control"></div>
+              <div class="form-group"><label>Instagram URL</label><input type="url" id="igLink" class="form-control"></div>
+              <div class="form-group"><label>YouTube URL</label><input type="url" id="ytLink" class="form-control"></div>
+              <div class="form-group"><label>LinkedIn URL</label><input type="url" id="liLink" class="form-control"></div>
+              <div class="form-group"><label>Twitter/X URL</label><input type="url" id="twLink" class="form-control"></div>
             </div>
           </div>
 
@@ -229,18 +171,18 @@
           </div>
 
           <!-- Maps Embed -->
-          <div class="card">
+          <div class="card glass-card">
             <h2 class="card-title">Location / Google Maps</h2>
             <div class="form-group">
               <label>Google Maps Embed SRC URL</label>
-              <input type="text" id="fMaps" placeholder="e.g. https://www.google.com/maps/embed?pb=...">
+              <input type="text" id="fMaps" placeholder="e.g. https://www.google.com/maps/embed?pb=..." class="form-control">
               <div style="font-size: 0.75rem; color: #6b7280; margin-top: 0.5rem;">Copy ONLY the src="..." content from the Google Maps iframe snippet</div>
             </div>
           </div>
         </form>
 
         <!-- Quick Links (Array managed separately) -->
-        <div class="card">
+        <div class="card glass-card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h2 class="card-title" style="margin: 0; border: none;">Footer Quick Links</h2>
             <div>

@@ -1,0 +1,886 @@
+
+================================================================
+        NUSRAT INTERNATIONAL INFORMATION SYSTEM
+             FULL PROJECT REPORT
+================================================================
+                    May, 2025
+
+================================================================
+LETTER OF TRANSMITTAL
+================================================================
+
+To:
+The Project Supervisor
+Department of Computer Science & Engineering
+[Your University Name]
+Dhaka, Bangladesh
+
+Dear Sir/Ma'am,
+
+Thank you for guiding us through this project. We have tried our
+best to make this project successful on time despite various
+technical limitations. After completing the full implementation,
+we have prepared this report which describes in detail the
+"Nusrat International Information System" — a modern, web-based
+platform for managing international travel packages, Hajj &
+Umrah services, and global manpower recruitment.
+
+We hope you will find the report relevant and meaningful.
+
+Sincerely,
+[Developer Name]
+Program: BSc/MSc in Computer Science & Engineering
+================================================================
+
+
+================================================================
+ABSTRACT
+================================================================
+
+The Nusrat International Information System is a full-stack
+web application developed to digitize and modernize the
+operations of Nusrat International, a licensed travel and
+manpower recruitment agency based in Dhaka, Bangladesh
+(BAIRA RL-1429).
+
+The system replaces the traditional paper-based record-keeping
+approach with a centralized, cloud-connected digital platform.
+It enables administrators to manage travel packages, Hajj/Umrah
+packages, work visa packages, gallery items, team members,
+certifications, hero sliders, and client messages — all through
+a secure admin dashboard. Clients can browse all packages,
+contact the agency, and view certifications through a fully
+responsive, multilingual (English & Bengali) public website.
+
+The backend is built on Node.js and Express, the database is
+MongoDB (hosted on MongoDB Atlas), images are managed via
+Cloudinary, and the platform is deployed on Vercel.
+
+================================================================
+ACKNOWLEDGEMENT
+================================================================
+
+In the name of Allah, the Most Merciful and Most Gracious.
+
+We sincerely thank our project supervisor for the valuable
+guidance and direction provided throughout the development of
+this project. We also thank the team at Nusrat International
+for their cooperation and for providing the domain knowledge
+required to build a system tailored to their real-world
+operational needs.
+
+================================================================
+DECLARATION
+================================================================
+
+We hereby declare that this project report titled
+"Nusrat International Information System" has been prepared
+originally by the development team as part of the project
+course requirement.
+
+All modules, procedures, and source code have been developed
+through proper analysis, research, and implementation.
+This project has not been submitted elsewhere for any other
+purpose, reward, or presentation.
+
+Date: May 2025
+
+================================================================
+CONTENT PAGE
+================================================================
+
+1.  Introduction
+    1.1. Introduction of Project
+    1.2. Aim of Project
+    1.3. System Study & Analysis
+
+2.  Existing System
+    2.1. Existing Manual System
+    2.2. Process of Existing System
+    2.3. Problems with Existing System
+
+3.  Proposed System
+    3.1. Aim of Proposed System
+    3.2. Advantages of the Proposed System
+    3.3. System Feasibility Study
+        3.3.1. Technical Feasibility
+        3.3.2. Economic Feasibility
+        3.3.3. Operational Feasibility
+
+4.  Proposed System Design
+    4.1. Introduction
+    4.2. Logical Design
+    4.3. Physical Design
+    4.4. Design/Specification Activities
+
+5.  Implementation of Model
+    5.1. Analysis Modeling & Design Methodologies
+    5.2. Database Design
+    5.3. Entity Relationship Model
+    5.4. Identifying Entities
+    5.5. Entity Relationship Diagram (Introduction)
+    5.6. Relationship Cardinality
+    5.7. Database Collection Structure
+    5.8. System Description
+    5.9. Data Flow Diagram
+    5.10. Effort & Task Distribution
+    5.11. System Specification
+    5.12. Project Cost Estimation
+    5.13. Cost Benefit Analysis
+    5.14. System Testing
+
+6.  System Requirements & Using Guideline
+    6.1. Hardware Requirements
+    6.2. Software Requirements
+    6.3. Using Guideline
+
+7.  Conclusion & Upcoming Features
+    7.1. Conclusion
+    7.2. Upcoming Features
+
+    Bibliography
+
+================================================================
+1. INTRODUCTION
+================================================================
+
+1.1. INTRODUCTION OF PROJECT
+-------------------------------
+The Nusrat International Information System is a comprehensive
+web-based platform designed to serve as the official digital
+presence and backend management system for Nusrat
+International — a travel, Hajj/Umrah, and manpower recruitment
+agency in Bangladesh.
+
+The system keeps a structured digital record of all travel and
+work packages, processes client inquiries, manages gallery
+images, team profiles, and certification documents, and allows
+the agency to update all website content in real time through a
+secure administrative dashboard.
+
+Key highlights of the system:
+- Dynamic package management (Travel, Hajj, Work)
+- Hero slider & homepage content management
+- Team member and certification management
+- Client message inbox
+- Multilingual content support (English & Bengali)
+- SEO-optimized public pages
+- Cloud image storage via Cloudinary
+- Deployed publicly on Vercel
+
+1.2. AIM OF PROJECT
+---------------------
+The existing system relies entirely on manual, paper-based
+record keeping with no centralized digital system. The aim of
+this project is to computerize all the informational and
+operational activities of Nusrat International using a modern
+web-based Information System.
+
+The main module of the system is the Administrative Module,
+through which a single authorized administrator can manage all
+aspects of the organization's digital content and client
+communications.
+
+1.3. SYSTEM STUDY & ANALYSIS
+------------------------------
+System analysis is the process of gathering and interpreting
+facts, diagnosing problems, and recommending improvements.
+It requires intensive communication between system users
+and system developers.
+
+During the analysis phase, detailed interviews were conducted
+with the agency staff to understand the daily operational
+workflows. The findings were used to design a system that
+closely mirrors real operational processes, while eliminating
+inefficiencies.
+
+================================================================
+2. EXISTING SYSTEM
+================================================================
+
+2.1. EXISTING MANUAL SYSTEM
+-----------------------------
+Currently, Nusrat International operates entirely on a
+paper-based system. Package details, client records, visa
+processing statuses, and team information are maintained in
+physical files and registers. Images and certifications are
+stored in printed formats in filing cabinets.
+
+2.2. PROCESS OF EXISTING SYSTEM
+---------------------------------
+- Packages are described in printed brochures.
+- Client inquiries are handled over phone/in-person only.
+- Certification records are maintained in physical folders.
+- Team information has no formal public record.
+- There is no way for clients to browse packages online.
+
+2.3. PROBLEMS WITH EXISTING SYSTEM
+------------------------------------
+- Lack of data security (files can be lost or damaged).
+- Time-consuming manual searches for records.
+- High paper usage and storage requirements.
+- No 24/7 accessibility for clients.
+- No centralized tracking of client messages.
+- Difficult to update package information quickly.
+- No scalability for handling high volumes of inquiries.
+- No analytics or statistical summary available.
+
+================================================================
+3. PROPOSED SYSTEM
+================================================================
+
+3.1. AIM OF PROPOSED SYSTEM
+-----------------------------
+The proposed system aims to fully digitize and centralize the
+operations of Nusrat International by providing:
+- A public-facing website for client engagement.
+- A secure admin dashboard for content management.
+- Cloud-based image storage for all media assets.
+- A real-time message inbox for client communications.
+
+3.2. ADVANTAGES OF THE PROPOSED SYSTEM
+----------------------------------------
+- Secure, JWT-authenticated admin access.
+- Real-time content updates without page redeployment.
+- 24/7 availability for clients worldwide.
+- Multilingual support (English & Bengali).
+- Cloudinary-based image management for efficiency.
+- SEO-optimized pages for improved online visibility.
+- Centralized management of all packages and content.
+- Fully responsive design for mobile and desktop.
+- Scalable cloud-hosted architecture (Vercel + MongoDB Atlas).
+- Significant reduction in manual work and paperwork.
+
+3.3. FEASIBILITY STUDY
+------------------------
+
+3.3.1. TECHNICAL FEASIBILITY
+The system is built using industry-standard, modern technologies:
+- Node.js (v22.x) — server-side runtime
+- Express.js — web framework
+- MongoDB Atlas — cloud NoSQL database
+- Cloudinary — cloud image storage
+- EJS — server-side templating
+- Vercel — serverless deployment platform
+
+All technologies are well-documented, actively maintained, and
+free-to-use at the development scale required. The project is
+technically feasible.
+
+3.3.2. ECONOMIC FEASIBILITY
+- MongoDB Atlas: Free tier (512MB) used for development.
+- Cloudinary: Free tier (25 credits/month) used for images.
+- Vercel: Free Hobby plan used for deployment.
+- Development tools (VS Code, Node.js): Free and open source.
+- Total monetary cost for initial deployment: BDT 0 (free tiers).
+
+The system is economically feasible.
+
+3.3.3. OPERATIONAL FEASIBILITY
+The admin dashboard is designed to be simple and intuitive.
+Any staff member with basic computer literacy can manage
+content without requiring technical knowledge. The system
+provides sufficient support through labeled UI elements and
+a structured navigation sidebar.
+
+The system is operationally feasible.
+
+================================================================
+4. PROPOSED SYSTEM DESIGN
+================================================================
+
+4.1. INTRODUCTION
+------------------
+Software design is the first step into the development phase.
+The Nusrat International system was designed with a clear
+separation of concerns: the frontend (EJS views + CSS) handles
+presentation, the backend (Express routes + controllers) handles
+business logic, and MongoDB handles data persistence.
+
+4.2. LOGICAL DESIGN
+--------------------
+The logical design defines the system boundaries and data flows:
+
+- Input:  Admin form submissions (packages, images, content)
+          Client contact form submissions
+- Process: JWT authentication, CRUD operations, image upload
+- Output:  Dynamic web pages, JSON API responses, admin views
+
+Logical flow:
+  Client Browser --> Express Router --> Controller --> MongoDB
+       |                                                  |
+       <------------- EJS Template (rendered HTML) --------
+
+4.3. PHYSICAL DESIGN
+---------------------
+The physical design defines the actual deployment architecture:
+
+  [Client Browser]
+       |
+  [Vercel CDN / Serverless Function]
+       |
+  [Express.js App (app.js)]
+       |
+  [Route Layer] --> /admin, /api, /
+       |
+  [Controller Layer] --> cardController, authController, etc.
+       |
+  [MongoDB Atlas] <--> [Cloudinary Storage]
+
+- Server: Vercel Serverless (Node.js 22.x)
+- Database: MongoDB Atlas (Cloud, nusrat_travels DB)
+- Static Assets: Vercel CDN (/public directory)
+- Images: Cloudinary CDN
+
+4.4. DESIGN / SPECIFICATION ACTIVITIES
+----------------------------------------
+- Concept formulation: Analysis of agency requirements
+- Problem understanding: Manual system audit
+- High-level requirement proposals: Feature list finalization
+- Feasibility study: Technical, economic, operational review
+- Requirements engineering: Route and schema design
+- Architectural design: MVC pattern implementation
+
+================================================================
+5. IMPLEMENTATION OF MODEL
+================================================================
+
+5.1. ANALYSIS MODELING & DESIGN METHODOLOGIES
+-----------------------------------------------
+This project uses structured analysis methodology. The system
+has very few transformation flows (data is mostly transactional
+— create/read/update/delete) making structured analysis the
+most appropriate choice over OOA.
+
+The analysis model achieves three objectives:
+1. Describes what the admin and client users do.
+2. Establishes a basis for the system design.
+3. Defines requirements that can be validated after build.
+
+The core of the model is the MongoDB schema (data dictionary),
+surrounded by:
+- Entity Relationship conceptual model (collections & refs)
+- Data Flow Diagram (request/response cycles)
+
+5.2. DATABASE DESIGN
+---------------------
+MongoDB (NoSQL document database) is used. The database name
+is "nusrat_travels". Collections are used instead of tables.
+
+The design follows two levels:
+1. Information Level Design: What data is needed and how it
+   relates (collection schemas, field types, relationships).
+2. Physical Level Design: MongoDB Atlas configuration, indexes,
+   connection pooling, and serverless-optimized caching.
+
+Data integrity is enforced via:
+- Mongoose schema validation (type checking, required fields)
+- Unique slug indexes on the `cards` collection
+- isActive / isPaused flags for soft-delete patterns
+
+5.3. ENTITY RELATIONSHIP MODEL
+--------------------------------
+MongoDB uses a document model rather than relational tables.
+Relationships are handled via referenced _id fields or embedded
+subdocuments. The conceptual ER model maps closely to the
+collection structure.
+
+5.4. IDENTIFYING THE ENTITIES (COLLECTIONS)
+---------------------------------------------
+The system uses the following MongoDB collections:
+
+1.  admins          - Administrator accounts
+2.  cards           - Travel / Hajj / Work packages
+3.  galleryitems    - Photo gallery images
+4.  teammembers     - Staff and founder profiles
+5.  certifications  - Agency certifications & licenses
+6.  sitecontents    - Homepage hero text, page intros, etc.
+7.  messages        - Client contact form submissions (inbox)
+8.  navlinks        - Navigation link configuration
+9.  footersettings  - Footer content configuration
+
+5.5. ENTITY RELATIONSHIP DIAGRAM (INTRODUCTION)
+-------------------------------------------------
+ERD enables the software engineer to fully specify data objects,
+their attributes, and their relationships.
+
+Key terms:
+- Entity: A MongoDB collection (e.g., cards, teammembers)
+- Attribute: A field within a document (e.g., title, slug)
+- Relationship: A reference from one collection to another
+  (e.g., a card's imageUrl references a Cloudinary asset)
+- Primary Key: MongoDB's auto-generated `_id` (ObjectId)
+- Reference: An ObjectId field pointing to another collection
+
+5.6. RELATIONSHIP CARDINALITY
+-------------------------------
+- admins      --> sitecontents  : 1:N (admin manages many)
+- admins      --> cards         : 1:N (admin manages many)
+- cards       --> images[]      : 1:N (one card, many images)
+- teammembers --> image         : 1:1 (one member, one photo)
+- certifications --> certImage  : 1:1
+
+5.7. DATABASE COLLECTION STRUCTURE
+------------------------------------
+
+COLLECTION: admins
+  _id        : ObjectId (Primary Key)
+  username   : String (required, unique)
+  password   : String (hashed with bcryptjs)
+  isActive   : Boolean
+  createdAt  : Date
+
+COLLECTION: cards
+  _id        : ObjectId (Primary Key)
+  type       : String (enum: 'travel', 'hajj', 'work')
+  title      : { en: String, bn: String }
+  slug       : String (unique, auto-generated)
+  description: { en: String, bn: String }
+  images[]   : [{ url, caption, order }]
+  location   : { en: String, bn: String }
+  pricing    : { amount, currency, displayText }
+  duration   : String
+  features[] : [{ en: String, bn: String }]
+  isActive   : Boolean
+  isPaused   : Boolean
+  order      : Number
+  createdAt  : Date
+  updatedAt  : Date
+
+COLLECTION: galleryitems
+  _id        : ObjectId (Primary Key)
+  title      : String
+  imageUrl   : String (Cloudinary URL)
+  category   : String
+  isActive   : Boolean
+  order      : Number
+  createdAt  : Date
+
+COLLECTION: teammembers
+  _id        : ObjectId (Primary Key)
+  name       : String
+  role       : String
+  email      : String
+  imageUrl   : String (Cloudinary URL)
+  isFounder  : Boolean
+  isActive   : Boolean
+  order      : Number
+
+COLLECTION: certifications
+  _id        : ObjectId (Primary Key)
+  name       : String
+  certImage  : String (Cloudinary URL)
+  issuedBy   : String
+  isFeatured : Boolean
+  isActive   : Boolean
+  order      : Number
+
+COLLECTION: sitecontents
+  _id        : ObjectId (Primary Key)
+  section    : String (e.g., 'homepage', 'about', 'hajj')
+  key        : String (e.g., 'homepage-hero-text')
+  title      : String
+  content    : String
+  imageUrl   : String
+  order      : Number
+
+COLLECTION: messages
+  _id        : ObjectId (Primary Key)
+  name       : String
+  email      : String
+  phone      : String
+  subject    : String
+  message    : String
+  isRead     : Boolean
+  createdAt  : Date
+
+5.8. SYSTEM DESCRIPTION
+------------------------
+The system is divided into two major parts:
+
+A. PUBLIC WEBSITE (Client-Facing)
+   Routes: /, /travel, /hajj, /work, /ticketing,
+           /about, /contact, /gallery, /certifications,
+           /employees, /travel/:slug, /hajj/:slug, /work/:slug
+   Features:
+   - Dynamic package listing and detail pages
+   - Contact form with database submission
+   - SEO meta tags on every page
+   - Fully responsive CSS design
+   - Multilingual content (EN/BN)
+
+B. ADMIN DASHBOARD (Administrator-Facing)
+   Routes: /admin/login, /admin/dashboard,
+           /admin/cards, /admin/gallery, /admin/team,
+           /admin/certifications, /admin/inbox,
+           /admin/content/manage/:section,
+           /admin/hero-manage, /admin/header-footer
+   Features:
+   - JWT-authenticated sessions (7-day expiry)
+   - Full CRUD for all content types
+   - Multi-image upload via Cloudinary
+   - Hero slider management with reordering
+   - Real-time dashboard statistics
+   - Client message inbox with read/unread status
+
+5.9. DATA FLOW DIAGRAM (DFD)
+-----------------------------
+
+LEVEL 0 - CONTEXT DIAGRAM:
+
+  [Client] ---request---> [Nusrat International System] ---data--> [MongoDB Atlas]
+     |                             |
+     <----response (HTML/JSON)-----+-----> [Cloudinary] (images)
+
+LEVEL 1 - MAIN PROCESSES:
+
+  1. Authentication Process
+     Admin --> Login Form --> JWT Verify --> Dashboard
+
+  2. Package Management Process
+     Admin --> Create/Edit Form --> Multer (upload) -->
+     Cloudinary --> MongoDB (cards collection) --> Public Pages
+
+  3. Content Management Process
+     Admin --> Section Form --> sitecontents collection -->
+     Homepage / Travel / Hajj / Work pages
+
+  4. Client Inquiry Process
+     Client --> Contact Form --> messages collection -->
+     Admin Inbox --> Mark Read / Delete
+
+  5. Gallery Management Process
+     Admin --> Image Upload --> Cloudinary -->
+     galleryitems collection --> /gallery page
+
+5.10. EFFORT & TASK DISTRIBUTION
+----------------------------------
+
+PHASE 1 - Planning & Analysis     : 1 week
+  - Requirements gathering
+  - System analysis
+  - Database schema design
+
+PHASE 2 - Backend Development     : 2 weeks
+  - Express app setup
+  - MongoDB Atlas connection
+  - Route & controller implementation
+  - Authentication system (JWT)
+  - Cloudinary integration
+  - Multer file upload middleware
+
+PHASE 3 - Frontend Development    : 2 weeks
+  - EJS template design
+  - Public CSS (common, cards, travel, hajj, work, etc.)
+  - Admin dashboard CSS & sidebar
+  - Responsive layout implementation
+
+PHASE 4 - Admin Dashboard         : 1 week
+  - All admin CRUD pages (cards, gallery, team, certs)
+  - Hero slider management
+  - Inbox management
+  - Content section management
+
+PHASE 5 - Testing & Deployment    : 1 week
+  - System testing
+  - Bug fixes
+  - Vercel deployment
+  - MongoDB Atlas configuration
+  - Environment variable setup
+
+5.11. SYSTEM SPECIFICATION
+----------------------------
+
+Backend:
+  Runtime     : Node.js v22.x
+  Framework   : Express.js v4.18.2
+  Database    : MongoDB v6.3.0 (via mongodb driver)
+  ODM         : Mongoose v9.4.1 (for schema models)
+  Auth        : jsonwebtoken v9.0.3
+  Encryption  : bcryptjs v3.0.3
+  File Upload : multer v2.1.1
+  Cloud Images: cloudinary v1.41.3
+  Templating  : EJS v3.1.10
+  Env Config  : dotenv v16.3.1
+  Security    : helmet v8.1.0
+  Sessions    : express-session + connect-mongo
+  CORS        : cors v2.8.5
+  URL Slugs   : slugify v1.6.9
+
+Frontend:
+  Language    : HTML5, CSS3, Vanilla JavaScript
+  Fonts       : Google Fonts (custom)
+  CSS Files   : common.css, cards.css, sections.css,
+                slider_container.css, Travel.css, Hajj.css,
+                work.css, About_us.css, contact.css,
+                gallery.css, employees.css, certifications.css,
+                Package-detail-travlas.css,
+                package-detail-work.css, traveling.css
+
+Deployment:
+  Hosting     : Vercel (Serverless, Node.js 22.x)
+  Database    : MongoDB Atlas (Cloud)
+  Media       : Cloudinary CDN
+  Domain      : Custom domain via Vercel
+
+5.12. PROJECT COST ESTIMATION
+-------------------------------
+
+5.12.1. HARDWARE COSTS
+  Development Machine  : Existing hardware (BDT 0)
+  Server Hardware      : None (Vercel serverless, BDT 0)
+  Total Hardware Cost  : BDT 0
+
+5.12.2. SOFTWARE COSTS
+  Node.js              : Free (Open Source)
+  MongoDB Atlas        : Free Tier
+  Cloudinary           : Free Tier
+  Vercel               : Free Hobby Plan
+  VS Code              : Free
+  Git / GitHub         : Free
+  Total Software Cost  : BDT 0
+
+5.12.3. OTHER COSTS
+  Domain Name          : ~BDT 1,200/year (if custom domain)
+  Internet Connection  : Existing subscription
+  Total Other Costs    : ~BDT 1,200/year
+
+5.13. COST BENEFIT ANALYSIS
+-----------------------------
+The system provides significant benefits relative to its
+minimal cost:
+
+Benefits:
+- Eliminates costs of printing and physical storage.
+- Increases client reach from local to global (24/7 online).
+- Reduces staff time spent answering basic inquiries.
+- Improves brand credibility through a professional website.
+- Enables data-driven decisions via dashboard statistics.
+- Reduces error rates compared to manual record keeping.
+
+Estimated annual benefit (staff hours saved): Significant
+Estimated annual cost (domain): ~BDT 1,200
+Conclusion: The system is highly cost-beneficial.
+
+5.14. SYSTEM TESTING
+---------------------
+
+5.14.1. SYSTEM TESTING INTRODUCTION
+Testing ensures the system meets all specified requirements
+and functions correctly under normal and edge-case conditions.
+
+Testing was performed at multiple levels:
+- Unit Testing:     Individual controller functions
+- Integration Test: Routes + controllers + database
+- System Testing:   Full end-to-end user workflows
+- UI Testing:       Responsive layout on multiple devices
+
+5.14.2. TEST PLAN
+
+Test ID | Module              | Test Case                    | Result
+--------|---------------------|------------------------------|-------
+T01     | Authentication      | Valid admin login             | PASS
+T02     | Authentication      | Invalid credentials           | PASS
+T03     | Cards - Create      | New travel package creation   | PASS
+T04     | Cards - Read        | Package listing with filters  | PASS
+T05     | Cards - Update      | Edit existing package         | PASS
+T06     | Cards - Delete      | Delete package                | PASS
+T07     | Image Upload        | Upload via Cloudinary         | PASS
+T08     | Contact Form        | Client submits message        | PASS
+T09     | Inbox               | Admin reads/deletes message   | PASS
+T10     | Gallery             | Add/remove gallery item       | PASS
+T11     | Team                | Add/edit/delete team member   | PASS
+T12     | Certifications      | Add/toggle featured cert      | PASS
+T13     | Public Routes       | All 15 public pages render    | PASS
+T14     | Detail Pages        | Slug & ObjectId routing       | PASS
+T15     | 404 Handler         | Invalid URL returns 404 page  | PASS
+T16     | Responsive Layout   | Mobile / Tablet / Desktop     | PASS
+T17     | SEO Meta Tags       | All pages have meta tags      | PASS
+T18     | Health Check        | /api/health returns DB status | PASS
+
+================================================================
+6. SYSTEM REQUIREMENTS & USING GUIDELINE
+================================================================
+
+6.1. HARDWARE REQUIREMENTS
+
+For Development:
+  Processor    : Intel Core i5 or equivalent (minimum)
+  RAM          : 8 GB (minimum), 16 GB (recommended)
+  Storage      : 10 GB free disk space
+  Internet     : Broadband connection required
+
+For End Users (Clients):
+  Any device with a modern web browser
+  Internet connection
+  No installation required
+
+6.2. SOFTWARE REQUIREMENTS
+
+For Development:
+  OS           : Windows 10/11, macOS, or Linux
+  Node.js      : v22.x or higher
+  npm          : v9.x or higher
+  MongoDB      : Atlas account (free tier)
+  Cloudinary   : Account (free tier)
+  Vercel       : Account (free hobby plan)
+  Browser      : Chrome, Firefox, Edge (latest versions)
+  Code Editor  : VS Code (recommended)
+
+For End Users:
+  Browser      : Any modern browser (Chrome, Firefox, Safari)
+  No plugins or installations required
+
+6.3. USING GUIDELINE
+
+FOR CLIENTS (Public Website):
+  1. Visit the website URL.
+  2. Browse packages via navigation: Travel, Hajj, Work.
+  3. Click any package card for full details.
+  4. Use the Contact page to submit inquiries.
+  5. Visit About, Gallery, and Certifications for more info.
+
+FOR ADMINISTRATOR (Admin Dashboard):
+  1. Navigate to /admin/login.
+  2. Enter admin username and password.
+  3. Upon login, you are redirected to /admin/dashboard.
+  4. Dashboard shows live statistics for all content types.
+
+  Managing Packages:
+  - Go to Admin > Cards
+  - Click "Add New Card" to create a Travel/Hajj/Work package
+  - Fill title (EN/BN), description, location, price, duration
+  - Upload up to 4 images
+  - Click Save; the package appears on the public website
+
+  Managing Gallery:
+  - Go to Admin > Gallery
+  - Upload images with title and category
+  - Toggle active/inactive status
+
+  Managing Team:
+  - Go to Admin > Team
+  - Update founder profile or add/edit/remove team members
+
+  Managing Certifications:
+  - Go to Admin > Certifications
+  - Add certification name, issuing body, and certificate image
+  - Toggle "Featured" to show on homepage
+
+  Managing Inbox:
+  - Go to Admin > Inbox
+  - View client messages submitted via the contact form
+  - Mark as read or delete messages
+
+  Managing Site Content:
+  - Go to Admin > Content sections (Homepage, Hajj, Travel, etc.)
+  - Update intro text, hero text, and section images
+
+  Logout:
+  - Click "Logout" in the sidebar to end the session securely
+
+================================================================
+7. CONCLUSION & UPCOMING FEATURES
+================================================================
+
+7.1. CONCLUSION
+----------------
+The Nusrat International Information System successfully
+addresses all limitations of the existing manual paper-based
+system. The platform provides a secure, scalable, and
+user-friendly digital solution for managing all aspects of
+the agency's operations.
+
+The system has been built using modern, industry-standard
+technologies (Node.js, Express, MongoDB, Cloudinary, Vercel)
+and follows best practices including JWT authentication,
+input validation, cloud storage, and SEO optimization.
+
+The administrative dashboard empowers non-technical staff to
+manage all website content independently, significantly
+reducing dependency on developers for routine updates.
+
+The public website serves clients 24/7, expanding the agency's
+reach beyond Dhaka to international audiences, which is
+essential for a recruitment agency operating globally.
+
+7.2. UPCOMING FEATURES
+-----------------------
+The following features are planned for future development:
+
+1.  Client Registration & Login
+    - Allow clients to create accounts and track applications.
+
+2.  Online Booking / Inquiry System
+    - Structured package booking forms with status tracking.
+
+3.  SMS / Email Notification Integration
+    - Auto-notify clients when their inquiry is processed.
+
+4.  Bengali Language Toggle (Frontend)
+    - Full frontend language switcher for EN/BN content.
+
+5.  Advanced Search & Filtering
+    - Search packages by price range, destination, duration.
+
+6.  Analytics Dashboard
+    - Page view tracking, top packages, inquiry trends.
+
+7.  Payment Gateway Integration
+    - Online deposit/payment for package bookings.
+
+8.  Multi-Admin Role Support
+    - Different access levels for editor, manager, super-admin.
+
+9.  Blog / News Section
+    - Publish travel tips, Hajj guides, and news articles.
+
+10. Progressive Web App (PWA)
+    - Enable offline access and mobile home-screen install.
+
+================================================================
+BIBLIOGRAPHY / REFERENCES
+================================================================
+
+1.  Express.js Documentation
+    https://expressjs.com/
+
+2.  MongoDB Documentation
+    https://www.mongodb.com/docs/
+
+3.  Mongoose Documentation
+    https://mongoosejs.com/docs/
+
+4.  Cloudinary Node.js SDK Documentation
+    https://cloudinary.com/documentation/node_integration
+
+5.  Vercel Deployment Documentation
+    https://vercel.com/docs
+
+6.  JSON Web Token (JWT) Documentation
+    https://jwt.io/introduction
+
+7.  EJS Templating Engine Documentation
+    https://ejs.co/
+
+8.  Multer File Upload Middleware
+    https://github.com/expressjs/multer
+
+9.  bcryptjs - Password Hashing
+    https://github.com/dcodeIO/bcrypt.js
+
+10. Slugify - URL Slug Generator
+    https://github.com/simov/slugify
+
+11. Pressman, R.S. (2014). Software Engineering: A
+    Practitioner's Approach (8th ed.). McGraw-Hill Education.
+
+12. Sommerville, I. (2016). Software Engineering (10th ed.).
+    Pearson Education.
+
+13. Bangladesh Association of International Recruiting Agencies
+    (BAIRA). https://www.baira.org.bd/
+
+================================================================
+              END OF REPORT
+================================================================
