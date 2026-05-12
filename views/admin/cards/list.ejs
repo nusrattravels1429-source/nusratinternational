@@ -56,7 +56,7 @@
       <div class="page-header">
         <div>
           <h1>Package Cards</h1>
-          <p>Manage your travel, hajj, and work packages. Currently viewing <strong><%= type === 'all' ? 'All' : type.charAt(0).toUpperCase() + type.slice(1) %></strong>.</p>
+          <p>Manage your travel, hajj, and work packages. Currently viewing <strong><%= currentType === 'all' ? 'All' : currentType.charAt(0).toUpperCase() + currentType.slice(1) %></strong>.</p>
         </div>
         <a href="/admin/cards/create" class="btn btn-primary">+ Add New Package</a>
       </div>
@@ -65,10 +65,10 @@
         <div class="filter-group">
           <label>Filter Type:</label>
           <select onchange="location.href='/admin/cards?type=' + this.value">
-            <option value="all" <%= type==='all' ? 'selected' : '' %>>All Packages</option>
-            <option value="travel" <%= type==='travel' ? 'selected' : '' %>>Travel Packages</option>
-            <option value="hajj" <%= type==='hajj' ? 'selected' : '' %>>Hajj Packages</option>
-            <option value="work" <%= type==='work' ? 'selected' : '' %>>Work Packages</option>
+            <option value="all" <%= currentType==='all' ? 'selected' : '' %>>All Packages</option>
+            <option value="travel" <%= currentType==='travel' ? 'selected' : '' %>>Travel Packages</option>
+            <option value="hajj" <%= currentType==='hajj' ? 'selected' : '' %>>Hajj Packages</option>
+            <option value="work" <%= currentType==='work' ? 'selected' : '' %>>Work Packages</option>
           </select>
         </div>
         
