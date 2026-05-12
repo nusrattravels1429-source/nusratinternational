@@ -54,7 +54,7 @@
     <% } else if (section === 'ticketing') { %>
     <div class="panel glass-card">
       <div class="panel-title">🎫 Ticketing Section Info</div>
-      <form action="/admin/content/update" method="POST">
+      <form action="/admin/content/update" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="section" value="ticketing">
         <input type="hidden" name="key" value="ticketing-intro">
         <div class="form-grid">
@@ -95,7 +95,7 @@
     <% } else if (section === 'travel') { %>
     <div class="panel glass-card">
       <div class="panel-title">✈️ Travel Page Static Content</div>
-      <form action="/admin/content/update" method="POST">
+      <form action="/admin/content/update" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="section" value="travel">
         <input type="hidden" name="key" value="travel-page-intro">
         <div class="form-grid">
@@ -132,7 +132,7 @@
     <% } else if (section === 'hajj') { %>
     <div class="panel glass-card">
       <div class="panel-title">🕋 Hajj/Umrah Page Content</div>
-      <form action="/admin/content/update" method="POST">
+      <form action="/admin/content/update" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="section" value="hajj">
         <input type="hidden" name="key" value="hajj-page-intro">
         <div class="form-grid">
@@ -169,7 +169,7 @@
     <% } else if (section === 'work') { %>
     <div class="panel glass-card">
       <div class="panel-title">💼 Work Abroad Page Content</div>
-      <form action="/admin/content/update" method="POST">
+      <form action="/admin/content/update" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="section" value="work">
         <input type="hidden" name="key" value="work-page-intro">
         <div class="form-grid">
@@ -198,7 +198,7 @@
     <% } else if (section === 'contact') { %>
     <div class="panel glass-card">
       <div class="panel-title">📞 Contact Page Information</div>
-      <form action="/admin/content/update" method="POST">
+      <form action="/admin/content/update" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="section" value="contact">
         <input type="hidden" name="key" value="contact-info">
         <div class="form-grid">
@@ -248,7 +248,7 @@
     <% } else if (section === 'about') { %>
     <div class="panel">
       <div class="panel-title">ℹ️ About Page - Header</div>
-      <form action="/admin/content/update" method="POST">
+      <form action="/admin/content/update" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="section" value="about">
         <input type="hidden" name="key" value="about-header">
         <div class="form-grid">
@@ -276,6 +276,14 @@
             <label>Main Description (বাংলা)</label>
             <textarea name="description_bn" class="form-control"><%= content['about-header']?.description_bn || '' %></textarea>
           </div>
+          <div class="form-group full">
+            <label>Banner Background Image (Optional)</label>
+            <% if (content['about-header']?.imageUrl) { %>
+              <img src="<%= content['about-header'].imageUrl %>" style="max-height:100px; display:block; margin-bottom:10px; border-radius:6px;">
+            <% } %>
+            <input type="file" name="imageUrl" class="form-control" accept="image/*">
+            <small style="color:var(--text-muted)">Upload a background image for the About Us banner</small>
+          </div>
         </div>
         <button type="submit" class="btn btn-primary">💾 Save About Header</button>
       </form>
@@ -283,7 +291,7 @@
 
     <div class="panel glass-card">
       <div class="panel-title">📊 Statistics</div>
-      <form action="/admin/content/update" method="POST">
+      <form action="/admin/content/update" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="section" value="about">
         <input type="hidden" name="key" value="about-stats">
         <p style="color:#64748b;font-size:13px;margin-bottom:16px;">Edit the key statistics shown on the About page (e.g., "10,000+ Clients", "15+ Years")</p>
