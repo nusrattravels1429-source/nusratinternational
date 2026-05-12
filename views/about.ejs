@@ -3,8 +3,11 @@
 <!-- ================= HERO ================= -->
 <section class="about-hero">
 
-  <!-- Animated geometric background blobs -->
+  <!-- Background image or blobs -->
   <div class="about-hero-bg">
+    <% if (aboutContent['about-header']?.imageUrl) { %>
+      <div style="position:absolute; inset:0; background: url('<%= aboutContent['about-header'].imageUrl %>') center/cover; opacity: 0.25;"></div>
+    <% } %>
     <div class="hero-geo geo-1"></div>
     <div class="hero-geo geo-2"></div>
     <div class="hero-geo geo-3"></div>
@@ -30,40 +33,40 @@
         <div class="cred-card top-left" data-delay="0">
           <span class="cred-icon">🏛</span>
           <div>
-            <strong>BAIRA Member</strong>
-            <small>Bangladesh Association of<br>International Recruiting Agencies</small>
+            <strong><%= aboutContent['about-credentials']?.cred1_title || 'BAIRA Member' %></strong>
+            <small><%- (aboutContent['about-credentials']?.cred1_desc || 'Bangladesh Association of<br>International Recruiting Agencies').replace(/\n/g, '<br>') %></small>
           </div>
         </div>
 
         <div class="cred-card top-right" data-delay="1">
           <span class="cred-icon">✈</span>
           <div>
-            <strong>IATA Accredited</strong>
-            <small>International Air Transport<br>Association</small>
+            <strong><%= aboutContent['about-credentials']?.cred2_title || 'IATA Accredited' %></strong>
+            <small><%- (aboutContent['about-credentials']?.cred2_desc || 'International Air Transport<br>Association').replace(/\n/g, '<br>') %></small>
           </div>
         </div>
 
         <div class="cred-card bottom-left" data-delay="2">
           <span class="cred-icon">🏢</span>
           <div>
-            <strong>ATAB Member</strong>
-            <small>Association of Travel<br>Agents of Bangladesh</small>
+            <strong><%= aboutContent['about-credentials']?.cred3_title || 'ATAB Member' %></strong>
+            <small><%- (aboutContent['about-credentials']?.cred3_desc || 'Association of Travel<br>Agents of Bangladesh').replace(/\n/g, '<br>') %></small>
           </div>
         </div>
 
         <div class="cred-card bottom-right" data-delay="3">
           <span class="cred-icon">📜</span>
           <div>
-            <strong>Govt. Approved</strong>
-            <small>Recruiting Agency<br>License No. RL-1429</small>
+            <strong><%= aboutContent['about-credentials']?.cred4_title || 'Govt. Approved' %></strong>
+            <small><%- (aboutContent['about-credentials']?.cred4_desc || 'Recruiting Agency<br>License No. RL-1429').replace(/\n/g, '<br>') %></small>
           </div>
         </div>
 
         <!-- Central logo circle -->
         <div class="cred-center">
-          <img src="<%= aboutContent['about-header']?.imageUrl || 'https://res.cloudinary.com/dvu3r51tb/image/upload/v1778520719/nusrat-international/wipb2zpgdlsdgs7p9seu.jpg' %>"
+          <img src="/images/logo.png"
                alt="Nusrat International" onerror="this.src='/images/logo.png'">
-          <span>Since 2010</span>
+          <span><%= aboutContent['about-credentials']?.since_year || 'Since 2010' %></span>
         </div>
 
       </div>
