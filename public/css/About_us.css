@@ -93,16 +93,18 @@
   }
 
   .about-hero-inner {
-    max-width: 1280px;
+    max-width: 1000px;
     margin: 0 auto;
     width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
     position: relative;
     z-index: 2;
+    padding-bottom: 60px;
   }
+
+  .text-center { text-align: center; }
+  .text-center .eyebrow { margin: 0 auto 22px; display: inline-block; }
+  .text-center p { margin: 0 auto 36px; max-width: 600px; }
+  .justify-center { justify-content: center; }
 
   /* Text side */
   .eyebrow {
@@ -175,94 +177,88 @@
     transform: translateY(-3px);
   }
 
-  /* Credential stack visual */
-  .credential-stack {
-    position: relative;
+  /* ===========================
+    PREMIUM CREDENTIAL STRIP
+    =========================== */
+  .hero-cred-strip {
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    aspect-ratio: 1;
-    max-width: 480px;
-    margin: 0 auto;
+    background: rgba(12, 22, 40, 0.4);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 5;
   }
 
-  .cred-card {
-    position: absolute;
-    background: rgba(255,255,255,0.06);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 18px;
-    padding: 18px 20px;
+  .cred-strip-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 20px 40px;
+    gap: 20px;
+  }
+
+  .cred-strip-item {
     display: flex;
     align-items: flex-start;
-    gap: 14px;
-    width: 200px;
-    animation: credFloat 0.7s ease both;
+    gap: 16px;
+    padding: 10px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+  .cred-strip-item:last-child {
+    border-right: none;
   }
 
-  .cred-card[data-delay="0"] { animation-delay: 0.1s; }
-  .cred-card[data-delay="1"] { animation-delay: 0.25s; }
-  .cred-card[data-delay="2"] { animation-delay: 0.4s; }
-  .cred-card[data-delay="3"] { animation-delay: 0.55s; }
-
-  @keyframes credFloat {
-    from { opacity:0; transform: translateY(20px); }
-    to   { opacity:1; transform: translateY(0); }
-  }
-
-  .cred-card.top-left    { top: 2%;  left: 0; }
-  .cred-card.top-right   { top: 2%;  right: 0; }
-  .cred-card.bottom-left { bottom: 2%; left: 0; }
-  .cred-card.bottom-right{ bottom: 2%; right: 0; }
-
-  .cred-icon {
-    font-size: 26px;
+  .cs-icon-wrapper {
+    background: rgba(201, 162, 39, 0.15);
+    border: 1px solid rgba(201, 162, 39, 0.3);
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
   }
 
-  .cred-card strong {
-    display: block;
-    font-size: 13px;
-    font-weight: 700;
-    color: white;
-    margin-bottom: 3px;
+  .cs-icon {
+    font-size: 24px;
   }
 
-  .cred-card small {
+  .cs-text strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .cs-text small {
+    display: block;
     font-size: 11px;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.55);
     line-height: 1.5;
   }
 
-  .cred-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    background: var(--gold);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    box-shadow: 0 0 0 8px rgba(201,162,39,0.15), 0 0 0 16px rgba(201,162,39,0.07);
-    z-index: 2;
+  @media (max-width: 992px) {
+    .cred-strip-inner {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .cred-strip-item:nth-child(2) { border-right: none; }
+    .cred-strip-item { border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .cred-strip-item:nth-child(3), .cred-strip-item:nth-child(4) { border-bottom: none; }
   }
 
-  .cred-center img {
-    width: 62px;
-    height: 62px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid rgba(255,255,255,0.4);
-  }
-
-  .cred-center span {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--navy);
-    letter-spacing: 1px;
+  @media (max-width: 600px) {
+    .cred-strip-inner {
+      grid-template-columns: 1fr;
+      padding: 20px;
+    }
+    .cred-strip-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .cred-strip-item:last-child { border-bottom: none; }
   }
 
   /* ===========================
